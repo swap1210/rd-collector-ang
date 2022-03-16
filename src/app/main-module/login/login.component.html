@@ -1,0 +1,16 @@
+<div class="login-body">
+  <mat-card class="mat-elevation-z8">
+    <fieldset>
+      <legend style="margin: 0 auto"><h3>Login</h3></legend>
+      <img
+        mat-card-image
+        src="../../../assets/logo.png"
+        style="opacity: 75%; width: 100%; border-radius: 0.3em"
+      />
+      <button mat-raised-button (click)="auth.googleSignin()" color="primary">
+        <img mat-card-avatar src="../../../assets/google.png" />
+        Login with Google
+      </button>
+    </fieldset>
+  </mat-card>
+</div>

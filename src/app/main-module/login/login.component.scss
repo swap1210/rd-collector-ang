@@ -1,0 +1,27 @@
+h1 {
+  color: white;
+}
+
+mat-card {
+  background-color: #dbdbdb9f;
+  max-width: 15em;
+}
+
+.login-body {
+  height: 100%;
+  display: flex;
+  place-items: center;
+  background-color: #ef5454;
+  justify-content: center;
+}
+
+fieldset {
+  border-radius: 0.3em;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+}
+button {
+  height: 5em;
+}

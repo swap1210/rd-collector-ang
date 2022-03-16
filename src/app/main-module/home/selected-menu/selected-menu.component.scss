@@ -1,0 +1,42 @@
+.bill-list-menu-main {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  padding-bottom: 2em;
+}
+.sm-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-top: 1em;
+}
+.sm-hdr-text {
+  margin-left: 2em;
+}
+table {
+  width: 100%;
+}
+
+tr.mat-footer-row {
+  font-weight: bold;
+  background-color: rgb(206, 206, 206);
+}
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+tr:hover {
+  background-color: #ddd;
+}
+
+th.mat-header-cell {
+  background-color: #ef5454;
+  font-size: medium;
+  font-weight: 600;
+}
+th,
+td {
+  border: 0.1em solid #6d6d6d;
+  padding: 0.5em;
+  text-align: center;
+}

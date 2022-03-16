@@ -1,0 +1,37 @@
+.main-detail {
+  background-color: #e5e5e5;
+  height: -webkit-fill-available;
+  padding-top: 4em;
+  padding-bottom: 1em;
+}
+mat-selection-list {
+  width: 31em;
+}
+.wrapper {
+  background-color: #e5e5e5;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-column-gap: 3.5em;
+  grid-row-gap: 1.5em;
+  margin: auto;
+  max-width: 70em;
+  padding: 1em 2em;
+}
+.box {
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.keyLabel {
+  font-weight: 800;
+}
+.imp {
+  background-color: coral;
+}
+.loaderDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+}

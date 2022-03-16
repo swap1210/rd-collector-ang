@@ -1,0 +1,104 @@
+<div mat-dialog-title class="dia-item">
+  <span
+    style="font-size: 1em; font-weight: 500"
+    [innerText]="auth.t('खाता नंबर') + ' ' + rec.AccountNo"
+  ></span>
+  <button
+    *ngIf="rec.Usertype === AccountType.A"
+    mat-icon-button
+    [routerLink]="'/new-account/' + rec.AccountNo"
+    [mat-dialog-close]="true"
+  >
+    <mat-icon>mode</mat-icon>
+  </button>
+</div>
+<mat-dialog-content class="main-dialog">
+  <!-- Preview Info -->
+  <button
+    color="accent"
+    class="dia-item"
+    mat-raised-button
+    [routerLink]="'/account-detail/' + rec.AccountNo"
+    mat-dialog-close
+    [innerText]="rec.AccountName"
+  ></button>
+  <!-- Amount Edit -->
+  <div class="dia-item">
+    <mat-form-field class="form-field" appearance="fill"
+      ><button
+        matPrefix
+        mat-icon-button
+        (click)="operatingAmt = operatingAmt + rec.Installment"
+      >
+        <mat-icon>add</mat-icon>
+      </button>
+      <mat-label [innerText]="auth.t('ली जाने वाली राशि')"></mat-label>
+      <input matInput type="number" [(ngModel)]="operatingAmt" />
+      <button
+        matSuffix
+        mat-icon-button
+        *ngIf="operatingAmt > (rec.AmountTillNow || 0) - originalOperatingAmt"
+        (click)="
+          operatingAmt = (rec.AmountTillNow || 0) - this.originalOperatingAmt
+        "
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+      <button
+        matSuffix
+        mat-icon-button
+        *ngIf="operatingAmt > (rec.AmountTillNow || 0) - originalOperatingAmt"
+        (click)="operatingAmt = operatingAmt - rec.Installment"
+      >
+        <mat-icon>remove</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
+  <div class="dia-item">
+    <div [innerText]="auth.t('आरंभ तारीख') + ':'"></div>
+    <div>
+      {{ startDate | date: "dd-MMM-yy" }}
+    </div>
+  </div>
+  <div class="dia-item">
+    <div [innerText]="auth.t('अंतिम तारीख') + ':'"></div>
+    <div>
+      {{ calcCloseDate | date: "dd-MMM-yy" }}
+    </div>
+  </div>
+  <div class="dia-item">
+    <div [innerText]="auth.t('बकाया') + ':'"></div>
+    <div>
+      {{ operatingAmtRemaining }}
+    </div>
+  </div>
+
+  <!-- <div class="dia-item">
+      <button
+        mat-raised-button
+        style="flex: auto"
+        color="accent"
+        [innerText]="auth.t('खाता विवरण')"
+      ></button>
+    </div> -->
+
+  <!-- action items -->
+  <div class="dia-item">
+    <button
+      mat-raised-button
+      *ngIf="actionName !== ''"
+      color="accent"
+      (click)="doAction()"
+      [innerText]="auth.t(actionName)"
+      [disabled]="operatingAmt === 0"
+      cdkFocusInitial
+    ></button
+    ><button
+      mat-raised-button
+      color="primary"
+      (click)="closeAction()"
+      [innerText]="auth.t('रद्द करना')"
+    ></button>
+  </div>
+</mat-dialog-content>

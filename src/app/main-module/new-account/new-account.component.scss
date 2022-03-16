@@ -1,0 +1,89 @@
+.new-account {
+  background-color: #e5e5e5;
+  height: auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  padding-top: 5em;
+}
+.form-field {
+  min-width: 12em;
+}
+.form-card {
+  max-width: 52em;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 1em;
+  height: auto;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6em;
+}
+.formfields {
+  display: flex;
+  gap: 2em;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: baseline;
+}
+.centered {
+  display: flex;
+  flex-direction: row;
+  gap: inherit;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+// ::-webkit-scrollbar {
+//   display: none; /* Chrome Safari */
+// }
+.phoneDiv {
+  display: flex;
+  gap: 1em;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.subformfields {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  // scrollbar-width: none; /* Firefox */
+  // -ms-overflow-style: none; /* IE 10+ */
+  gap: 1em;
+  align-items: center;
+  height: 30em;
+  padding: 0em 1em;
+  justify-content: center;
+}
+.glowing-border {
+  outline: none;
+  border-color: #73b5eb;
+  box-shadow: 0 0 1.2em #9ecaed;
+  border-radius: 1em;
+}
+mat-error {
+  padding-top: 0.15em;
+}
+::ng-deep .form-field .mat-form-field-label {
+  padding-top: 0.2em;
+}
+.editActionDiv {
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  flex-direction: row;
+  padding-top: 1.5em;
+}
+.increaseDecreaseFlex {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2em;
+  height: 3.6em;
+  padding-bottom: 1em;
+}

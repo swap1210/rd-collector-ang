@@ -1,0 +1,116 @@
+<div class="main-detail">
+  <div class="loaderDiv" *ngIf="ca === undefined">
+    <app-loader *ngIf="ca === undefined"></app-loader>
+  </div>
+  <div class="wrapper" *ngIf="ca !== undefined">
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('खाता नंबर')"></div>
+      <div [innerText]="ca.AccountNo"></div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('खाता धारक का नाम')"></div>
+      <div [innerText]="ca.AccountName"></div>
+    </div>
+    <div
+      class="box mat-elevation-z1"
+      *ngIf="ca.Phoneno !== '' && ca.Phoneno !== null"
+    >
+      <div class="keyLabel" [innerText]="auth.t('फोन नंबर')"></div>
+      <a [href]="'tel:+91' + ca.Phoneno" [innerText]="ca.Phoneno"></a>
+      <a
+        *ngIf="ca.Whatsapp && (ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+        [href]="
+          'https://api.whatsapp.com/send?phone=%2B91' +
+          ca.Phoneno +
+          '&text=' +
+          msg()
+        "
+        target="_blank"
+        ><img src="../../../assets/whatsapp-logo.ico"
+      /></a>
+    </div>
+    <div class="box mat-elevation-z1" *ngIf="ca.CIFNo !== undefined">
+      <div class="keyLabel" [innerText]="auth.t('स.ई.फ. नंबर')"></div>
+      <div [innerText]="ca.CIFNo"></div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('किस्त')"></div>
+      <div [innerText]="'₹ ' + ca.Installment"></div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('कार्ड नंबर')"></div>
+      <div [innerText]="ca.CardNo"></div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('आरंभ तारीख')"></div>
+      <div>{{ ca.RdStartDate.toDate() | date: "dd-MMM-yy" }}</div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('अंतिम तारीख')"></div>
+      <div>
+        {{
+          this.ca.CloseDate && this.ca.CloseDate.toDate() | date: "dd-MMM-yy"
+        }}
+      </div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('आखरी कलेक्शन तारीख')"></div>
+      <div>
+        {{ this.ca.LastCollected.toDate() | date: "dd-MMM-yy" }}
+      </div>
+    </div>
+    <div
+      class="box mat-elevation-z1 imp"
+      *ngIf="(ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+    >
+      <div class="keyLabel" [innerText]="auth.t('कलेक्शन बकाया')"></div>
+      <div
+        [innerText]="
+          '₹ ' + ((ca.AmountTillNow || 0) - ca.AmountCollected).toString()
+        "
+      ></div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('आखरी भुगतान तारीख')"></div>
+      <div>
+        {{ this.ca.LastPaid.toDate() | date: "dd-MMM-yy" }}
+      </div>
+    </div>
+    <div
+      class="box mat-elevation-z1 imp"
+      *ngIf="(ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+    >
+      <div class="keyLabel" [innerText]="auth.t('भुगतान बकाया')"></div>
+      <div
+        [innerText]="
+          '₹ ' + ((ca.AmountTillNow || 0) - ca.AmountPaid).toString()
+        "
+      ></div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('आखरी बिल तारीख')"></div>
+      <div>
+        {{ this.ca.LastBilled.toDate() | date: "dd-MMM-yy" }}
+      </div>
+    </div>
+    <div
+      class="box mat-elevation-z1 imp"
+      *ngIf="(ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+    >
+      <div class="keyLabel" [innerText]="auth.t('बिल बकाया')"></div>
+      <div
+        [innerText]="
+          '₹ ' + ((ca.AmountTillNow || 0) - ca.AmountBilled).toString()
+        "
+      ></div>
+    </div>
+    <div class="box mat-elevation-z1">
+      <div class="keyLabel" [innerText]="auth.t('अब तक की राशि')"></div>
+      <div [innerText]="ca.AmountTillNow"></div>
+    </div>
+    <div class="box mat-elevation-z1" *ngIf="ca.Nominee && ca.Nominee !== ''">
+      <div class="keyLabel" [innerText]="auth.t('नॉमिनी का नाम')"></div>
+      <div [innerText]="ca.Nominee"></div>
+    </div>
+  </div>
+</div>

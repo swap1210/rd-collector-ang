@@ -3,16 +3,31 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-
+import { MainModule } from './main-module/main.module';
+import { SharedModule } from './shared/shared.module';
+import { HeaderComponent } from './header/header.component';
+import { pass } from 'src/shh/fin';
+import { CU } from './shared/comm-util';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from './services/auth.service';
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
+  declarations: [AppComponent, HeaderComponent],
   imports: [
+    HttpClientModule,
+    SharedModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MainModule,
+    AngularFireModule.initializeApp(JSON.parse(CU.decrypt(pass.value))),
+    AngularFirestoreModule,
+    AngularFireAuthModule,
+    BrowserAnimationsModule,
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [AuthService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
