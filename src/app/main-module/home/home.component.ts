@@ -21,7 +21,7 @@ import { AccountType } from 'src/app/model/user.model';
 import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { AccountDialogComponent } from '../account-dialog/account-dialog.component';
+import { AccountDialogComponent } from './account-dialog/account-dialog.component';
 import { Subscription } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -30,8 +30,6 @@ import {
   SelectMenu,
 } from './selected-menu/selected-menu.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-
-// import {all} from '../../services/'
 
 interface FilterType {
   filterInput: string;
