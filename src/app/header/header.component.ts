@@ -52,10 +52,12 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('🤯🤯', event);
+
+    //not working correctly
     this._router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
-        // console.log(event);
         let tempstr = event
           .toString()
           .replace('NavigationEnd', '')

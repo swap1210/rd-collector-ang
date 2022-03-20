@@ -31,6 +31,8 @@ import {
 } from './selected-menu/selected-menu.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 
+// import {all} from '../../services/'
+
 interface FilterType {
   filterInput: string;
   enableAll: boolean;
@@ -84,11 +86,10 @@ export class HomeComponent implements OnDestroy, OnInit {
     });
 
     this.filterGroup.valueChanges.subscribe((obj) => {
-      console.log('🏡 value changed', obj);
       // obj.filterInput = obj.filterInput.trim().toLowerCase();
 
       let temp: FilterType = obj;
-      console.log(obj);
+      // console.log(obj);
       this.applyFilter(JSON.stringify(temp));
     });
 
@@ -110,7 +111,7 @@ export class HomeComponent implements OnDestroy, OnInit {
   }
   ngOnDestroy(): void {
     console.log('On destroy called');
-    this.accountSubscribe = new Subscription();
+    // this.accountSubscribe = new Subscription();
   }
   t(p_str: string): string {
     return this.auth.t(p_str);
@@ -137,12 +138,12 @@ export class HomeComponent implements OnDestroy, OnInit {
   }
 
   startSubscription(p_mode?: string) {
-    this.accountSubscribe = this.accountService.allRD.subscribe(
-      (rdDocList) => {
+    this.accountSubscribe = this.accountService.allRD.subscribe({
+      next: (rdDocList) => {
         if (!rdDocList) return;
         let tempAll = rdDocList;
-        console.log('Data Refresh', tempAll);
-        this.filterGroup.patchValue({ filterInput: '' });
+        //console.log('Data Refresh', JSON.stringify(tempAll));
+        this.filterGroup.patchValue({ filterInput: '', enableAll: false });
         this.dialog.closeAll();
         this.rdlist = tempAll.all;
         // this.rdlist = Object.values(tempAll.all).map((rec: any) => {
@@ -169,49 +170,115 @@ export class HomeComponent implements OnDestroy, OnInit {
         //   this.dataSource.paginator.firstPage();
         // }
       },
-      (err) => {
+      error: (err) => {
         console.log(err);
         this.dataFetched = true;
         this.rdlist = [];
         // alert('Error loading data');
       },
-      () => {
+      complete: () => {
         this.dataFetched = true;
         console.log('Finally after subscription');
-      }
-    );
+      },
+    });
   }
 
   customFilterPredicate = (record: RDAccount, filter: string): boolean => {
     try {
       const unfilter: FilterType = JSON.parse(filter);
-      // let tempAmt = 0;
-      // if (!this.billingOrCollection) tempAmt = record.AmountCollected;
-      // else if (this.billingOrCollection === 'C') tempAmt = record.AmountPaid;
-      // else if (this.billingOrCollection === 'B') tempAmt = record.AmountBilled;
 
-      return (
-        record.Enabled &&
-        (!record.CloseDate || record.CloseDate.toDate() < this.firstDay) &&
-        (record.AccountName.includes(
+      //ignore all further filters if enableAll is toggled
+      if (unfilter.enableAll) {
+        return unfilter.enableAll;
+      }
+
+      //unused old code block for legacy reference
+      {
+        // let recordFinalFilter =
+        //   //record is unabled
+        //   record.Enabled &&
+        //   //record is active
+        //   (!record.CloseDate || record.CloseDate.toDate() < this.firstDay) && //record name include search string unfilter.filterInput
+        //   //start of search string
+        //   (record.AccountName.includes(
+        //     unfilter.filterInput.trim().toUpperCase()
+        //   ) ||
+        //     //record account number include search string unfilter.filterInput
+        //     record.AccountNo.includes(unfilter.filterInput.trim()) ||
+        //     record.Installment.toString().includes(unfilter.filterInput.trim()) ||
+        //     //search for records with no phone number if "no phone" is passed in search string
+        //     (unfilter.filterInput.trim().toLowerCase() === 'no phone' &&
+        //       !record.Phoneno) ||
+        //     //search for records with no cif number if "no cif" is passed in search string
+        //     (unfilter.filterInput.trim().toLowerCase() === 'no cif' &&
+        //       !record.CIFNo)) &&
+        //   //end of search string
+        //   ((!this.billingOrCollection &&
+        //     record.AmountCollected <
+        //       (record.AmountTillNow || record.Installment)) ||
+        //     (this.billingOrCollection === 'C' &&
+        //       record.AmountPaid < record.AmountCollected) ||
+        //     (this.billingOrCollection === 'B' &&
+        //       record.AmountBilled < record.AmountPaid &&
+        //       !unfilter.enableAll) ||
+        //     //ignore all previous filters if enableAll is toggled
+        //     unfilter.enableAll);
+      }
+
+      //console.log('Acc ' + record.AccountNo);
+      // console.group('Acc ' + record.AccountNo);
+      //record is Enabled
+      let recordFinalFilter = record.Enabled;
+      console.debug(recordFinalFilter);
+
+      //record is active
+      recordFinalFilter &&=
+        !record.CloseDate || record.CloseDate.toDate() < this.firstDay;
+      console.debug(recordFinalFilter + '' + record.CloseDate);
+
+      //start of search string
+      //record name include search string unfilter.filterInput
+      recordFinalFilter &&=
+        record.AccountName.includes(
           unfilter.filterInput.trim().toUpperCase()
         ) ||
-          record.AccountNo.includes(unfilter.filterInput.trim()) ||
-          record.Installment.toString().includes(unfilter.filterInput.trim()) ||
-          (unfilter.filterInput.trim().toLowerCase() === 'no phone' &&
-            !record.Phoneno) ||
-          (unfilter.filterInput.trim().toLowerCase() === 'no cif' &&
-            !record.CIFNo)) &&
-        ((!this.billingOrCollection &&
+        //record account number include search string unfilter.filterInput
+        record.AccountNo.includes(unfilter.filterInput.trim()) ||
+        record.Installment.toString().includes(unfilter.filterInput.trim()) ||
+        //search for records with no phone number if "no phone" is passed in search string
+        (unfilter.filterInput.trim().toLowerCase() === 'no phone' &&
+          !record.Phoneno) ||
+        //search for records with no cif number if "no cif" is passed in search string
+        (unfilter.filterInput.trim().toLowerCase() === 'no cif' &&
+          !record.CIFNo);
+      //end of search string
+      console.debug(recordFinalFilter + ' .' + unfilter.filterInput + '.');
+
+      //based on user type filter to be collected or to be paid
+      // recordFinalFilter &&=
+      // (!this.billingOrCollection &&
+      //   record.AmountCollected <
+      //     (record.AmountTillNow || record.Installment)) ||
+      // (this.billingOrCollection === 'C' &&
+      //   record.AmountPaid < record.AmountCollected) ||
+      // (this.billingOrCollection === 'B' &&
+      //   record.AmountBilled < record.AmountPaid);
+
+      //show if collected/paid amount is less than AmountTillNow or Installment (for first case)
+      recordFinalFilter &&=
+        (!this.billingOrCollection &&
           record.AmountCollected <
             (record.AmountTillNow || record.Installment)) ||
-          (this.billingOrCollection === 'C' &&
-            record.AmountPaid < record.AmountCollected) ||
-          (this.billingOrCollection === 'B' &&
-            record.AmountBilled < record.AmountPaid &&
-            !unfilter.enableAll) ||
-          unfilter.enableAll)
-      );
+        (this.billingOrCollection === 'C' &&
+          record.AmountCollected <
+            (record.AmountTillNow || record.Installment)) ||
+        (this.billingOrCollection === 'B' &&
+          record.AmountPaid < (record.AmountTillNow || record.Installment));
+      //console.debug(recordFinalFilter + ' ' + (this.billingOrCollection === 'C'));
+
+      // console.groupEnd();
+
+      return recordFinalFilter;
     } catch (e) {
       console.log('Filter failure', e);
       return true;

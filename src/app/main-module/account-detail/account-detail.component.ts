@@ -17,6 +17,7 @@ import { environment } from 'src/environments/environment';
 export class AccountDetailComponent implements OnInit, OnDestroy {
   accNo: string | undefined;
   ca: RDAccount | undefined;
+  calcED: Date | undefined;
   public accountSubscribe: Subscription | undefined;
 
   constructor(
@@ -36,10 +37,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         this.ca = obj.all[this.accNo] as RDAccount;
 
         const sd: Date = this.ca.RdStartDate.toDate();
-        const calcED: Timestamp = Timestamp.fromDate(
-          new Date(sd.setFullYear(sd.getFullYear() + 5))
-        );
-        this.ca.CloseDate = this.ca.CloseDate || calcED;
+        this.calcED = new Date(sd.setFullYear(sd.getFullYear() + 5));
+        //this.ca.CloseDate = this.ca.CloseDate || calcED;
       }
     });
   }

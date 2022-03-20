@@ -17,7 +17,7 @@ export class AccountDialogComponent implements OnInit {
   toBePaid = false;
   toBeBilled = false;
   startDate: Date;
-  calcCloseDate: Date;
+  calcCloseDate: Date | undefined;
   actionName = '';
   originalOperatingAmt: number = 0;
   operatingAmt: number = 0;
@@ -30,12 +30,13 @@ export class AccountDialogComponent implements OnInit {
     private dialogRef: MatDialogRef<AccountDialogComponent>,
     private accountService: AccountService
   ) {
-    // console.log(rec);
     this.startDate = (rec.RdStartDate as Timestamp).toDate();
 
-    this.calcCloseDate = new Date(this.startDate);
-
-    this.calcCloseDate.setFullYear(this.calcCloseDate.getFullYear() + 5);
+    //use temp variable till end date logic is fixed
+    if (!rec.CloseDate) {
+      this.calcCloseDate = new Date(this.startDate);
+      this.calcCloseDate.setFullYear(this.calcCloseDate.getFullYear() + 5);
+    }
 
     console.log(rec.Usertype, rec.billingOrCollection, rec.AmountTillNow || 0);
     if (rec.Usertype === AccountType.C) {

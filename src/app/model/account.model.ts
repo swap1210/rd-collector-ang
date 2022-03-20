@@ -14,7 +14,7 @@ export interface RDAccount {
   CardNo: string;
   CIFNo?: string;
   CloseDate?: Timestamp;
-  CreatedBy?: DocumentReference;
+  CreatedBy?: DocumentReference | String;
   CreatedOn: Timestamp;
   Enabled: boolean;
   HomeLocation?: GeoPoint;
@@ -22,7 +22,7 @@ export interface RDAccount {
   LastBilled: Timestamp;
   LastCollected: Timestamp;
   LastPaid: Timestamp;
-  LastUpdateBy?: DocumentReference;
+  LastUpdateBy?: DocumentReference | String;
   LastUpdateOn?: Timestamp;
   Nominee?: string;
   Phoneno?: string;

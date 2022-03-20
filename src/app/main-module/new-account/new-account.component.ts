@@ -35,7 +35,7 @@ export class NewAccountComponent implements OnInit {
     LastBilled: Timestamp.now(),
     LastCollected: Timestamp.now(),
     LastPaid: Timestamp.now(),
-    LastUpdateBy: this.auth.curUserRef,
+    LastUpdateBy: this.auth.curUserRef?.id, //this.auth.curUserRef,
     LastUpdateOn: Timestamp.now(),
     Nominee: '',
     Phoneno: '',
@@ -55,6 +55,7 @@ export class NewAccountComponent implements OnInit {
     private _snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
+    console.log(this.auth.curUserRef?.id);
     this.accountForm = this._formBuilder.group({
       AccountNo: new FormControl('', [Validators.required]),
       AccountName: new FormControl('', [Validators.required]),
@@ -192,7 +193,7 @@ export class NewAccountComponent implements OnInit {
 
     //DEFAULT VALUES
     //IF BILLED ELSE 0
-    temp_account.CreatedBy = this.auth.curUserRef;
+    temp_account.CreatedBy = this.auth.curUserRef?.id; //this.auth.curUserRef;
     temp_account.CreatedOn = Timestamp.now();
     temp_account.LastBilled = Timestamp.fromDate(
       CU.dateFinder(

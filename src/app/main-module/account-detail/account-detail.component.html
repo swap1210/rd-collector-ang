@@ -48,8 +48,10 @@
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('अंतिम तारीख')"></div>
       <div>
+        <!-- use temp variable till end date logic is fixed -->
         {{
-          this.ca.CloseDate && this.ca.CloseDate.toDate() | date: "dd-MMM-yy"
+          (this.ca.CloseDate && this.ca.CloseDate.toDate()) || this.calcED
+            | date: "dd-MMM-yy"
         }}
       </div>
     </div>

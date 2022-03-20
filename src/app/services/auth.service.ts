@@ -17,7 +17,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   providedIn: 'root',
 })
 export class AuthService {
-  anl = !environment.production;
+  anl = !environment.production; //flag for anonymous login
   user$: Observable<any> | undefined;
   curUser: User | undefined;
   curUserRef: DocumentReference<User> | undefined;
@@ -60,7 +60,7 @@ export class AuthService {
       .signInWithPopup(provider)
       .then((result) => {
         this.ngZone.run(() => {
-          this.router.navigate(['dashboard']);
+          this.router.navigate(['home']);
         });
         this.updateUserData(result.user);
       })
@@ -72,7 +72,7 @@ export class AuthService {
   googleSignin() {
     return this.AuthLogin(new GoogleAuthProvider()).then((res: any) => {
       if (res) {
-        this.router.navigate(['dashboard']);
+        this.router.navigate(['home']);
       }
     });
   }

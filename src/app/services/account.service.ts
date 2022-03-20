@@ -6,6 +6,8 @@ import { filter } from 'rxjs/operators';
 import { RDAccount } from '../model/account.model';
 import { CU } from '../shared/comm-util';
 import { AuthService } from './auth.service';
+import { obj } from '../services/temp';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -14,11 +16,11 @@ export class AccountService {
   allRD = new BehaviorSubject<any>(undefined);
   collectionName = 'rd-records';
   constructor(private firestore: AngularFirestore, auth: AuthService) {
-    console.log('here');
     this.fetchRDAccounts(auth.curUser ? auth.curUser.company : '').subscribe(
-      (obj) => {
-        // console.log('Internet data fetch', obj);
-        this.allRD.next(obj);
+      (obj1) => {
+        console.log('Internet data fetch', obj1);
+        if (environment.production) this.allRD.next(obj);
+        else this.allRD.next(obj1);
       }
     );
   }
@@ -48,6 +50,7 @@ export class AccountService {
         })
       );
   }
+
   createUpdateRDAccount(p_company: string, p_RDAccount: RDAccount) {
     let accountNo = p_RDAccount.AccountNo;
     let temp: any = {};
