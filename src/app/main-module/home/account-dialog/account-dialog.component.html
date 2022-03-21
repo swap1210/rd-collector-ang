@@ -70,7 +70,7 @@
   <div class="dia-item">
     <div [innerText]="auth.t('बकाया') + ':'"></div>
     <div>
-      {{ operatingAmtRemaining }}
+      {{ operatingAmtRemaining | currency: "INR":"symbol" }}
     </div>
   </div>
 

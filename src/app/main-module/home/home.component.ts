@@ -40,7 +40,7 @@ interface FilterType {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnDestroy, OnInit {
+export class HomeComponent implements OnInit {
   public rdlist: RDAccount[] = [];
 
   public accountSubscribe: Subscription | undefined;
@@ -107,10 +107,6 @@ export class HomeComponent implements OnDestroy, OnInit {
       this.billingTotalFun();
     });
   }
-  ngOnDestroy(): void {
-    console.log('On destroy called');
-    // this.accountSubscribe = new Subscription();
-  }
   t(p_str: string): string {
     return this.auth.t(p_str);
   }
@@ -136,37 +132,23 @@ export class HomeComponent implements OnDestroy, OnInit {
   }
 
   startSubscription(p_mode?: string) {
-    this.accountSubscribe = this.accountService.allRD.subscribe({
+    // console.count('trying here but' + JSON.stringify(this.accountSubscribe));
+    this.accountSubscribe = this.accountService.allRD$.subscribe({
       next: (rdDocList) => {
+        // console.log('Atleast heres');
         if (!rdDocList) return;
+        // console.log(rdDocList);
         let tempAll = rdDocList;
-        //console.log('Data Refresh', JSON.stringify(tempAll));
         this.filterGroup.patchValue({ filterInput: '', enableAll: false });
         this.dialog.closeAll();
-        this.rdlist = tempAll.all;
-        // this.rdlist = Object.values(tempAll.all).map((rec: any) => {
-        // rec.AmountTillNow =
-        //   (CU.monthDiff(
-        //     (rec.RdStartDate as firestore.Timestamp).toDate(),
-        //     new Date()
-        //   ) +
-        //     1) *
-        //   rec.Installment;
-        // return rec as RDAccount;
-        // });
+        this.rdlist = tempAll;
         this.dataFetched = true;
-        this.rdlist = Object.values(tempAll.all);
+        this.rdlist = tempAll;
         this.dataSource = new MatTableDataSource(this.rdlist);
         this.dataSource.filterPredicate = this.customFilterPredicate;
         this.cdr.detectChanges();
 
         this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));
-
-        // this.dataSource.sort = this.sort;
-        // this.dataSource.paginator = this.paginator;
-        // if (this.dataSource.paginator) {
-        //   this.dataSource.paginator.firstPage();
-        // }
       },
       error: (err) => {
         console.log(err);
@@ -189,6 +171,49 @@ export class HomeComponent implements OnDestroy, OnInit {
       if (unfilter.enableAll) {
         return unfilter.enableAll;
       }
+
+      //record is Enabled
+      let recordFinalFilter = record.Enabled;
+      console.debug(recordFinalFilter);
+
+      //record is active
+      recordFinalFilter &&=
+        !record.CloseDate || record.CloseDate.toDate() < this.firstDay;
+      console.debug(recordFinalFilter + '' + record.CloseDate);
+
+      //start of search string
+      //record name include search string unfilter.filterInput
+      recordFinalFilter &&=
+        record.AccountName.includes(
+          unfilter.filterInput.trim().toUpperCase()
+        ) ||
+        //record account number include search string unfilter.filterInput
+        record.AccountNo.includes(unfilter.filterInput.trim()) ||
+        record.Installment.toString().includes(unfilter.filterInput.trim()) ||
+        //search for records with no phone number if "no phone" is passed in search string
+        (unfilter.filterInput.trim().toLowerCase() === 'no phone' &&
+          !record.Phoneno) ||
+        //search for records with no cif number if "no cif" is passed in search string
+        (unfilter.filterInput.trim().toLowerCase() === 'no cif' &&
+          !record.CIFNo);
+      //end of search string
+      console.debug(recordFinalFilter + ' .' + unfilter.filterInput + '.');
+
+      //show if collected/paid amount is less than AmountTillNow or Installment (for first case)
+      recordFinalFilter &&=
+        (!this.billingOrCollection &&
+          record.AmountCollected <
+            (record.AmountTillNow || record.Installment)) ||
+        (this.billingOrCollection === 'C' &&
+          record.AmountCollected <
+            (record.AmountTillNow || record.Installment)) ||
+        (this.billingOrCollection === 'B' &&
+          record.AmountPaid < (record.AmountTillNow || record.Installment));
+      //console.debug(recordFinalFilter + ' ' + (this.billingOrCollection === 'C'));
+
+      // console.groupEnd();
+
+      return recordFinalFilter;
 
       //unused old code block for legacy reference
       {
@@ -222,61 +247,6 @@ export class HomeComponent implements OnDestroy, OnInit {
         //     //ignore all previous filters if enableAll is toggled
         //     unfilter.enableAll);
       }
-
-      //console.log('Acc ' + record.AccountNo);
-      // console.group('Acc ' + record.AccountNo);
-      //record is Enabled
-      let recordFinalFilter = record.Enabled;
-      console.debug(recordFinalFilter);
-
-      //record is active
-      recordFinalFilter &&=
-        !record.CloseDate || record.CloseDate.toDate() < this.firstDay;
-      console.debug(recordFinalFilter + '' + record.CloseDate);
-
-      //start of search string
-      //record name include search string unfilter.filterInput
-      recordFinalFilter &&=
-        record.AccountName.includes(
-          unfilter.filterInput.trim().toUpperCase()
-        ) ||
-        //record account number include search string unfilter.filterInput
-        record.AccountNo.includes(unfilter.filterInput.trim()) ||
-        record.Installment.toString().includes(unfilter.filterInput.trim()) ||
-        //search for records with no phone number if "no phone" is passed in search string
-        (unfilter.filterInput.trim().toLowerCase() === 'no phone' &&
-          !record.Phoneno) ||
-        //search for records with no cif number if "no cif" is passed in search string
-        (unfilter.filterInput.trim().toLowerCase() === 'no cif' &&
-          !record.CIFNo);
-      //end of search string
-      console.debug(recordFinalFilter + ' .' + unfilter.filterInput + '.');
-
-      //based on user type filter to be collected or to be paid
-      // recordFinalFilter &&=
-      // (!this.billingOrCollection &&
-      //   record.AmountCollected <
-      //     (record.AmountTillNow || record.Installment)) ||
-      // (this.billingOrCollection === 'C' &&
-      //   record.AmountPaid < record.AmountCollected) ||
-      // (this.billingOrCollection === 'B' &&
-      //   record.AmountBilled < record.AmountPaid);
-
-      //show if collected/paid amount is less than AmountTillNow or Installment (for first case)
-      recordFinalFilter &&=
-        (!this.billingOrCollection &&
-          record.AmountCollected <
-            (record.AmountTillNow || record.Installment)) ||
-        (this.billingOrCollection === 'C' &&
-          record.AmountCollected <
-            (record.AmountTillNow || record.Installment)) ||
-        (this.billingOrCollection === 'B' &&
-          record.AmountPaid < (record.AmountTillNow || record.Installment));
-      //console.debug(recordFinalFilter + ' ' + (this.billingOrCollection === 'C'));
-
-      // console.groupEnd();
-
-      return recordFinalFilter;
     } catch (e) {
       console.log('Filter failure', e);
       return true;
@@ -385,5 +355,9 @@ export class HomeComponent implements OnDestroy, OnInit {
     this._bottomSheet.open(SelectedMenuComponent, {
       data: { list: this.sm_arr, total: this.billingTotal },
     });
+  }
+
+  myTracker(index: number, rd_record: RDAccount): string {
+    return `${rd_record.AccountNo}`;
   }
 }

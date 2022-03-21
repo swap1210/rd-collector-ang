@@ -21,7 +21,7 @@ import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
   templateUrl: './new-account.component.html',
   styleUrls: ['./new-account.component.scss'],
 })
-export class NewAccountComponent implements OnInit {
+export class NewAccountComponent implements OnInit, OnDestroy {
   accountForm: FormGroup = new FormGroup({});
   onlydigit = /\d+/g;
   existingAccount = true;
@@ -54,6 +54,9 @@ export class NewAccountComponent implements OnInit {
     private router: Router,
     private _snackBar: MatSnackBar
   ) {}
+  ngOnDestroy() {
+    // this.accountService.allRD$.unsubscribe();
+  }
   ngOnInit(): void {
     console.log(this.auth.curUserRef?.id);
     this.accountForm = this._formBuilder.group({
@@ -75,6 +78,9 @@ export class NewAccountComponent implements OnInit {
     this.editAccountNo = this.route.snapshot.paramMap.get('accid') || '';
 
     this.accountForm.valueChanges.subscribe((formVal) => {
+      //return if blank form
+      if (!formVal.AccountName) return;
+
       if (this.editAccountNo || this.editAccountNo !== '') {
         // console.log('hi');
         this.editAccountChange =
@@ -96,6 +102,7 @@ export class NewAccountComponent implements OnInit {
           );
         }
       } else {
+        console.log(formVal);
         this.accountForm.patchValue(
           {
             AccountName: formVal.AccountName.toUpperCase(),
@@ -106,42 +113,34 @@ export class NewAccountComponent implements OnInit {
     });
 
     if (this.editAccountNo || this.editAccountNo !== '') {
-      let editobj = this.accountService.allRD.getValue();
-      // (editobj) => {
-      if (editobj) {
-        console.log(editobj);
-        // this.curAccountObj = Object.values(editobj).filter(
-        //   (obj: any) => obj.AccountNo === this.editAccountNo
-        // )[0] as RDAccount;
-        this.curAccountObj = (editobj as any).all[this.editAccountNo];
-        console.log(this.curAccountObj);
+      this.accountService.allRD$.subscribe({
+        next: (x) => {
+          if (x.length < 1) return;
+          this.curAccountObj = x.filter(
+            (obj: RDAccount) => obj.AccountNo === this.editAccountNo
+          )[0];
 
-        let editFormData: any = {
-          ...this.curAccountObj,
-          existingAccount: true,
-        };
+          let editFormData: any = {
+            ...this.curAccountObj,
+            existingAccount: true,
+          };
 
-        editFormData.RdStartDate = (
-          this.curAccountObj as RDAccount
-        ).RdStartDate.toDate();
+          editFormData.RdStartDate = (
+            this.curAccountObj as RDAccount
+          ).RdStartDate.toDate();
 
-        this.accountForm.reset(editFormData);
-        this.accountForm.controls['AccountNo'].disable();
-        this.accountForm.controls['AccountName'].disable();
-        this.accountForm.controls['Installment'].disable();
-        this.accountForm.controls['RdStartDate'].disable();
-        this.accountForm.controls['CardNo'].disable();
-      } else {
-        this.snack(CU.err[0]);
-        this.router.navigate(['/home']);
-      }
-      //   },
-      //   (err) => {
-      //     console.log(err);
-      //     this.snack(CU.err[0]);
-      //     this.router.navigate(['/home']);
-      //   }
-      // );
+          this.accountForm.reset(editFormData);
+          this.accountForm.controls['AccountNo'].disable();
+          this.accountForm.controls['AccountName'].disable();
+          this.accountForm.controls['Installment'].disable();
+          this.accountForm.controls['RdStartDate'].disable();
+          this.accountForm.controls['CardNo'].disable();
+        },
+        error: (err) => {
+          this.snack(CU.err[0]);
+          this.router.navigate(['/home']);
+        },
+      });
     }
   }
   installmentOrStartDateChange() {
@@ -235,7 +234,7 @@ export class NewAccountComponent implements OnInit {
               p_mode === 'C' ? 'नामांकन' : 'सुधार'
             } पूरा हुआ!`
           );
-          // this.accountForm.clearValidators();
+
           if (p_mode === 'C') {
             (this.accountFormGroupDirective as FormGroupDirective).resetForm();
             this.accountForm.reset({

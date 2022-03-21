@@ -1,63 +1,58 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Timestamp } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { RDAccount } from '../model/account.model';
 import { CU } from '../shared/comm-util';
 import { AuthService } from './auth.service';
-import { obj } from '../services/temp';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
-  allRD = new BehaviorSubject<any>(undefined);
+  allRD$ = new BehaviorSubject<RDAccount[]>([]);
   collectionName = 'rd-records';
   constructor(private firestore: AngularFirestore, auth: AuthService) {
-    this.fetchRDAccounts(auth.curUser ? auth.curUser.company : '').subscribe(
-      (obj1) => {
-        console.log('Internet data fetch', obj1);
-        if (environment.production) this.allRD.next(obj);
-        else this.allRD.next(obj1);
-      }
-    );
+    this.fetchRDAccounts2(auth.curUser ? auth.curUser.company : '');
   }
 
-  fetchRDAccounts(p_company: string): Observable<any> {
-    return this.firestore
+  fetchRDAccounts2(p_company: string) {
+    this.firestore
       .collection<any>(this.collectionName)
       .doc(p_company)
       .valueChanges()
       .pipe(
-        filter((orgObj: any) => {
-          let newObj = orgObj;
-
-          Object.values<RDAccount>(newObj.all).map((rec: RDAccount) => {
-            newObj.all[rec.AccountNo].AmountTillNow =
+        map((orgObj: any) => {
+          console.log('Internet', orgObj);
+          Object.values<RDAccount>(orgObj.all).map((rec: RDAccount) => {
+            rec.AmountTillNow =
               (CU.monthDiff(
                 (rec.RdStartDate as Timestamp).toDate(),
                 new Date()
               ) +
                 1) *
               rec.Installment;
-
-            return false;
           });
-
-          return newObj;
+          let tempList = Object.values<RDAccount>(orgObj.all);
+          return tempList;
         })
-      );
+      )
+      .subscribe({
+        next: (val) => {
+          this.allRD$.next(val);
+        },
+      });
   }
 
   createUpdateRDAccount(p_company: string, p_RDAccount: RDAccount) {
-    let accountNo = p_RDAccount.AccountNo;
-    let temp: any = {};
-    temp[accountNo] = p_RDAccount;
+    let acc_key: any = {};
+    acc_key[p_RDAccount.AccountNo] = p_RDAccount;
+    let temp: any = { all: acc_key };
+    console.log();
     return this.firestore
       .collection(this.collectionName)
       .doc(p_company)
-      .set({ all: temp }, { merge: true });
+      .set(temp, { merge: true });
   }
 }

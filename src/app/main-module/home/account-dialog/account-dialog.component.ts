@@ -38,7 +38,7 @@ export class AccountDialogComponent implements OnInit {
       this.calcCloseDate.setFullYear(this.calcCloseDate.getFullYear() + 5);
     }
 
-    console.log(rec.Usertype, rec.billingOrCollection, rec.AmountTillNow || 0);
+    // console.log(rec.Usertype, rec.billingOrCollection, rec.AmountTillNow || 0);
     if (rec.Usertype === AccountType.C) {
       this.toBeCollected = true;
 
