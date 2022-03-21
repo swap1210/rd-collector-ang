@@ -79,10 +79,10 @@ export class NewAccountComponent implements OnInit, OnDestroy {
 
     this.accountForm.valueChanges.subscribe((formVal) => {
       //return if blank form
-      if (!formVal.AccountName) return;
+      // if (!formVal.AccountName) return;
 
       if (this.editAccountNo || this.editAccountNo !== '') {
-        // console.log('hi');
+        // console.count(formVal);
         this.editAccountChange =
           formVal.Phoneno !== this.curAccountObj.Phoneno ||
           formVal.Nominee !== this.curAccountObj.Nominee ||
@@ -92,7 +92,15 @@ export class NewAccountComponent implements OnInit, OnDestroy {
           formVal.Whatsapp !== this.curAccountObj.Whatsapp ||
           formVal.CIFNo !== this.curAccountObj.CIFNo;
 
-        // console.log(formVal.Nominee, this.curAccountObj.Nominee);
+        // console.log(
+        //   formVal.Phoneno !== this.curAccountObj.Phoneno,
+        //   formVal.Nominee !== this.curAccountObj.Nominee,
+        //   formVal.AmountCollected !== this.curAccountObj.AmountCollected,
+        //   formVal.AmountPaid !== this.curAccountObj.AmountPaid,
+        //   formVal.AmountBilled !== this.curAccountObj.AmountBilled,
+        //   formVal.Whatsapp !== this.curAccountObj.Whatsapp,
+        //   formVal.CIFNo !== this.curAccountObj.CIFNo
+        // );
         if (formVal.Nominee) {
           this.accountForm.patchValue(
             {
@@ -130,6 +138,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
           ).RdStartDate.toDate();
 
           this.accountForm.reset(editFormData);
+          console.log('Resetting ');
           this.accountForm.controls['AccountNo'].disable();
           this.accountForm.controls['AccountName'].disable();
           this.accountForm.controls['Installment'].disable();

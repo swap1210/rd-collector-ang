@@ -52,33 +52,19 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('🤯🤯', event);
-
     //not working correctly
     this._router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
-        let tempstr = event
-          .toString()
-          .replace('NavigationEnd', '')
-          .replace('(', '{')
-          .replace(')', '}')
-          .replace('id', `'id'`)
-          .replace('url', `'url'`)
-          .replace('urlAfterRedirects', `'urlAfterRedirects'`)
-          .split(`'`)
-          .join(`"`);
-        let { url } = JSON.parse(tempstr);
+        console.log('header', (event as any)['url']);
 
-        this.curRoute = url.split('/');
+        this.curRoute = (event as any)['url'].split('/');
         this.tagMapping(this.curRoute);
-        // let editAccountNo = this._route.snapshot.paramMap.get('accid') || '';
-        // console.log(editAccountNo);
       });
   }
 
   tagMapping(curRoute: string[]) {
-    //console.log("Current language ", this.auth.curUser.language);
+    // console.log('Hdr eval ', curRoute);
     if (curRoute.length > 2 && curRoute[1] === 'new-account') {
       this.currentTitle = 'edit-account';
       // console.log(this.tag[this.currentTitle], curRoute[2]);
@@ -88,11 +74,11 @@ export class HeaderComponent implements OnInit {
       );
     } else if (curRoute.length > 2 && curRoute[1] === 'account-detail') {
       this.currentTitle = 'account-detail';
-      // console.log(this.tag[this.currentTitle], curRoute[2]);
       this.tag[this.currentTitle] = this.tag[this.currentTitle].replace(
         '$',
         curRoute[2]
       );
+      console.log('Hdr eval ', this.tag);
     } else {
       this.currentTitle = curRoute[1];
     }
