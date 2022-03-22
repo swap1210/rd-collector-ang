@@ -3,7 +3,6 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -40,7 +39,7 @@ interface FilterType {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
   public rdlist: RDAccount[] = [];
 
   public accountSubscribe: Subscription | undefined;
@@ -49,7 +48,10 @@ export class HomeComponent implements OnInit {
   selection = new SelectionModel<RDAccount>(true, []);
 
   @ViewChild('curAcc') curAcc: ElementRef<MatSelectionList> | undefined;
-  @ViewChild(MatPaginator) paginator: MatPaginator | undefined;
+  @ViewChild(MatPaginator, { static: false }) paginator:
+    | MatPaginator
+    | undefined;
+
   @ViewChild(MatSort) sort: MatSort | undefined;
 
   displayedColumns: string[] = ['AccountNo', 'AccountName', 'Installment'];
@@ -101,6 +103,7 @@ export class HomeComponent implements OnInit {
     );
     this.LastMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0);
   }
+
   ngOnInit(): void {
     this.startSubscription();
     this.selection.changed.subscribe((obj) => {
@@ -135,9 +138,9 @@ export class HomeComponent implements OnInit {
     // console.count('trying here but' + JSON.stringify(this.accountSubscribe));
     this.accountSubscribe = this.accountService.allRD$.subscribe({
       next: (rdDocList) => {
-        // console.log('Atleast heres');
-        if (!rdDocList) return;
-        // console.log(rdDocList);
+        console.log('Atleast heres');
+        if (!rdDocList.length) return;
+        console.log(rdDocList);
         let tempAll = rdDocList;
         this.filterGroup.patchValue({ filterInput: '', enableAll: false });
         this.dialog.closeAll();
@@ -295,7 +298,7 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log(`Dialog result:`, result);
+      // console.log(`Dialog result:`, result);
       if (result && result.msg) this.snack(result.msg);
     });
   }
@@ -359,5 +362,18 @@ export class HomeComponent implements OnInit {
 
   myTracker(index: number, rd_record: RDAccount): string {
     return `${rd_record.AccountNo}`;
+  }
+
+  ngAfterViewInit(): void {
+    this.auth.user$?.subscribe((obj) => {
+      if (this.paginator) {
+        console.log('user change');
+        this.paginator._intl.itemsPerPageLabel = CU.t(
+          obj?.language,
+          'एक बार में कितने खाते देखने हैं: '
+        );
+        // console.log('user change', obj, this.paginator._intl);
+      }
+    });
   }
 }

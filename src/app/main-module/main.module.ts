@@ -10,6 +10,7 @@ import { AccountDialogComponent } from './home/account-dialog/account-dialog.com
 import { FormsModule } from '@angular/forms';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
 import { SelectedMenuComponent } from './home/selected-menu/selected-menu.component';
+import { NopageComponent } from './nopage/nopage.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { SelectedMenuComponent } from './home/selected-menu/selected-menu.compon
     AccountDialogComponent,
     AccountDetailComponent,
     SelectedMenuComponent,
+    NopageComponent,
   ],
   imports: [CommonModule, FormsModule, SharedModule, RouterModule],
 })

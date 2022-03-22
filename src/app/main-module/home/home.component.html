@@ -16,10 +16,7 @@
     }"
   >
     <form class="filterFormDiv" [formGroup]="filterGroup">
-      <div
-        class="tabDiv"
-        *ngIf="(auth.curUser ? auth.curUser.type : '') === AccountType.A"
-      >
+      <div class="tabDiv" *ngIf="auth.curUser?.type === AccountType.A">
         <mat-button-toggle-group [(value)]="billingOrCollection" color="accent">
           <mat-button-toggle value="C" (click)="fetchPaidMode()">{{
             t("कलेक्शन सूची")
@@ -45,7 +42,13 @@
           : t("सभी खाते देखे")
       }}</mat-slide-toggle>
     </form>
-    <table mat-table *ngIf="dataSource" [dataSource]="dataSource" matSort>
+    <table
+      mat-table
+      *ngIf="dataSource"
+      [dataSource]="dataSource"
+      [trackBy]="myTracker"
+      matSort
+    >
       <!-- Checkbox for RD Bill creation -->
       <ng-container matColumnDef="select">
         <th mat-header-cell *matHeaderCellDef style="text-align: center">
@@ -79,7 +82,7 @@
           (click)="
             billingOrCollection === 'C' ||
             billingOrCollection === 'B' ||
-            (auth.curUser ? auth.curUser.type : '') === AccountType.C
+            auth.curUser?.type === AccountType.C
               ? rowClick(row)
               : snack(t('कलेक्शन या भुगतान सूची चुने'))
           "
@@ -99,7 +102,7 @@
           (click)="
             billingOrCollection === 'C' ||
             billingOrCollection === 'B' ||
-            (auth.curUser ? auth.curUser.type : '') === AccountType.C
+            auth.curUser?.type === AccountType.C
               ? rowClick(row)
               : snack(t('कलेक्शन या भुगतान सूची चुने'))
           "
@@ -119,7 +122,7 @@
           (click)="
             billingOrCollection === 'C' ||
             billingOrCollection === 'B' ||
-            (auth.curUser ? auth.curUser.type : '') === AccountType.C
+            auth.curUser?.type === AccountType.C
               ? rowClick(row)
               : snack(t('कलेक्शन या भुगतान सूची चुने'))
           "
@@ -164,7 +167,10 @@
                   t("फ़िल्टर से मेल खाने वाला कोई खाता नहीं मिला")
               }}
             </div>
-            <img src="../../../assets/finding_v2.png" alt="no data image" />
+            <img
+              [src]="(auth.commonData$ | async)['finding_v2.png']"
+              alt="no data image"
+            />
           </div>
           <div
             class="noDataDiv"
@@ -178,7 +184,7 @@
               >{{ " इस महीने के लिए और कोई कलेक्शन नहीं है" }}
             </div>
             <img
-              src="../../../assets/happy_v2.png"
+              [src]="(auth.commonData$ | async)['happy_v2.png']"
               alt="all collection complete image"
             />
           </div>
@@ -188,7 +194,9 @@
     <mat-paginator
       style="width: 100%; font-size: 1em; font-weight: bold"
       [pageSizeOptions]="[5, 10, 25, 100]"
-    ></mat-paginator>
+    >
+      ></mat-paginator
+    >
   </div>
   <div *ngIf="selection.selected.length > 0" class="billing-box">
     <button

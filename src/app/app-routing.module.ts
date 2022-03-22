@@ -4,6 +4,7 @@ import { AccountDetailComponent } from './main-module/account-detail/account-det
 import { HomeComponent } from './main-module/home/home.component';
 import { LoginComponent } from './main-module/login/login.component';
 import { NewAccountComponent } from './main-module/new-account/new-account.component';
+import { NopageComponent } from './main-module/nopage/nopage.component';
 import { AuthGuard } from './services/auth.guard';
 
 const routes: Routes = [
@@ -36,6 +37,7 @@ const routes: Routes = [
     component: AccountDetailComponent,
     canActivate: [AuthGuard],
   },
+  { path: '**', pathMatch: 'full', component: NopageComponent },
 ];
 
 @NgModule({

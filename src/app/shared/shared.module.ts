@@ -22,7 +22,6 @@ import {
   MatPaginatorIntl,
   MatPaginatorModule,
 } from '@angular/material/paginator';
-import { CustomPaginator } from './CustomPaginatorConfiguration';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnacksComponent } from './snacks/snacks.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -62,6 +61,5 @@ const moduleList = [
   declarations: [SnacksComponent],
   imports: moduleList,
   exports: moduleList,
-  providers: [{ provide: MatPaginatorIntl, useValue: CustomPaginator() }],
 })
 export class SharedModule {}

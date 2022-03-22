@@ -16,7 +16,11 @@ export class CU {
   } as const;
 
   static key = '678dfs983hjbd0dhjk089ck.,/apoioa';
-
+  //image url
+  static iu_p1 =
+    'https://firebasestorage.googleapis.com/v0/b/poorti-21857.appspot.com/o/cassets%2F';
+  static iu_p2 = '?alt=media&token=';
+  static imgDoc = 'gknplF75bvmpeCorR66k';
   static translation: any = {
     'एक बार में कितने खाते देखने हैं: ': 'Item per page: ',
     'RD कलेक्टर': 'RD Collector',
@@ -73,7 +77,7 @@ export class CU {
     'खाता विवरण': 'Account Detail',
     'मचुरेटी की तारीख': 'Maturity Date',
     'होम स्क्रीन': 'Home Screen',
-    '$ का विवरण': '$ Details',
+    '$ का विवरण': "$'s Detail",
     'कलेक्शन बकाया': 'Collection Pending',
     'भुगतान बकाया': 'Payment Pending',
     'बिल बकाया': 'Billing Pending',
@@ -85,6 +89,8 @@ export class CU {
     सब: 'All',
     राशि: 'Amount',
     'हमशकल खाते': 'Clone Accounts',
+    '404 यह एक अमान्य रास्ता है। कृपया ऊपर दिए 🏡 चिह्न में जाए।':
+      '404 This is an invalid Path. Please press 🏡',
   };
 
   constructor() {}
