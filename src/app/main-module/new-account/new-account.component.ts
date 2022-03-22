@@ -58,7 +58,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     // this.accountService.allRD$.unsubscribe();
   }
   ngOnInit(): void {
-    console.log(this.auth.curUserRef?.id);
+    // console.log(this.auth.curUserRef?.id);
     this.accountForm = this._formBuilder.group({
       AccountNo: new FormControl('', [Validators.required]),
       AccountName: new FormControl('', [Validators.required]),

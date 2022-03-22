@@ -33,6 +33,9 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     this.accNo = this.route.snapshot.paramMap.get('accid') || '';
     this.accountSubscribe = this.accountService.allRD$.subscribe((obj) => {
       // console.log(obj);
+      //return when no data
+      if (!obj.length) return;
+
       if (obj && this.accNo) {
         this.ca = obj.filter(
           (cur_rec) => cur_rec.AccountNo === this.accNo

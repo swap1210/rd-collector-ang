@@ -11,7 +11,12 @@
     ></span>
   </button>
   <!-- <span class="max-spacer"></span> -->
-  <h1 [innerText]="tag[currentTitle]" *ngIf="!translationPending"></h1>
+  <h1
+    [innerText]="
+      tag[currentTitle] ? tag[currentTitle].replace('$', curRoute[2]) : ''
+    "
+    *ngIf="!translationPending"
+  ></h1>
   <!-- <span class="max-spacer"></span> -->
   <div class="expanded">
     <h3
@@ -31,6 +36,14 @@
     >
       ➕
     </button>
+    <button
+      class="bkpBtn"
+      mat-icon-button
+      (click)="accSer.createBackupRDAccount(auth.curUser.company)"
+      *ngIf="auth.curUser && auth.curUser.type === Usertype.A"
+    >
+      <mat-icon>backup</mat-icon>
+    </button>
     <button class="menuItems" mat-icon-button (click)="auth.signOut()">
       <mat-icon style="font-size: 1.5em">power_settings_new</mat-icon>
     </button>
@@ -47,8 +60,9 @@
   <mat-menu #menu="matMenu">
     <button class="phoneBtn" mat-menu-item routerLink="/home">
       🏡
-      <div></div>
-      {{ auth.t("होम स्क्रीन") }}
+      <div>
+        {{ auth.t("होम स्क्रीन") }}
+      </div>
     </button>
     <button class="phoneBtn" mat-menu-item (click)="languageChange()">
       <div>
@@ -68,6 +82,17 @@
       ➕
       <div></div>
       <span [innerText]="auth.t('नया खाता')"></span>
+    </button>
+    <button
+      class="phoneBtn"
+      mat-menu-item
+      (click)="accSer.createBackupRDAccount(auth.curUser.company)"
+      *ngIf="auth.curUser && auth.curUser.type === Usertype.A"
+    >
+      <mat-icon color="warn">backup</mat-icon>
+      <div>
+        <span [innerText]="auth.t('हमशकल खाते')"></span>
+      </div>
     </button>
     <button class="phoneBtn" mat-menu-item (click)="auth.signOut()">
       <mat-icon>power_settings_new</mat-icon>

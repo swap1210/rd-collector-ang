@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { AccountType, Language } from '../model/user.model';
+import { AccountService } from '../services/account.service';
 
 @Component({
   selector: 'app-header',
@@ -24,18 +25,18 @@ export class HeaderComponent implements OnInit {
     'edit-account': '',
     'account-detail': '',
   };
-  currentTitle = '';
+  currentTitle = 'home';
   showGreeting: boolean = true;
   curLanguage: Language = Language.EN;
   Language = Language;
   Usertype = AccountType;
-  curRoute: any;
+  curRoute: string[] = [];
   translationPending = false;
 
   constructor(
     public auth: AuthService,
-    private _route: ActivatedRoute,
-    private _router: Router
+    private _router: Router,
+    public accSer: AccountService
   ) {
     if (this.auth.curUser)
       this.curLanguage = this.auth.curUser.language as Language;
@@ -43,44 +44,35 @@ export class HeaderComponent implements OnInit {
       this.showGreeting = false;
     }, 3000);
     this.translateTags();
-  }
 
-  translateTags() {
-    Object.keys(this.tag).map(
-      (val: string) => (this.tag[val] = this.auth.t(this.orgtag[val]))
-    );
-  }
-
-  ngOnInit(): void {
     //not working correctly
     this._router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event) => {
-        console.log('header', (event as any)['url']);
-
         this.curRoute = (event as any)['url'].split('/');
-        this.tagMapping(this.curRoute);
+        this.tagMapping();
       });
   }
 
-  tagMapping(curRoute: string[]) {
-    // console.log('Hdr eval ', curRoute);
-    if (curRoute.length > 2 && curRoute[1] === 'new-account') {
+  translateTags() {
+    Object.keys(this.tag).map((val: string) => {
+      this.tag[val] = this.auth.t(this.orgtag[val]);
+      // console.log('HDR tag key ', val, this.tag[val]);
+    });
+  }
+
+  ngOnInit(): void {}
+
+  tagMapping() {
+    if (this.curRoute.length > 2 && this.curRoute[1] === 'new-account') {
       this.currentTitle = 'edit-account';
-      // console.log(this.tag[this.currentTitle], curRoute[2]);
-      this.tag[this.currentTitle] = this.tag[this.currentTitle].replace(
-        '$',
-        curRoute[2]
-      );
-    } else if (curRoute.length > 2 && curRoute[1] === 'account-detail') {
+    } else if (
+      this.curRoute.length > 2 &&
+      this.curRoute[1] === 'account-detail'
+    ) {
       this.currentTitle = 'account-detail';
-      this.tag[this.currentTitle] = this.tag[this.currentTitle].replace(
-        '$',
-        curRoute[2]
-      );
-      console.log('Hdr eval ', this.tag);
     } else {
-      this.currentTitle = curRoute[1];
+      this.currentTitle = this.curRoute[1];
     }
   }
 
@@ -88,7 +80,6 @@ export class HeaderComponent implements OnInit {
     this.translationPending = true;
     this.curLanguage =
       this.curLanguage === Language.HI ? Language.EN : Language.HI;
-    // console.log('translated language', curLang);
     this.auth
       .updateUserDataLanguage(this.curLanguage)
       .then(() => {

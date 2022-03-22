@@ -22,7 +22,7 @@ export interface RDAccount {
   LastBilled: Timestamp;
   LastCollected: Timestamp;
   LastPaid: Timestamp;
-  LastUpdateBy?: DocumentReference | String;
+  LastUpdateBy?: DocumentReference | string;
   LastUpdateOn?: Timestamp;
   Nominee?: string;
   Phoneno?: string;
@@ -46,6 +46,6 @@ export interface RDAccountChange {
   Nominee?: string;
   Phoneno?: string;
   Whatsapp: boolean;
-  LastUpdateBy: DocumentReference;
+  LastUpdateBy: DocumentReference | string;
   LastUpdateOn: Timestamp;
 }

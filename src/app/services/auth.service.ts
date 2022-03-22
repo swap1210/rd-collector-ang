@@ -43,17 +43,6 @@ export class AuthService {
     });
   }
 
-  // async googleSignin() {
-  //   const provider = new GoogleAuthProvider();
-  //   signInWithPopup(this.afAuth, provider)
-  //     .then((credential) => {
-  //       this.updateUserData(credential.user);
-  //     })
-  //     .catch((err) => {
-  //       this.updateUserData(undefined);
-  //     });
-  // }
-
   // Auth logic to run auth providers
   AuthLogin(provider: any) {
     return this.afAuth
@@ -89,18 +78,9 @@ export class AuthService {
       `users/${user.uid}`
     );
 
-    // if(this.curUser)
     let oldData = await userRef.get().toPromise();
     oldData && console.log('oldData', oldData.data());
-    const data = {
-      // uid,
-      // company: 'ss',
-      // displayName,
-      // email,
-      // language: oldData.get('language'),
-      // type: oldData.get('type'),
-    };
-    console.log(data);
+    const data = {};
     if (oldData && user.uid === oldData.get('uid')) {
       sessionStorage.setItem('language', oldData.get('language'));
       return userRef.set({ last_login: Timestamp.now() }, { merge: true });

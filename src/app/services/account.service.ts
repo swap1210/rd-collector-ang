@@ -31,7 +31,7 @@ export class AccountService {
       .valueChanges()
       .pipe(
         map((orgObj: any) => {
-          console.log('Internet', orgObj);
+          // console.log('Internet', orgObj);
           Object.values<RDAccount>(orgObj.all).map((rec: RDAccount) => {
             rec.AmountTillNow =
               (CU.monthDiff(
@@ -53,8 +53,27 @@ export class AccountService {
     let temp: any = { all: acc_key };
     return this.firestore
       .collection(this.collectionName)
-      .doc(p_company + '_bkp')
+      .doc(p_company)
       .set(temp, { merge: true });
+  }
+
+  createBackupRDAccount(p_company: string) {
+    // let acc_key: any = {};
+    // let temp: any = { all: acc_key };
+
+    this.allRD$.subscribe({
+      next: (temp) => {
+        let new_temp: any = {};
+        temp.map((rec) => {
+          new_temp[rec.AccountNo] = rec;
+        });
+        console.log(this.collectionName, p_company + '_bkp', { all: new_temp });
+        this.firestore
+          .collection(this.collectionName)
+          .doc(p_company + '_bkp')
+          .set({ all: new_temp }, { merge: true });
+      },
+    });
   }
 
   ngOnDestroy() {

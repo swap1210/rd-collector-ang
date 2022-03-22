@@ -78,7 +78,7 @@ export class AccountDialogComponent implements OnInit {
     let tempPack: any = {
       AccountNo: this.rec.AccountNo,
       LastUpdateOn: Timestamp.now(),
-      LastUpdateBy: this.auth.curUserRef,
+      LastUpdateBy: this.auth.curUserRef?.id,
     };
     // console.log(this.toBeCollected, this.toBePaid, this.toBeBilled);
     if (this.toBeCollected) {
@@ -155,7 +155,7 @@ export class AccountDialogComponent implements OnInit {
     let tempPack: any = {
       AccountNo: this.rec.AccountNo,
       LastUpdateOn: Timestamp.now(),
-      LastUpdateBy: this.auth.curUserRef,
+      LastUpdateBy: this.auth.curUserRef?.id,
     };
 
     if (
