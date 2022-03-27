@@ -64,7 +64,8 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     console.log(
-      'Instance ' + environment.instance + ' v' + environment.version
+      'Instance ' + environment.instance + ' v' + environment.version,
+      environment.firebase
     );
   }
 
