@@ -18,9 +18,10 @@ jobs:
        node-version: '16.14.2'
     - run: npm install
     - run: npm run build
-    - uses: w9jds/firebase-action@master
+    - uses: FirebaseExtended/action-hosting-deploy@v0
       with:
-        args: deploy --only hosting --project poorti-21857
+          repoToken: ${{ secrets.FIREBASE_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_POORTI_21857 }}
+          projectId: poorti-21857
       env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-        FIREBASE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_POORTI_21857 }}
+          FIREBASE_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_POORTI_21857 }}
