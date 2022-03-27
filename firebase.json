@@ -1,7 +1,11 @@
 {
   "hosting": {
     "public": "dist/rd-collector-ang",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "rewrites": [
       {
         "source": "**",
