@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { environment } from 'src/environments/environment';
 import { AuthService } from './services/auth.service';
 
 @Component({
@@ -7,5 +8,10 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(public auth: AuthService) {}
+  constructor(public auth: AuthService) {
+    console.log(
+      'Instance ' + environment.instance + ' v' + environment.version,
+      environment.firebase
+    );
+  }
 }
