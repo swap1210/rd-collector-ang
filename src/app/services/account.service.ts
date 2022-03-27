@@ -17,7 +17,7 @@ export class AccountService {
   constructor(private firestore: AngularFirestore, auth: AuthService) {
     // console.log('Acc Serv Cons', auth);
     auth?.user$?.subscribe((Userdat) => {
-      console.log('Userdat', Userdat);
+      // console.log('Userdat', Userdat);
       if (Userdat && Userdat.uid && Userdat.company) {
         this.fetchRDAccounts2(Userdat.company).subscribe(this.allRD$);
       }
