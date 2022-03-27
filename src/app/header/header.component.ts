@@ -4,6 +4,7 @@ import { filter } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { AccountType, Language } from '../model/user.model';
 import { AccountService } from '../services/account.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-header',
@@ -61,7 +62,11 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log(
+      'Instance ' + environment.instance + ' v' + environment.version
+    );
+  }
 
   tagMapping() {
     if (this.curRoute.length > 2 && this.curRoute[1] === 'new-account') {

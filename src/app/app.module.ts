@@ -6,8 +6,6 @@ import { AppComponent } from './app.component';
 import { MainModule } from './main-module/main.module';
 import { SharedModule } from './shared/shared.module';
 import { HeaderComponent } from './header/header.component';
-import { pass } from 'src/shh/fin';
-import { CU } from './shared/comm-util';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
