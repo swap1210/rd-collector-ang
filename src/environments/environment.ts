@@ -1,6 +1,8 @@
+import { pass } from '../shh/fin';
+
 export const environment = {
-  version: 1.3,
   production: false,
   instance: 'Development',
-  firebase: {},
+  version: 1.3,
+  firebase: pass.value,
 };
