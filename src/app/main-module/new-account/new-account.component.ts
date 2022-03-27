@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import {
   FormBuilder,
@@ -20,6 +26,7 @@ import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
   selector: 'app-new-account',
   templateUrl: './new-account.component.html',
   styleUrls: ['./new-account.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewAccountComponent implements OnInit, OnDestroy {
   accountForm: FormGroup = new FormGroup({});

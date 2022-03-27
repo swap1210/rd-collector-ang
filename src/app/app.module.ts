@@ -14,6 +14,8 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
+import { environment } from 'src/environments/environment';
+import { FirebaseOptions } from '@angular/fire/app';
 @NgModule({
   declarations: [AppComponent, HeaderComponent],
   imports: [
@@ -22,7 +24,7 @@ import { AuthService } from './services/auth.service';
     BrowserModule,
     AppRoutingModule,
     MainModule,
-    AngularFireModule.initializeApp(JSON.parse(CU.decrypt(pass.value))),
+    AngularFireModule.initializeApp(environment.firebase as FirebaseOptions),
     AngularFirestoreModule,
     AngularFireAuthModule,
     BrowserAnimationsModule,

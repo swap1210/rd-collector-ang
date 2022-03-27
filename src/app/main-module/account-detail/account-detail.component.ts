@@ -1,4 +1,4 @@
-import { OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
@@ -7,12 +7,12 @@ import { RDAccount } from 'src/app/model/account.model';
 import { AccountService } from 'src/app/services/account.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { CU } from 'src/app/shared/comm-util';
-import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-account-detail',
   templateUrl: './account-detail.component.html',
   styleUrls: ['./account-detail.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
   accNo: string | undefined;

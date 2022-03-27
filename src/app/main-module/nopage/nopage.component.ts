@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { CU } from 'src/app/shared/comm-util';
 
@@ -6,6 +6,7 @@ import { CU } from 'src/app/shared/comm-util';
   selector: 'app-nopage',
   templateUrl: './nopage.component.html',
   styleUrls: ['./nopage.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NopageComponent implements OnInit {
   msg: string = '';

@@ -1,6 +1,64 @@
 import { Language } from '../model/user.model';
 
 export class CU {
+  constructor() {}
+
+  static t(p_lang: string, p_str: string): string {
+    let temp = '';
+    // console.log(p_lang, p_str);
+    switch (p_lang) {
+      case Language.EN:
+        if (new Object(CU.translation).hasOwnProperty(p_str)) {
+          temp = CU.translation[p_str];
+          // console.log(p_lang, p_str, temp);
+        } else {
+          temp = 'TNA: ' + p_str;
+        }
+        break;
+      case Language.HI:
+        temp = p_str;
+        break;
+    }
+
+    return temp;
+  }
+
+  static monthDiff(d1: Date, d2: Date) {
+    var months;
+    months = (d2.getFullYear() - d1.getFullYear()) * 12;
+    months -= d1.getMonth();
+    months += d2.getMonth();
+    return months <= 0 ? 0 : months;
+  }
+  static addMonths(date: Date, months: number) {
+    var d = date.getDate();
+    date.setMonth(date.getMonth() + +months);
+    if (date.getDate() != d) {
+      date.setDate(0);
+    }
+    return date;
+  }
+  static dateFinder(
+    p_startDate: Date,
+    p_installment: number,
+    p_paid: number
+  ): { calcDate: Date; amountShouldBe: number } {
+    let finalDate = new Date(
+      p_startDate.getFullYear(),
+      p_startDate.getMonth(),
+      1
+    );
+    finalDate = this.addMonths(finalDate, Math.floor(p_paid / p_installment));
+    finalDate = new Date(finalDate.getFullYear(), finalDate.getMonth(), 0);
+
+    let monthTillNow = this.monthDiff(p_startDate, new Date()) + 1;
+
+    return {
+      calcDate: finalDate,
+      amountShouldBe: monthTillNow * p_installment,
+    };
+  }
+
   static monthOptions = { year: 'numeric', month: 'long' } as const;
   static dateOptions = {
     year: 'numeric',
@@ -92,94 +150,4 @@ export class CU {
     '404 यह एक अमान्य रास्ता है। कृपया ऊपर दिए 🏡 चिह्न में जाए।':
       '404 This is an invalid Path. Please press 🏡',
   };
-
-  constructor() {}
-  static encrypt(p_value: string) {
-    console.log('encrypt', p_value);
-    var temp = '';
-    var karr = this.key.split('');
-    var i = 0;
-    p_value.split('').forEach((element) => {
-      temp += element + karr[i];
-      i++;
-      if (i === karr.length) {
-        i = 0;
-      }
-    });
-
-    return this.reverseString(temp);
-  }
-
-  static decrypt(p_encrypt_val: string) {
-    var temp = '';
-    p_encrypt_val = this.reverseString(p_encrypt_val);
-    var valarr = p_encrypt_val.split('');
-
-    valarr.forEach((ele, i) => {
-      if (i % 2 == 0) {
-        temp += ele;
-      }
-    });
-
-    return temp;
-  }
-  static reverseString(str: string) {
-    return str.split('').reverse().join('');
-  }
-
-  static t(p_lang: string, p_str: string): string {
-    let temp = '';
-    // console.log(p_lang, p_str);
-    switch (p_lang) {
-      case Language.EN:
-        if (new Object(CU.translation).hasOwnProperty(p_str)) {
-          temp = CU.translation[p_str];
-          // console.log(p_lang, p_str, temp);
-        } else {
-          temp = 'TNA: ' + p_str;
-        }
-        break;
-      case Language.HI:
-        temp = p_str;
-        break;
-    }
-
-    return temp;
-  }
-
-  static monthDiff(d1: Date, d2: Date) {
-    var months;
-    months = (d2.getFullYear() - d1.getFullYear()) * 12;
-    months -= d1.getMonth();
-    months += d2.getMonth();
-    return months <= 0 ? 0 : months;
-  }
-  static addMonths(date: Date, months: number) {
-    var d = date.getDate();
-    date.setMonth(date.getMonth() + +months);
-    if (date.getDate() != d) {
-      date.setDate(0);
-    }
-    return date;
-  }
-  static dateFinder(
-    p_startDate: Date,
-    p_installment: number,
-    p_paid: number
-  ): { calcDate: Date; amountShouldBe: number } {
-    let finalDate = new Date(
-      p_startDate.getFullYear(),
-      p_startDate.getMonth(),
-      1
-    );
-    finalDate = this.addMonths(finalDate, Math.floor(p_paid / p_installment));
-    finalDate = new Date(finalDate.getFullYear(), finalDate.getMonth(), 0);
-
-    let monthTillNow = this.monthDiff(p_startDate, new Date()) + 1;
-
-    return {
-      calcDate: finalDate,
-      amountShouldBe: monthTillNow * p_installment,
-    };
-  }
 }

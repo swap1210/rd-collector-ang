@@ -53,7 +53,7 @@ export class AuthService {
         next: (vv) => {
           Object.keys(vv.img).map((ev) => {
             let prep_str = CU.iu_p1 + ev + CU.iu_p2 + vv.img[ev];
-            console.log(prep_str);
+            // console.log(prep_str);
             vv.img[ev] = prep_str;
             return [];
           });
@@ -94,10 +94,10 @@ export class AuthService {
       next: (oldData) => {
         const data = {};
         if (oldData && user.uid === oldData.get('uid')) {
-          sessionStorage.setItem('language', oldData.get('language'));
+          // sessionStorage.setItem('language', oldData.get('language'));
           return userRef.set({ last_login: Timestamp.now() }, { merge: true });
         } else {
-          sessionStorage.clear();
+          // sessionStorage.clear();
           if (this.anl) {
             const { uid, displayName, email } = user;
             return userRef.set(
