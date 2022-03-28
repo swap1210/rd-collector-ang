@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: pwd
+      - run: ls
       - run: touch './src/environments/environment.ts';
       - run: touch './src/environments/environment.prod.ts';
       - run: npm ci && npm run build
