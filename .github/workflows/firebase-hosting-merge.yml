@@ -14,10 +14,12 @@ jobs:
       APIKEY: "${{ secrets.APIKEY }}"
     steps:
       - uses: actions/checkout@v2
-      - run: pwd
-      - run: ls
-      - run: touch './src/environments/environment.ts';
-      - run: touch './src/environments/environment.prod.ts';
+      - uses: 1arp/create-a-file-action@0.2
+        with:
+          path: "src/environments"
+          file: "environment.ts"
+      - run: touch 'src/environments/environment.ts';
+      - run: touch 'src/environments/environment.prod.ts';
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
