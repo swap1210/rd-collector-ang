@@ -4,7 +4,7 @@ const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
 let x = process.env['FIREBASE_KEY'];
 x = x ? x : '';
-let temp = JSON.PARSE(x);
+let temp = JSON.parse(x);
 // for (let i = 1; i < x.length - 1; i++) {
 //   if (x.charAt(i) === ':') {
 //     temp += '"' + x.charAt(i) + '"';
