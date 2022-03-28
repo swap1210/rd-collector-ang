@@ -4,6 +4,7 @@ const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
 let x = process.env['FIREBASE_KEY'];
 x = x ? x : '';
+console.log("*x*",x);
 let temp = JSON.parse(x);
 // for (let i = 1; i < x.length - 1; i++) {
 //   if (x.charAt(i) === ':') {
@@ -14,7 +15,7 @@ let temp = JSON.parse(x);
 //     temp += x.charAt(i);
 //   }
 // }
-temp = '{"' + temp.substring(0, temp.length - 2) + '}';
+//temp = '{"' + temp.substring(0, temp.length - 2) + '}';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
