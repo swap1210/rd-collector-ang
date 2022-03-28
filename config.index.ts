@@ -6,9 +6,7 @@ const ky = process.env['FIREBASE_KEY'];
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
-   firebase: {
-        apiKey: ${ky}
-    },
+   firebase: ${ky},
     version: 1.3
 };
 `;
