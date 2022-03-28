@@ -1,12 +1,12 @@
 import { writeFile } from 'fs';
 
 const targetPath = './src/environments/environment.prod.ts';
-
+const ky = process.env['FIREBASE_KEY'];
 const envConfigFile = `export const environment = {
    production: true,
    instance: 'Production',
    firebase: {
-        apiKey: '${process.env?.['FIREBASE_API_KEY']}'
+        apiKey: '${ky}'
     },
     version: 1.3
 };
