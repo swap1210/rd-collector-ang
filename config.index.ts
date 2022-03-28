@@ -2,32 +2,28 @@ import { writeFile } from 'fs';
 
 const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
-let x = process.env['FIREBASE_KEY'];
+let x = process.env['APIKEY'];
 x = x ? x : '';
-console.log("*x*",typeof x);
-let temp = x;//JSON.parse(x);
-// for (let i = 1; i < x.length - 1; i++) {
-//   if (x.charAt(i) === ':') {
-//     temp += '"' + x.charAt(i) + '"';
-//   } else if (x.charAt(i) === ',') {
-//     temp += '"' + x.charAt(i) + '"';
-//   } else {
-//     temp += x.charAt(i);
-//   }
-// }
-//temp = '{"' + temp.substring(0, temp.length - 2) + '}';
+console.log('*x*', x);
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
-   firebase: ${temp}
-    ,
+   firebase: {
+                "apiKey": '${x}',
+                "authDomain": 'poorti-21857.firebaseapp.com',
+                "projectId": 'poorti-21857',
+              },
     version: 1.3
 };
 `;
 const envConfigFile2 = `export const environment = {
    production: true,
    instance: 'Production',
-   firebase: ${temp},
+   firebase: {
+              "apiKey": '${x}',
+              "authDomain": 'poorti-21857.firebaseapp.com',
+              "projectId": 'poorti-21857',
+            },
     version: 1.3
 };
 `;
