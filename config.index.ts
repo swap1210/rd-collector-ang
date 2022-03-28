@@ -4,7 +4,6 @@ const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
 let x = process.env['APIKEY'];
 x = x ? x : '';
-console.log('*x*', x);
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
