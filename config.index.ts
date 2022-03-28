@@ -1,8 +1,20 @@
 import { writeFile } from 'fs';
 
-const targetPath = './src/environments/environment.prod.ts';
-const ky = process.env['FIREBASE_KEY'];
-const envConfigFile = `export const environment = {
+const targetPath1 = './src/environments/environment.ts';
+const targetPath2 = './src/environments/environment.prod.ts';
+const ky = JSON.parse(
+  process.env['FIREBASE_KEY'] ? process.env['FIREBASE_KEY'] : ''
+);
+const envConfigFile1 = `export const environment = {
+   production: false,
+   instance: 'Development',
+   firebase: {
+        apiKey: ${ky}
+    },
+    version: 1.3
+};
+`;
+const envConfigFile2 = `export const environment = {
    production: true,
    instance: 'Production',
    firebase: {
@@ -12,7 +24,12 @@ const envConfigFile = `export const environment = {
 };
 `;
 
-writeFile(targetPath, envConfigFile, 'utf8', (err) => {
+writeFile(targetPath1, envConfigFile1, 'utf8', (err) => {
+  if (err) {
+    return console.log(err);
+  }
+});
+writeFile(targetPath2, envConfigFile2, 'utf8', (err) => {
   if (err) {
     return console.log(err);
   }
