@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  version: 1.2,
+  version: 1.0,
   instance: 'Production',
-  firebase: process.env['FIREBASE_KEY'],
+  firebase: {},
 };

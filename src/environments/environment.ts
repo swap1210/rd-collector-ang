@@ -1,8 +1,6 @@
 export const environment = {
-   production: false,
-   instance: 'Production',
-   firebase: {
-        apiKey: 'undefined'
-    },
-    version: 1.3
+  production: false,
+  version: 1.0,
+  instance: 'Production',
+  firebase: {},
 };
