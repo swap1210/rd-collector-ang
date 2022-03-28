@@ -2,9 +2,7 @@ import { writeFile } from 'fs';
 
 const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
-const ky = JSON.parse(
-  process.env['FIREBASE_KEY'] ? process.env['FIREBASE_KEY'] : ''
-);
+const ky = process.env['FIREBASE_KEY'];
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
