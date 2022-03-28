@@ -18,12 +18,8 @@ temp = '{"' + temp.substring(0, temp.length - 2) + '}';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
-<<<<<<< HEAD
    firebase: ${temp}
     ,
-=======
-   firebase: ${ky},
->>>>>>> 7fe7f096831163cd34ae7d3d9aba18eceeea1223
     version: 1.3
 };
 `;
