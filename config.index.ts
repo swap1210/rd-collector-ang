@@ -2,22 +2,31 @@ import { writeFile } from 'fs';
 
 const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
-const ky = process.env['FIREBASE_KEY'];
+let x = process.env['FIREBASE_KEY'];
+x = x ? x : '';
+let temp = '';
+for (let i = 1; i < x.length - 1; i++) {
+  if (x.charAt(i) === ':') {
+    temp += '"' + x.charAt(i) + '"';
+  } else if (x.charAt(i) === ',') {
+    temp += '"' + x.charAt(i) + '"';
+  } else {
+    temp += x.charAt(i);
+  }
+}
+temp = '{"' + temp.substring(0, temp.length - 2) + '}';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
-   firebase: {
-        apiKey: ${ky}
-    },
+   firebase: ${temp}
+    ,
     version: 1.3
 };
 `;
 const envConfigFile2 = `export const environment = {
    production: true,
    instance: 'Production',
-   firebase: {
-        apiKey: '${ky}'
-    },
+   firebase: ${temp},
     version: 1.3
 };
 `;
