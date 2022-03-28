@@ -63,9 +63,7 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(
-      'Instance ' + environment.instance + ' v' + environment.version
-    );
+    console.log('Instance ' + environment.instance, ' v' + environment.version);
   }
 
   tagMapping() {

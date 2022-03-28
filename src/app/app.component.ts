@@ -10,8 +10,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   constructor(public auth: AuthService) {
     console.log(
-      'Instance ' + environment.instance + ' v' + environment.version,
-      environment.firebase
+      'Instance ' + environment.instance + ' v' + environment.version
     );
   }
 }
