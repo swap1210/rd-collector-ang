@@ -14,8 +14,8 @@ jobs:
       APIKEY: "${{ secrets.APIKEY }}"
     steps:
       - uses: actions/checkout@v2
-      - run: touch 'src/environments/environment.ts';
-      - run: touch 'src/environments/environment.prod.ts';
+      # - run: touch 'src/environments/environment.ts';
+      # - run: touch 'src/environments/environment.prod.ts';
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

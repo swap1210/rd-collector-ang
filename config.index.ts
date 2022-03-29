@@ -1,4 +1,4 @@
-import { writeFile } from 'fs';
+import { mkdir, writeFile } from 'fs';
 
 const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
@@ -26,7 +26,11 @@ const envConfigFile2 = `export const environment = {
     version: 1.3
 };
 `;
-
+mkdir('./src/environments/', (err) => {
+  if (err) {
+    return console.log(err);
+  }
+});
 writeFile(targetPath1, envConfigFile1, 'utf8', (err) => {
   if (err) {
     return console.log(err);
