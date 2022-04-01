@@ -10,7 +10,7 @@ import { AuthService } from './services/auth.service';
 export class AppComponent {
   constructor(public auth: AuthService) {
     console.log(
-      'Instance ' + environment.instance + ' v' + environment.version
+      'Instance 11 ' + environment.instance + ' v' + environment.version
     );
   }
 }
