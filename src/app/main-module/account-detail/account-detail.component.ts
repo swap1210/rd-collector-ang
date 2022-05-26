@@ -29,17 +29,13 @@ export class AccountDetailComponent implements OnInit {
   ngOnInit(): void {
     this.accNo = this.route.snapshot.paramMap.get('accid') || '';
     this.accountSubscribe = this.accountService.allRD$.subscribe((obj) => {
-      console.log('a' + this.accNo);
       //return when no data
       if (!obj.length) return;
-      console.log('b');
 
       if (obj && this.accNo) {
         this.ca = obj.filter(
           (cur_rec) => cur_rec.AccountNo === this.accNo
         )[0] as RDAccount;
-        // this.str_test = JSON.stringify(this.ca);
-        console.log(this.ca);
         const sd: Date = new Timestamp(
           this.ca.RdStartDate.seconds,
           this.ca.RdStartDate.nanoseconds

@@ -1,5 +1,5 @@
 <div class="main-detail">
-  <div class="loaderDiv" *ngIf="ca === undefined">
+  <div class="loaderDiv" *ngIf="ca?.AccountName === ''">
     <app-loader></app-loader>
   </div>
   <div class="wrapper">
@@ -121,7 +121,7 @@
     </div>
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('अब तक की राशि')"></div>
-      <div>{{ (ca && ca.AmountTillNow) || 0 | currency: "INR":"symbol" }}</div>
+      <div>{{ ca.AmountTillNow | currency: "INR":"symbol" }}</div>
     </div>
     <div class="box mat-elevation-z1" *ngIf="ca?.Nominee && ca?.Nominee !== ''">
       <div class="keyLabel" [innerText]="auth.t('नॉमिनी का नाम')"></div>
