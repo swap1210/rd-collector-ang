@@ -179,12 +179,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       //record is Enabled
       let recordFinalFilter = record.Enabled;
-      console.debug(recordFinalFilter);
+      // console.debug(recordFinalFilter);
 
       //record is active
       recordFinalFilter &&=
         !record.CloseDate || record.CloseDate.toDate() < this.firstDay;
-      console.debug(recordFinalFilter + '' + record.CloseDate);
+      // console.debug(recordFinalFilter + '' + record.CloseDate);
 
       //start of search string
       //record name include search string unfilter.filterInput

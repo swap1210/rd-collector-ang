@@ -16,7 +16,23 @@ import { CU } from 'src/app/shared/comm-util';
 })
 export class AccountDetailComponent implements OnInit, OnDestroy {
   accNo: string | undefined;
-  ca: RDAccount | undefined;
+  ca: RDAccount = {
+    temp_account: '',
+    AccountNo: '',
+    AccountName: '',
+    AmountBilled: 0,
+    AmountCollected: 0,
+    AmountPaid: 0,
+    CardNo: '',
+    CreatedOn: Timestamp.now(),
+    Enabled: false,
+    Installment: 0,
+    LastBilled: Timestamp.now(),
+    LastCollected: Timestamp.now(),
+    LastPaid: Timestamp.now(),
+    RdStartDate: Timestamp.now(),
+    Whatsapp: false,
+  };
   calcED: Date | undefined;
   public accountSubscribe: Subscription | undefined;
 
@@ -26,7 +42,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     public auth: AuthService
   ) {}
   ngOnDestroy(): void {
-    this.accountSubscribe = new Subscription();
+    // this.accountSubscribe = new Subscription();
   }
 
   ngOnInit(): void {
@@ -64,12 +80,16 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
         ? lpendingFromMonth.setDate(lpendingFromMonth.getDate() - 10)
         : 0
     );
+
     let CurPendingDate = new Date(d.getFullYear(), d.getMonth() + 1, -10);
     let finalDate =
       shouldBeDate > CurPendingDate ? shouldBeDate : CurPendingDate;
 
     let str = CU.msg[0] as string;
-    str = str.replace('$', this.ca ? this.ca.AccountName : '');
+    str = str.replace(
+      '$',
+      this.ca ? this.ca.AccountName.replace('&', 'and') : ''
+    );
     str = str.replace(
       '$',
       pendingFromMonth

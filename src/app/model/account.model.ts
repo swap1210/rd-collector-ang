@@ -4,7 +4,7 @@ import { GeoPoint, Timestamp } from '@angular/fire/firestore';
 import { AccountType } from './user.model';
 
 export interface RDAccount {
-  temp_account: DocumentReference;
+  temp_account: DocumentReference | String;
   Alias?: string[];
   AccountName: string;
   AccountNo: string;

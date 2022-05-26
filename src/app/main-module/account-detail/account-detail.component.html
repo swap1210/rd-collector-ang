@@ -1,8 +1,8 @@
 <div class="main-detail">
-  <div class="loaderDiv" *ngIf="ca === undefined">
-    <app-loader *ngIf="ca === undefined"></app-loader>
+  <div class="loaderDiv" *ngIf="ca?.AccountName === undefined">
+    <app-loader></app-loader>
   </div>
-  <div class="wrapper" *ngIf="ca !== undefined">
+  <div class="wrapper" *ngIf="ca?.AccountName !== undefined">
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('खाता नंबर')"></div>
       <div [innerText]="ca.AccountNo"></div>
