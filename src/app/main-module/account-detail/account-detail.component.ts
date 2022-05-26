@@ -14,25 +14,9 @@ import { CU } from 'src/app/shared/comm-util';
   styleUrls: ['./account-detail.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountDetailComponent implements OnInit, OnDestroy {
+export class AccountDetailComponent implements OnInit {
   accNo: string | undefined;
-  ca: RDAccount = {
-    temp_account: '',
-    AccountNo: '',
-    AccountName: '',
-    AmountBilled: 0,
-    AmountCollected: 0,
-    AmountPaid: 0,
-    CardNo: '',
-    CreatedOn: Timestamp.now(),
-    Enabled: false,
-    Installment: 0,
-    LastBilled: Timestamp.now(),
-    LastCollected: Timestamp.now(),
-    LastPaid: Timestamp.now(),
-    RdStartDate: Timestamp.now(),
-    Whatsapp: false,
-  };
+  ca!: RDAccount;
   calcED: Date | undefined;
   public accountSubscribe: Subscription | undefined;
 
@@ -41,22 +25,21 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
     private accountService: AccountService,
     public auth: AuthService
   ) {}
-  ngOnDestroy(): void {
-    // this.accountSubscribe = new Subscription();
-  }
 
   ngOnInit(): void {
     this.accNo = this.route.snapshot.paramMap.get('accid') || '';
     this.accountSubscribe = this.accountService.allRD$.subscribe((obj) => {
-      // console.log(obj);
+      console.log('a' + this.accNo);
       //return when no data
       if (!obj.length) return;
+      console.log('b');
 
       if (obj && this.accNo) {
         this.ca = obj.filter(
           (cur_rec) => cur_rec.AccountNo === this.accNo
         )[0] as RDAccount;
-
+        // this.str_test = JSON.stringify(this.ca);
+        console.log(this.ca);
         const sd: Date = new Timestamp(
           this.ca.RdStartDate.seconds,
           this.ca.RdStartDate.nanoseconds
@@ -66,6 +49,7 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   msg() {
     const pendingFromMonth = this.ca
       ? this.ca.LastCollected.toDate()

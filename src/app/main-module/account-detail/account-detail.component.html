@@ -1,24 +1,24 @@
 <div class="main-detail">
-  <div class="loaderDiv" *ngIf="ca?.AccountName === undefined">
+  <div class="loaderDiv" *ngIf="ca === undefined">
     <app-loader></app-loader>
   </div>
-  <div class="wrapper" *ngIf="ca?.AccountName !== undefined">
+  <div class="wrapper">
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('खाता नंबर')"></div>
-      <div [innerText]="ca.AccountNo"></div>
+      <div [innerText]="ca?.AccountNo"></div>
     </div>
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('खाता धारक का नाम')"></div>
-      <div [innerText]="ca.AccountName"></div>
+      <div [innerText]="ca?.AccountName"></div>
     </div>
     <div
       class="box mat-elevation-z1"
-      *ngIf="ca.Phoneno !== '' && ca.Phoneno !== null"
+      *ngIf="ca?.Phoneno !== '' && ca?.Phoneno !== null"
     >
       <div class="keyLabel" [innerText]="auth.t('फोन नंबर')"></div>
-      <a [href]="'tel:+91' + ca.Phoneno" [innerText]="ca.Phoneno"></a>
+      <a [href]="'tel:+91' + ca?.Phoneno" [innerText]="ca?.Phoneno"></a>
       <a
-        *ngIf="ca.Whatsapp && (ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+        *ngIf="ca?.Whatsapp && (ca.AmountTillNow || 0) - ca.AmountCollected > 0"
         [href]="
           'https://api.whatsapp.com/send?phone=%2B91' +
           ca.Phoneno +
@@ -43,28 +43,28 @@
         </svg>
       </a>
     </div>
-    <div class="box mat-elevation-z1" *ngIf="ca.CIFNo !== undefined">
+    <div class="box mat-elevation-z1" *ngIf="ca?.CIFNo !== undefined">
       <div class="keyLabel" [innerText]="auth.t('स.ई.फ. नंबर')"></div>
-      <div [innerText]="ca.CIFNo"></div>
+      <div [innerText]="ca?.CIFNo"></div>
     </div>
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('किस्त')"></div>
-      <div>{{ ca.Installment | currency: "INR":"symbol" }}</div>
+      <div>{{ ca?.Installment | currency: "INR":"symbol" }}</div>
     </div>
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('कार्ड नंबर')"></div>
-      <div [innerText]="ca.CardNo"></div>
+      <div [innerText]="ca?.CardNo"></div>
     </div>
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('आरंभ तारीख')"></div>
-      <div>{{ ca.RdStartDate.toDate() | date: "dd-MMM-yy" }}</div>
+      <div>{{ ca && ca.RdStartDate.toDate() | date: "dd-MMM-yy" }}</div>
     </div>
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('अंतिम तारीख')"></div>
       <div>
         <!-- use temp variable till end date logic is fixed -->
         {{
-          (this.ca.CloseDate && this.ca.CloseDate.toDate()) || this.calcED
+          (ca && this.ca.CloseDate && this.ca.CloseDate.toDate()) || this.calcED
             | date: "dd-MMM-yy"
         }}
       </div>
@@ -72,12 +72,12 @@
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('आखरी कलेक्शन तारीख')"></div>
       <div>
-        {{ this.ca.LastCollected.toDate() | date: "dd-MMM-yy" }}
+        {{ ca && this.ca.LastCollected.toDate() | date: "dd-MMM-yy" }}
       </div>
     </div>
     <div
       class="box mat-elevation-z1 imp"
-      *ngIf="(ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+      *ngIf="ca && (ca.AmountTillNow || 0) - ca.AmountCollected > 0"
     >
       <div class="keyLabel" [innerText]="auth.t('कलेक्शन बकाया')"></div>
       <div>
@@ -90,12 +90,12 @@
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('आखरी भुगतान तारीख')"></div>
       <div>
-        {{ this.ca.LastPaid.toDate() | date: "dd-MMM-yy" }}
+        {{ ca && ca.LastPaid.toDate() | date: "dd-MMM-yy" }}
       </div>
     </div>
     <div
       class="box mat-elevation-z1 imp"
-      *ngIf="(ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+      *ngIf="ca && (ca.AmountTillNow || 0) - ca.AmountCollected > 0"
     >
       <div class="keyLabel" [innerText]="auth.t('भुगतान बकाया')"></div>
       <div>
@@ -105,12 +105,12 @@
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('आखरी बिल तारीख')"></div>
       <div>
-        {{ this.ca.LastBilled.toDate() | date: "dd-MMM-yy" }}
+        {{ ca && ca.LastBilled.toDate() | date: "dd-MMM-yy" }}
       </div>
     </div>
     <div
       class="box mat-elevation-z1 imp"
-      *ngIf="(ca.AmountTillNow || 0) - ca.AmountCollected > 0"
+      *ngIf="ca && (ca.AmountTillNow || 0) - ca.AmountCollected > 0"
     >
       <div class="keyLabel" [innerText]="auth.t('बिल बकाया')"></div>
       <div>
@@ -121,7 +121,7 @@
     </div>
     <div class="box mat-elevation-z1">
       <div class="keyLabel" [innerText]="auth.t('अब तक की राशि')"></div>
-      <div>{{ ca?.AmountTillNow | currency: "INR":"symbol" }}</div>
+      <div>{{ (ca && ca.AmountTillNow) || 0 | currency: "INR":"symbol" }}</div>
     </div>
     <div class="box mat-elevation-z1" *ngIf="ca?.Nominee && ca?.Nominee !== ''">
       <div class="keyLabel" [innerText]="auth.t('नॉमिनी का नाम')"></div>

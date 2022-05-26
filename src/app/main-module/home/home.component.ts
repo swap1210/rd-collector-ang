@@ -140,9 +140,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // console.count('trying here but' + JSON.stringify(this.accountSubscribe));
     this.accountSubscribe = this.accountService.allRD$.subscribe({
       next: (rdDocList) => {
-        console.log('Atleast heres');
+        // console.log('Atleast heres');
         if (!rdDocList.length) return;
-        console.log(rdDocList);
+        // console.log(rdDocList);
         let tempAll = rdDocList;
         this.filterGroup.patchValue({ filterInput: '', enableAll: false });
         this.dialog.closeAll();
@@ -369,7 +369,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.auth.user$?.subscribe((obj) => {
       if (this.paginator) {
-        console.log('user change');
+        // console.log('user change');
         this.paginator._intl.itemsPerPageLabel = CU.t(
           obj?.language,
           'एक बार में कितने खाते देखने हैं: '
