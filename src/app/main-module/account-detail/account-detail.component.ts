@@ -12,7 +12,7 @@ import { CU } from 'src/app/shared/comm-util';
   selector: 'app-account-detail',
   templateUrl: './account-detail.component.html',
   styleUrls: ['./account-detail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountDetailComponent implements OnInit {
   accNo: string | undefined;
