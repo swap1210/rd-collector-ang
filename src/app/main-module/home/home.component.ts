@@ -79,7 +79,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public dialog: MatDialog,
     private cdr: ChangeDetectorRef,
     formBuilder: FormBuilder,
-    private cdRef: ChangeDetectorRef,
     private _bottomSheet: MatBottomSheet
   ) {
     this.filterGroup = formBuilder.group({

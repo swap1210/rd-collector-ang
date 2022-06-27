@@ -1,2 +1,8 @@
-<app-header *ngIf="auth.user$ | async as user"></app-header>
-<router-outlet></router-outlet>
+<div class="parent">
+  <app-header *ngIf="auth.user$ | async as user; else thickmargin"></app-header>
+  <ng-template #thickmargin>
+    <div class="thick"></div>
+  </ng-template>
+  <div class="centered"><router-outlet></router-outlet></div>
+  <app-footer></app-footer>
+</div>

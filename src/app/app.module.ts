@@ -14,8 +14,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './services/auth.service';
 import { environment } from 'src/environments/environment';
 import { FirebaseOptions } from '@angular/fire/app';
+import { FooterComponent } from './footer/footer.component';
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent, HeaderComponent, FooterComponent],
   imports: [
     HttpClientModule,
     SharedModule,

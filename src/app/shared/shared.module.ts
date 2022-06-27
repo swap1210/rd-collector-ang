@@ -18,10 +18,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { MatTableModule } from '@angular/material/table';
 import { MatSortModule } from '@angular/material/sort';
-import {
-  MatPaginatorIntl,
-  MatPaginatorModule,
-} from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { SnacksComponent } from './snacks/snacks.component';
 import { MatDialogModule } from '@angular/material/dialog';

@@ -1,0 +1,13 @@
+.parent {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 95%;
+}
+.centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.thick {
+  height: 2.5em;
+}

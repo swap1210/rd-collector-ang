@@ -18,6 +18,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class AuthService {
   anl = !environment.production; //flag for anonymous login
+  default_work_group = 'na'; //flag for anonymous login
   user$: Observable<any> | undefined;
   commonData$: BehaviorSubject<any> = new BehaviorSubject({});
   curUser: User | undefined;
@@ -57,6 +58,10 @@ export class AuthService {
             vv.img[ev] = prep_str;
             return [];
           });
+          vv.img['default_login'] = vv.default_login;
+          vv.img['footer'] = vv.footer;
+          this.anl = vv.default_login['allow'];
+          this.default_work_group = vv.default_login['work_group'];
           this.commonData$.next(vv.img);
         },
       });
@@ -108,12 +113,13 @@ export class AuthService {
                 language: 'hi',
                 type: AccountType.C,
                 last_login: Timestamp.now(),
-                company: 'ss',
+                company: this.default_work_group,
               },
               { merge: true }
             );
           } else {
             this.afAuth.signOut();
+            alert('Currently new logins are disabled');
           }
           return { uid: null };
         }
