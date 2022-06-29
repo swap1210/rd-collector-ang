@@ -29,6 +29,7 @@ export class AccountDetailComponent implements OnInit {
     this.accNo = this.route.snapshot.paramMap.get('accid') || '';
     this.accountSubscribe = this.accountService.allRD$.subscribe((obj) => {
       //return when no data
+      console.log('detail sub');
       if (!obj.length) return;
 
       if (obj && this.accNo) {

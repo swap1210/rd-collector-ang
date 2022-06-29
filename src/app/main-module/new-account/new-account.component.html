@@ -253,13 +253,14 @@
             ><button
               matPrefix
               mat-icon-button
-              *ngIf="accountForm.value.Installment"
+              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
                     AmountBilled:
                       accountForm.value.AmountBilled +
-                      accountForm.value.Installment
+                      (accountForm.value.Installment ||
+                        curAccountObj.Installment)
                   },
                   { emitEvent: false, onlySelf: true }
                 )
@@ -290,14 +291,15 @@
             <button
               matSuffix
               mat-icon-button
-              *ngIf="accountForm.value.Installment"
+              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
                     AmountBilled:
                       accountForm.value.AmountBilled > 0
                         ? accountForm.value.AmountBilled -
-                          accountForm.value.Installment
+                          (accountForm.value.Installment ||
+                            curAccountObj.Installment)
                         : 0
                   },
                   { emitEvent: false, onlySelf: true }
@@ -311,13 +313,14 @@
             <button
               matPrefix
               mat-icon-button
-              *ngIf="accountForm.value.Installment"
+              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
                     AmountPaid:
                       accountForm.value.AmountPaid +
-                      accountForm.value.Installment
+                      (accountForm.value.Installment ||
+                        curAccountObj.Installment)
                   },
                   { emitEvent: false, onlySelf: true }
                 )
@@ -348,14 +351,15 @@
             <button
               matSuffix
               mat-icon-button
-              *ngIf="accountForm.value.Installment"
+              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
                     AmountPaid:
                       accountForm.value.AmountPaid > 0
                         ? accountForm.value.AmountPaid -
-                          accountForm.value.Installment
+                          (accountForm.value.Installment ||
+                            curAccountObj.Installment)
                         : 0
                   },
                   { emitEvent: false, onlySelf: true }
@@ -369,13 +373,14 @@
             <button
               matPrefix
               mat-icon-button
-              *ngIf="accountForm.value.Installment"
+              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
                     AmountCollected:
                       accountForm.value.AmountCollected +
-                      accountForm.value.Installment
+                      (accountForm.value.Installment ||
+                        curAccountObj.Installment)
                   },
                   { emitEvent: false, onlySelf: true }
                 )
@@ -406,14 +411,15 @@
             <button
               matSuffix
               mat-icon-button
-              *ngIf="accountForm.value.Installment"
+              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
                     AmountCollected:
                       accountForm.value.AmountCollected > 0
                         ? accountForm.value.AmountCollected -
-                          accountForm.value.Installment
+                          (accountForm.value.Installment ||
+                            curAccountObj.Installment)
                         : 0
                   },
                   { emitEvent: false, onlySelf: true }

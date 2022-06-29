@@ -45,7 +45,7 @@ interface FilterType {
 export class HomeComponent implements OnInit, AfterViewInit {
   public rdlist: RDAccount[] = [];
 
-  public accountSubscribe: Subscription | undefined;
+  // public accountSubscribe: Subscription | undefined;
 
   dataSource: MatTableDataSource<RDAccount> | undefined;
   selection = new SelectionModel<RDAccount>(true, []);
@@ -117,28 +117,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   fetchPaidMode() {
-    if (!this.accountSubscribe) this.startSubscription();
-    else {
-      const selIndex = this.displayedColumns.indexOf('select');
-      if (selIndex > -1) {
-        this.selection.clear();
-        this.displayedColumns.splice(selIndex, 1);
-      }
-      this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));
+    // if (!this.accountSubscribe) this.startSubscription();
+    // else {
+    const selIndex = this.displayedColumns.indexOf('select');
+    if (selIndex > -1) {
+      this.selection.clear();
+      this.displayedColumns.splice(selIndex, 1);
     }
+    this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));
+    // }
   }
+
   fetchBilledMode() {
-    if (!this.accountSubscribe) this.startSubscription();
-    else {
-      if (!this.displayedColumns.includes('select'))
-        this.displayedColumns.unshift('select');
-      this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));
-    }
+    // if (!this.accountSubscribe) this.startSubscription();
+    // else {
+    if (!this.displayedColumns.includes('select'))
+      this.displayedColumns.unshift('select');
+    this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));
+    // }
   }
 
   startSubscription(p_mode?: string) {
     // console.count('trying here but' + JSON.stringify(this.accountSubscribe));
-    this.accountSubscribe = this.accountService.allRD$.subscribe({
+    // this.accountSubscribe =
+    console.log('Home sub');
+    this.accountService.allRD$.subscribe({
       next: (rdDocList) => {
         // console.log('Atleast heres');
         if (!rdDocList.length) return;
@@ -173,7 +176,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       //ignore all further filters if enableAll is toggled
       if (unfilter.enableAll) {
-        return unfilter.enableAll;
+        return (
+          record.AccountName.includes(
+            unfilter.filterInput.trim().toUpperCase()
+          ) ||
+          record.AccountNo.includes(unfilter.filterInput.trim().toUpperCase())
+        );
       }
 
       //record is Enabled
@@ -219,13 +227,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
           record.AmountCollected <
             (record.AmountTillNow || record.Installment)) ||
         (this.billingOrCollection === 'C' &&
-          record.AmountCollected <
-            (record.AmountTillNow || record.Installment)) ||
+          record.AmountPaid < (record.AmountTillNow || record.Installment)) ||
         (this.billingOrCollection === 'B' &&
-          record.AmountPaid < (record.AmountTillNow || record.Installment));
+          record.AmountBilled < (record.AmountTillNow || record.Installment));
       //console.debug(recordFinalFilter + ' ' + (this.billingOrCollection === 'C'));
-
-      // console.groupEnd();
 
       return recordFinalFilter;
 

@@ -16,7 +16,13 @@
     }"
   >
     <form class="filterFormDiv" [formGroup]="filterGroup">
-      <div class="tabDiv" *ngIf="auth.curUser?.type === AccountType.A">
+      <div
+        class="tabDiv"
+        *ngIf="auth.curUser?.type === AccountType.A"
+        [ngStyle]="{
+          display: !filterGroup.controls['enableAll'].value ? 'block' : 'none'
+        }"
+      >
         <mat-button-toggle-group [(value)]="billingOrCollection" color="accent">
           <mat-button-toggle value="C" (click)="fetchPaidMode()">{{
             t("कलेक्शन सूची")
