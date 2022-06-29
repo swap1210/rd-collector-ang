@@ -145,6 +145,9 @@
       <tr
         mat-row
         style="cursor: pointer"
+        [ngStyle]="{
+          'background-color': row.maturity == 0 ? 'lawngreen' : 'none'
+        }"
         *matRowDef="let row; columns: displayedColumns"
       ></tr>
 
@@ -192,7 +195,7 @@
       </tr>
     </table>
     <mat-paginator
-      style="width: 100%; font-size: 1em; font-weight: bold"
+      style="width: 95%; font-size: 1em; font-weight: bold"
       [pageSizeOptions]="[5, 10, 25, 100]"
     >
       ></mat-paginator

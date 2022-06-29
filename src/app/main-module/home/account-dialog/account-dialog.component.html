@@ -58,13 +58,13 @@
   <div class="dia-item">
     <div [innerText]="auth.t('आरंभ तारीख') + ':'"></div>
     <div>
-      {{ startDate | date: "dd-MMM-yy" }}
+      {{ rec.RdStartDate.toDate() | date: "dd-MMM-yy" }}
     </div>
   </div>
   <div class="dia-item">
     <div [innerText]="auth.t('अंतिम तारीख') + ':'"></div>
     <div>
-      {{ calcCloseDate | date: "dd-MMM-yy" }}
+      {{ rec?.RdEndDate?.toDate() | date: "dd-MMM-yy" }}
     </div>
   </div>
   <div class="dia-item">

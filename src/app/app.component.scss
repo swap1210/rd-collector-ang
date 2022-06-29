@@ -5,9 +5,11 @@
 }
 .centered {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  width: 100%;
 }
+
 .thick {
   height: 2.5em;
 }

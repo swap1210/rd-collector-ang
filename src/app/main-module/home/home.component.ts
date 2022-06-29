@@ -30,6 +30,7 @@ import {
   SelectMenu,
 } from './selected-menu/selected-menu.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Timestamp } from '@angular/fire/firestore';
 
 interface FilterType {
   filterInput: string;
@@ -145,7 +146,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         let tempAll = rdDocList;
         this.filterGroup.patchValue({ filterInput: '', enableAll: false });
         this.dialog.closeAll();
-        this.rdlist = tempAll;
         this.dataFetched = true;
         this.rdlist = tempAll;
         this.dataSource = new MatTableDataSource(this.rdlist);
@@ -182,8 +182,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       //record is active
       recordFinalFilter &&=
-        !record.CloseDate || record.CloseDate.toDate() < this.firstDay;
-      // console.debug(recordFinalFilter + '' + record.CloseDate);
+        !record.RdEndDate || record.RdEndDate.toDate() >= this.firstDay;
+      // console.log(
+      //   !record.RdEndDate || record.RdEndDate.toDate() > this.firstDay,
+      //   !record.RdEndDate || record.RdEndDate.toDate(),
+      //   this.firstDay
+      // );
 
       //start of search string
       //record name include search string unfilter.filterInput
@@ -199,7 +203,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
           !record.Phoneno) ||
         //search for records with no cif number if "no cif" is passed in search string
         (unfilter.filterInput.trim().toLowerCase() === 'no cif' &&
-          !record.CIFNo);
+          !record.CIFNo) ||
+        //search for records with no end date if "no end" is passed in search string
+        (unfilter.filterInput.trim().toLowerCase() === 'no end' &&
+          !record.RdEndDate);
       //end of search string
       console.debug(recordFinalFilter + ' .' + unfilter.filterInput + '.');
 

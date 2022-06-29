@@ -73,6 +73,7 @@
             <mat-icon>close</mat-icon>
           </button>
         </mat-form-field>
+        <!-- start date -->
         <mat-form-field class="form-field" appearance="fill">
           <mat-label
             [innerText]="auth.t('खाता आरंभ करने की तारीख')"
@@ -99,6 +100,57 @@
             ></span>
           </mat-error>
         </mat-form-field>
+
+        <span>{{ tempRdEndDate | date: "dd-MMM-yy" }}</span>
+        <mat-form-field
+          class="form-field2"
+          appearance="fill"
+          *ngIf="this.editAccountNo || accountForm.value.RdStartDate"
+        >
+          <button
+            matPrefix
+            mat-icon-button
+            (click)="
+              accountForm.patchValue(
+                {
+                  Period: accountForm.value.Period + 5
+                },
+                { emitEvent: true, onlySelf: true }
+              );
+              calcEndDate()
+            "
+          >
+            <mat-icon>add</mat-icon>
+          </button>
+          <mat-label [innerText]="auth.t('साल')"></mat-label>
+          <input
+            autocomplete="off"
+            matInput
+            type="number"
+            formControlName="Period"
+            (change)="calcEndDate()"
+          />
+          <button
+            matSuffix
+            mat-icon-button
+            *ngIf="accountForm.value.Period > 0"
+            (click)="
+              accountForm.patchValue(
+                {
+                  Period:
+                    accountForm.value.Period > 5
+                      ? accountForm.value.Period - 5
+                      : 0
+                },
+                { emitEvent: true, onlySelf: true }
+              );
+              calcEndDate()
+            "
+          >
+            <mat-icon>remove</mat-icon>
+          </button>
+        </mat-form-field>
+
         <mat-form-field class="form-field" appearance="fill">
           <mat-label [innerText]="auth.t('किस्त')"></mat-label>
           <input
@@ -188,15 +240,13 @@
               [src]="(auth.commonData$ | async)['whatsapp-logo.svg']"
           /></mat-slide-toggle>
         </div>
-        <mat-slide-toggle
-          formControlName="existingAccount"
-          [ngStyle]="{ display: editAccountNo === '' ? 'block' : 'none' }"
+        <mat-slide-toggle formControlName="Enabled"
           >{{ auth.t("खता चालू है") }}
         </mat-slide-toggle>
         <div
           class="centered"
           [ngStyle]="{
-            display: accountForm.value.existingAccount ? 'flex' : 'none'
+            display: accountForm.value.Enabled ? 'flex' : 'none'
           }"
         >
           <mat-form-field class="form-field" appearance="fill"

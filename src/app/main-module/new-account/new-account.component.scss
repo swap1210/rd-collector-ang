@@ -10,7 +10,12 @@
   padding-top: 5em;
 }
 .form-field {
-  min-width: 12em;
+  min-width: 8em;
+  max-width: 15em;
+}
+.form-field2 {
+  min-width: 8em;
+  max-width: 9.5em;
 }
 .form-card {
   max-width: 52em;

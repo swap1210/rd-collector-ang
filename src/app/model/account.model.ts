@@ -13,7 +13,6 @@ export interface RDAccount {
   AmountPaid: number;
   CardNo: string;
   CIFNo?: string;
-  CloseDate?: Timestamp;
   CreatedBy?: DocumentReference | String;
   CreatedOn: Timestamp;
   Enabled: boolean;
@@ -27,11 +26,13 @@ export interface RDAccount {
   Nominee?: string;
   Phoneno?: string;
   RdStartDate: Timestamp;
+  RdEndDate?: Timestamp;
   Whatsapp: boolean;
   //to be user on later stage no need to store in firestore
   Usertype?: AccountType;
   AmountTillNow?: number;
   billingOrCollection?: string;
+  maturity: number;
 }
 
 export interface RDAccountChange {
@@ -40,6 +41,7 @@ export interface RDAccountChange {
   AmountCollected: number;
   AmountPaid: number;
   Enabled: boolean;
+  RdEndDate: Timestamp;
   LastBilled?: Timestamp;
   LastCollected?: Timestamp;
   LastPaid?: Timestamp;

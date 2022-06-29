@@ -29,9 +29,9 @@ import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewAccountComponent implements OnInit, OnDestroy {
+  public tempRdEndDate!: Date;
   accountForm: FormGroup = new FormGroup({});
   onlydigit = /\d+/g;
-  existingAccount = true;
   editAccountNo = '';
   editAccountChange = false;
   curAccountObj: RDAccount | RDAccountChange | any = {
@@ -39,6 +39,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     AmountCollected: 0,
     AmountPaid: 0,
     Enabled: true,
+    RdEndDate: Timestamp.now(),
     LastBilled: Timestamp.now(),
     LastCollected: Timestamp.now(),
     LastPaid: Timestamp.now(),
@@ -71,11 +72,12 @@ export class NewAccountComponent implements OnInit, OnDestroy {
       AccountName: new FormControl('', [Validators.required]),
       CardNo: new FormControl('', []),
       RdStartDate: new FormControl('', [Validators.required]),
-      Installment: new FormControl('', [Validators.required]),
+      Period: new FormControl(0, []),
+      Installment: new FormControl(0, [Validators.required]),
       AmountCollected: new FormControl(0, []),
       AmountPaid: new FormControl(0, []),
       AmountBilled: new FormControl(0, []),
-      existingAccount: new FormControl(true),
+      Enabled: new FormControl(true),
       Nominee: new FormControl('', []),
       CIFNo: new FormControl('', []),
       Phoneno: new FormControl('', [Validators.pattern('[0-9]{10}')]),
@@ -97,8 +99,16 @@ export class NewAccountComponent implements OnInit, OnDestroy {
           formVal.AmountPaid !== this.curAccountObj.AmountPaid ||
           formVal.AmountBilled !== this.curAccountObj.AmountBilled ||
           formVal.Whatsapp !== this.curAccountObj.Whatsapp ||
-          formVal.CIFNo !== this.curAccountObj.CIFNo;
+          formVal.CIFNo !== this.curAccountObj.CIFNo ||
+          formVal.Enabled !== this.curAccountObj.Enabled ||
+          (this.curAccountObj as RDAccount).RdStartDate.toDate().getFullYear() +
+            formVal.Period !==
+            (this.curAccountObj as RDAccount).RdEndDate?.toDate().getFullYear();
 
+        // console.log(
+        //   this.tempRdEndDate.getFullYear(),
+        //   (this.curAccountObj as RDAccount).RdEndDate.toDate().getFullYear()
+        // );
         // console.log(
         //   formVal.Phoneno !== this.curAccountObj.Phoneno,
         //   formVal.Nominee !== this.curAccountObj.Nominee,
@@ -117,13 +127,15 @@ export class NewAccountComponent implements OnInit, OnDestroy {
           );
         }
       } else {
-        console.log(formVal);
-        this.accountForm.patchValue(
-          {
-            AccountName: formVal.AccountName.toUpperCase(),
-          },
-          { emitEvent: false, onlySelf: true }
-        );
+        // console.log(formVal);
+        if (formVal.AccountName) {
+          this.accountForm.patchValue(
+            {
+              AccountName: formVal.AccountName.toUpperCase(),
+            },
+            { emitEvent: false, onlySelf: true }
+          );
+        }
       }
     });
 
@@ -131,18 +143,31 @@ export class NewAccountComponent implements OnInit, OnDestroy {
       this.accountService.allRD$.subscribe({
         next: (x) => {
           if (x.length < 1) return;
+
+          // console.log('Weird val change');
           this.curAccountObj = x.filter(
             (obj: RDAccount) => obj.AccountNo === this.editAccountNo
           )[0];
 
           let editFormData: any = {
             ...this.curAccountObj,
-            existingAccount: true,
           };
 
           editFormData.RdStartDate = (
             this.curAccountObj as RDAccount
           ).RdStartDate.toDate();
+
+          //calc period if end date exists
+          let tEndDate = (this.curAccountObj as RDAccount).RdEndDate;
+          if (tEndDate) {
+            editFormData.Period =
+              tEndDate.toDate().getFullYear() -
+              (
+                this.curAccountObj as RDAccount
+              ).RdStartDate.toDate().getFullYear();
+
+            this.tempRdEndDate = tEndDate.toDate();
+          }
 
           this.accountForm.reset(editFormData);
           console.log('Resetting ');
@@ -189,7 +214,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
 
     let tempRawData = this.accountForm.getRawValue();
 
-    delete tempRawData.existingAccount;
+    // delete tempRawData.existingAccount;
 
     let temp_account: RDAccount = tempRawData;
     temp_account.AccountName = temp_account.AccountName.toUpperCase();
@@ -205,6 +230,9 @@ export class NewAccountComponent implements OnInit, OnDestroy {
         temp_account.RdStartDate.toDate()
       );
     }
+
+    //end date translation always
+    temp_account.RdEndDate = Timestamp.fromDate(this.tempRdEndDate);
 
     //DEFAULT VALUES
     //IF BILLED ELSE 0
@@ -279,7 +307,13 @@ export class NewAccountComponent implements OnInit, OnDestroy {
       this.snack(CU.err[0]);
     }
   };
-
+  calcEndDate() {
+    let sDate = !this.editAccountNo
+      ? (this.accountForm.value.RdStartDate as Timestamp).toDate()
+      : this.curAccountObj.RdStartDate.toDate();
+    sDate.setFullYear(sDate.getFullYear() + this.accountForm.value.Period);
+    this.tempRdEndDate = new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0);
+  }
   snack(p_msg: string) {
     this._snackBar.openFromComponent(SnacksComponent, {
       data: { message: p_msg },

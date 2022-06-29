@@ -14,7 +14,10 @@ export class AccountService {
   // fsObs: Observable<any> | undefined;
   allRD$ = new BehaviorSubject<RDAccount[]>([]);
   collectionName = 'rd-records';
+  firstDay: Date = new Date();
   constructor(private firestore: AngularFirestore, auth: AuthService) {
+    const date = new Date();
+    this.firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     // console.log('Acc Serv Cons', auth);
     auth?.user$?.subscribe((Userdat) => {
       // console.log('Userdat', Userdat);
@@ -40,6 +43,13 @@ export class AccountService {
               ) +
                 1) *
               rec.Installment;
+            if (rec.RdEndDate) {
+              const e = rec.RdEndDate.toDate();
+              if (e.getFullYear() == this.firstDay.getFullYear()) {
+                // console.log('ed fon', e.getMonth(), this.firstDay.getMonth());
+                rec.maturity = e.getMonth() - this.firstDay.getMonth();
+              }
+            }
           });
           let tempList = Object.values<RDAccount>(orgObj.all);
           return tempList;

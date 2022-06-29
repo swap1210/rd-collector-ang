@@ -17,7 +17,6 @@ import { CU } from 'src/app/shared/comm-util';
 export class AccountDetailComponent implements OnInit {
   accNo: string | undefined;
   ca!: RDAccount;
-  calcED: Date | undefined;
   public accountSubscribe: Subscription | undefined;
 
   constructor(
@@ -36,12 +35,6 @@ export class AccountDetailComponent implements OnInit {
         this.ca = obj.filter(
           (cur_rec) => cur_rec.AccountNo === this.accNo
         )[0] as RDAccount;
-        const sd: Date = new Timestamp(
-          this.ca.RdStartDate.seconds,
-          this.ca.RdStartDate.nanoseconds
-        ).toDate();
-        this.calcED = new Date(sd.setFullYear(sd.getFullYear() + 5));
-        //this.ca.CloseDate = this.ca.CloseDate || calcED;
       }
     });
   }
