@@ -206,7 +206,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
           !record.CIFNo) ||
         //search for records with no end date if "no end" is passed in search string
         (unfilter.filterInput.trim().toLowerCase() === 'no end' &&
-          !record.RdEndDate);
+          !record.RdEndDate) ||
+        //search for records which are maturing
+        (unfilter.filterInput.trim().toLowerCase() === 'mature' &&
+          record.maturity == 0);
       //end of search string
       console.debug(recordFinalFilter + ' .' + unfilter.filterInput + '.');
 
