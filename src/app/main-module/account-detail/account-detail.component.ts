@@ -33,7 +33,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.accNo = this.route.snapshot.paramMap.get('accid') || '';
-    this.accountSubscribe = this.accountService.allRD$
+    this.accountSubscribe = this.accountService
+      .getAllAccounts()
       .pipe(takeUntil(this.destroy$))
       .subscribe((obj) => {
         //return when no data

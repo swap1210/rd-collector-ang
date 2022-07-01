@@ -145,48 +145,51 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     });
 
     if (this.editAccountNo || this.editAccountNo !== '') {
-      this.accountService.allRD$.pipe(takeUntil(this.destroy$)).subscribe({
-        next: (x) => {
-          if (x.length < 1) return;
+      this.accountService
+        .getAllAccounts()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe({
+          next: (x) => {
+            if (x.length < 1) return;
 
-          // console.log('Weird val change');
-          this.curAccountObj = x.filter(
-            (obj: RDAccount) => obj.AccountNo === this.editAccountNo
-          )[0];
+            // console.log('Weird val change');
+            this.curAccountObj = x.filter(
+              (obj: RDAccount) => obj.AccountNo === this.editAccountNo
+            )[0];
 
-          let editFormData: any = {
-            ...this.curAccountObj,
-          };
+            let editFormData: any = {
+              ...this.curAccountObj,
+            };
 
-          editFormData.RdStartDate = (
-            this.curAccountObj as RDAccount
-          ).RdStartDate.toDate();
+            editFormData.RdStartDate = (
+              this.curAccountObj as RDAccount
+            ).RdStartDate.toDate();
 
-          //calc period if end date exists
-          let tEndDate = (this.curAccountObj as RDAccount).RdEndDate;
-          if (tEndDate) {
-            editFormData.Period =
-              tEndDate.toDate().getFullYear() -
-              (
-                this.curAccountObj as RDAccount
-              ).RdStartDate.toDate().getFullYear();
+            //calc period if end date exists
+            let tEndDate = (this.curAccountObj as RDAccount).RdEndDate;
+            if (tEndDate) {
+              editFormData.Period =
+                tEndDate.toDate().getFullYear() -
+                (
+                  this.curAccountObj as RDAccount
+                ).RdStartDate.toDate().getFullYear();
 
-            this.tempRdEndDate = tEndDate.toDate();
-          }
+              this.tempRdEndDate = tEndDate.toDate();
+            }
 
-          this.accountForm.reset(editFormData);
-          console.log('Resetting ');
-          this.accountForm.controls['AccountNo'].disable();
-          this.accountForm.controls['AccountName'].disable();
-          this.accountForm.controls['Installment'].disable();
-          this.accountForm.controls['RdStartDate'].disable();
-          this.accountForm.controls['CardNo'].disable();
-        },
-        error: (err) => {
-          this.snack(CU.err[0]);
-          this.router.navigate(['/home']);
-        },
-      });
+            this.accountForm.reset(editFormData);
+            console.log('Resetting ');
+            this.accountForm.controls['AccountNo'].disable();
+            this.accountForm.controls['AccountName'].disable();
+            this.accountForm.controls['Installment'].disable();
+            this.accountForm.controls['RdStartDate'].disable();
+            this.accountForm.controls['CardNo'].disable();
+          },
+          error: (err) => {
+            this.snack(CU.err[0]);
+            this.router.navigate(['/home']);
+          },
+        });
     }
   }
   installmentOrStartDateChange() {

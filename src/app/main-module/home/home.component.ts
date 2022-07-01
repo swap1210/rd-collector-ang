@@ -106,6 +106,7 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     );
     this.LastMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0);
   }
+
   ngOnDestroy(): void {
     console.log('detroy of home');
     // this.accountService.allRD$?.unsubscribe();
@@ -148,34 +149,37 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   startSubscription(p_mode?: string) {
     // console.count('trying here but' + JSON.stringify(this.accountSubscribe));
     // this.accountSubscribe =
-    this.accountService.allRD$.pipe(takeUntil(this.destroy$)).subscribe({
-      next: (rdDocList) => {
-        console.log('Home sub', rdDocList.length);
-        // console.log('Atleast heres');
-        if (!rdDocList.length) return;
-        console.count('data loaded');
-        let tempAll = rdDocList;
-        this.filterGroup.patchValue({ filterInput: '', enableAll: false });
-        this.dialog.closeAll();
-        this.dataFetched = true;
-        this.rdlist = tempAll;
-        this.dataSource = new MatTableDataSource(this.rdlist);
-        this.dataSource.filterPredicate = this.customFilterPredicate;
-        this.cdr.detectChanges();
+    this.accountService
+      .getAllAccounts()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (rdDocList) => {
+          console.log('Home sub', rdDocList.length);
+          // console.log('Atleast heres');
+          if (!rdDocList.length) return;
+          console.count('data loaded');
+          let tempAll = rdDocList;
+          this.filterGroup.patchValue({ filterInput: '', enableAll: false });
+          this.dialog.closeAll();
+          this.dataFetched = true;
+          this.rdlist = tempAll;
+          this.dataSource = new MatTableDataSource(this.rdlist);
+          this.dataSource.filterPredicate = this.customFilterPredicate;
+          this.cdr.detectChanges();
 
-        this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));
-      },
-      error: (err) => {
-        console.log(err);
-        this.dataFetched = true;
-        this.rdlist = [];
-        // alert('Error loading data');
-      },
-      complete: () => {
-        this.dataFetched = true;
-        console.log('Finally after subscription');
-      },
-    });
+          this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));
+        },
+        error: (err) => {
+          console.log(err);
+          this.dataFetched = true;
+          this.rdlist = [];
+          // alert('Error loading data');
+        },
+        complete: () => {
+          this.dataFetched = true;
+          console.log('Finally after subscription');
+        },
+      });
   }
 
   customFilterPredicate = (record: RDAccount, filter: string): boolean => {

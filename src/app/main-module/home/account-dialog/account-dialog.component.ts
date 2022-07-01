@@ -181,19 +181,22 @@ export class AccountDialogComponent implements OnInit {
           tempPack.AmountPaid
         ).calcDate;
       }
-
+      let self = this;
       this.accountService
         .createUpdateRDAccount(
           this.auth.curUser ? this.auth.curUser.company : '',
           tempPack
         )
         .then(() => {
-          this.dialogRef.close({
+          console.log(1);
+          self.dialogRef.close({
+            xx: 'ghgj',
             diaCloseMsg: 'Collection complete for ' + this.rec.AccountNo,
           });
         })
         .catch((err) => {
-          this.dialogRef.close({
+          console.log(1);
+          self.dialogRef.close({
             diaCloseMsg: 'Some error occured ' + this.rec.AccountNo,
           });
         });

@@ -20,10 +20,24 @@ export class AccountService {
     const date = new Date();
     this.firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
     // console.log('Acc Serv Cons', auth);
-    this.auth.user$?.subscribe((ur) => {
-      this.fetchRDAccounts2(ur.company).subscribe(this.allRD$);
-    });
+    // this.auth.user$?.subscribe((ur) => {
+    //   this.fetchRDAccounts2(ur.company).subscribe(this.allRD$);
+    // });
   }
+
+  getAllAccounts = (): BehaviorSubject<RDAccount[]> => {
+    const allRD_v2$ = new BehaviorSubject<RDAccount[]>([]);
+    if (this.auth.user$) {
+      this.auth.user$.subscribe((ur) => {
+        if (ur && ur.company) {
+          this.fetchRDAccounts2(ur.company).subscribe((val) => {
+            allRD_v2$.next(val);
+          });
+        }
+      });
+    }
+    return allRD_v2$;
+  };
 
   fetchRDAccounts2(p_company: string): Observable<RDAccount[]> {
     console.log('company: ', p_company);

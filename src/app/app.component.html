@@ -1,4 +1,7 @@
-<div class="parent">
+<div
+  class="parent"
+  [ngStyle]="{ 'background-color': !(auth.user$ | async) ? '#ef5454' : '' }"
+>
   <app-header *ngIf="auth.user$ | async as user; else thickmargin"></app-header>
   <ng-template #thickmargin>
     <div class="thick"></div>
