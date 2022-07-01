@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
@@ -15,6 +16,7 @@ import {
 } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 // import * as moment from 'moment';
 import { RDAccount, RDAccountChange } from 'src/app/model/account.model';
 import { AccountService } from 'src/app/services/account.service';
@@ -29,6 +31,7 @@ import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NewAccountComponent implements OnInit, OnDestroy {
+  destroy$: Subject<boolean> = new Subject<boolean>();
   public tempRdEndDate!: Date;
   accountForm: FormGroup = new FormGroup({});
   onlydigit = /\d+/g;
@@ -63,7 +66,9 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     private _snackBar: MatSnackBar
   ) {}
   ngOnDestroy() {
-    // this.accountService.allRD$.unsubscribe();
+    console.log('new account detroy called');
+    this.destroy$.next(true);
+    this.destroy$.complete();
   }
   ngOnInit(): void {
     // console.log(this.auth.curUserRef?.id);
@@ -140,7 +145,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     });
 
     if (this.editAccountNo || this.editAccountNo !== '') {
-      this.accountService.allRD$.subscribe({
+      this.accountService.allRD$.pipe(takeUntil(this.destroy$)).subscribe({
         next: (x) => {
           if (x.length < 1) return;
 

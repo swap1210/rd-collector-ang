@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, OnDestroy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { RDAccount } from 'src/app/model/account.model';
 import { AccountService } from 'src/app/services/account.service';
 import { AuthService } from 'src/app/services/auth.service';
@@ -14,7 +14,8 @@ import { CU } from 'src/app/shared/comm-util';
   styleUrls: ['./account-detail.component.scss'],
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountDetailComponent implements OnInit {
+export class AccountDetailComponent implements OnInit, OnDestroy {
+  destroy$: Subject<boolean> = new Subject<boolean>();
   accNo: string | undefined;
   ca!: RDAccount;
   public accountSubscribe: Subscription | undefined;
@@ -24,20 +25,27 @@ export class AccountDetailComponent implements OnInit {
     private accountService: AccountService,
     public auth: AuthService
   ) {}
+  ngOnDestroy(): void {
+    console.log('detroy of details');
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
     this.accNo = this.route.snapshot.paramMap.get('accid') || '';
-    this.accountSubscribe = this.accountService.allRD$.subscribe((obj) => {
-      //return when no data
-      console.log('detail sub');
-      if (!obj.length) return;
+    this.accountSubscribe = this.accountService.allRD$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((obj) => {
+        //return when no data
+        console.log('detail sub');
+        if (!obj.length) return;
 
-      if (obj && this.accNo) {
-        this.ca = obj.filter(
-          (cur_rec) => cur_rec.AccountNo === this.accNo
-        )[0] as RDAccount;
-      }
-    });
+        if (obj && this.accNo) {
+          this.ca = obj.filter(
+            (cur_rec) => cur_rec.AccountNo === this.accNo
+          )[0] as RDAccount;
+        }
+      });
   }
 
   msg() {

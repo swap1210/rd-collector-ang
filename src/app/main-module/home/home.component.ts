@@ -4,6 +4,7 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -22,7 +23,7 @@ import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountDialogComponent } from './account-dialog/account-dialog.component';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import {
@@ -30,7 +31,6 @@ import {
   SelectMenu,
 } from './selected-menu/selected-menu.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { Timestamp } from '@angular/fire/firestore';
 
 interface FilterType {
   filterInput: string;
@@ -42,8 +42,9 @@ interface FilterType {
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   public rdlist: RDAccount[] = [];
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   // public accountSubscribe: Subscription | undefined;
 
@@ -105,6 +106,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
     this.LastMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0);
   }
+  ngOnDestroy(): void {
+    console.log('detroy of home');
+    // this.accountService.allRD$?.unsubscribe();
+
+    this.destroy$.next(true);
+    this.destroy$.complete();
+  }
 
   ngOnInit(): void {
     this.startSubscription();
@@ -140,12 +148,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   startSubscription(p_mode?: string) {
     // console.count('trying here but' + JSON.stringify(this.accountSubscribe));
     // this.accountSubscribe =
-    console.log('Home sub');
-    this.accountService.allRD$.subscribe({
+    this.accountService.allRD$.pipe(takeUntil(this.destroy$)).subscribe({
       next: (rdDocList) => {
+        console.log('Home sub', rdDocList.length);
         // console.log('Atleast heres');
         if (!rdDocList.length) return;
-        // console.log(rdDocList);
+        console.count('data loaded');
         let tempAll = rdDocList;
         this.filterGroup.patchValue({ filterInput: '', enableAll: false });
         this.dialog.closeAll();
@@ -314,7 +322,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      // console.log(`Dialog result:`, result);
+      console.log(`Dialog result:`, result);
       if (result && result.msg) this.snack(result.msg);
     });
   }
@@ -381,7 +389,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.auth.user$?.subscribe((obj) => {
+    this.auth.user$?.pipe(takeUntil(this.destroy$)).subscribe((obj) => {
       if (this.paginator) {
         // console.log('user change');
         this.paginator._intl.itemsPerPageLabel = CU.t(
@@ -390,6 +398,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         );
         // console.log('user change', obj, this.paginator._intl);
       }
+      // trigger rdlist Subscription
+      // this.accountService.fetchRDAccounts2(obj.company);
     });
   }
 }

@@ -198,6 +198,7 @@ export class AccountDialogComponent implements OnInit {
           });
         });
     } else {
+      console.log('Collection cancelled for ' + this.rec.AccountNo);
       this.dialogRef.close({
         diaCloseMsg: 'Collection cancelled for ' + this.rec.AccountNo,
       });
