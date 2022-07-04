@@ -199,7 +199,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
       this.accountForm.controls['Installment'] &&
       this.accountForm.controls['RdStartDate']
     ) {
-      console.log(RdStartDate);
+      // console.log(RdStartDate);
       // let monthDiff =
       //   moment(moment.now()).diff(RdStartDate as moment.MomentInput, 'months') +
       //   1;
@@ -221,8 +221,6 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     if (!this.accountForm.valid) return;
 
     let tempRawData = this.accountForm.getRawValue();
-
-    // delete tempRawData.existingAccount;
 
     let temp_account: RDAccount = tempRawData;
     temp_account.AccountName = temp_account.AccountName.toUpperCase();

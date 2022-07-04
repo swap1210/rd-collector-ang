@@ -245,39 +245,6 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
       //console.debug(recordFinalFilter + ' ' + (this.billingOrCollection === 'C'));
 
       return recordFinalFilter;
-
-      //unused old code block for legacy reference
-      {
-        // let recordFinalFilter =
-        //   //record is unabled
-        //   record.Enabled &&
-        //   //record is active
-        //   (!record.CloseDate || record.CloseDate.toDate() < this.firstDay) && //record name include search string unfilter.filterInput
-        //   //start of search string
-        //   (record.AccountName.includes(
-        //     unfilter.filterInput.trim().toUpperCase()
-        //   ) ||
-        //     //record account number include search string unfilter.filterInput
-        //     record.AccountNo.includes(unfilter.filterInput.trim()) ||
-        //     record.Installment.toString().includes(unfilter.filterInput.trim()) ||
-        //     //search for records with no phone number if "no phone" is passed in search string
-        //     (unfilter.filterInput.trim().toLowerCase() === 'no phone' &&
-        //       !record.Phoneno) ||
-        //     //search for records with no cif number if "no cif" is passed in search string
-        //     (unfilter.filterInput.trim().toLowerCase() === 'no cif' &&
-        //       !record.CIFNo)) &&
-        //   //end of search string
-        //   ((!this.billingOrCollection &&
-        //     record.AmountCollected <
-        //       (record.AmountTillNow || record.Installment)) ||
-        //     (this.billingOrCollection === 'C' &&
-        //       record.AmountPaid < record.AmountCollected) ||
-        //     (this.billingOrCollection === 'B' &&
-        //       record.AmountBilled < record.AmountPaid &&
-        //       !unfilter.enableAll) ||
-        //     //ignore all previous filters if enableAll is toggled
-        //     unfilter.enableAll);
-      }
     } catch (e) {
       console.log('Filter failure', e);
       return true;

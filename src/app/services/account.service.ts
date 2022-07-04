@@ -19,10 +19,6 @@ export class AccountService {
     console.log('acc service');
     const date = new Date();
     this.firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    // console.log('Acc Serv Cons', auth);
-    // this.auth.user$?.subscribe((ur) => {
-    //   this.fetchRDAccounts2(ur.company).subscribe(this.allRD$);
-    // });
   }
 
   getAllAccounts = (): BehaviorSubject<RDAccount[]> => {
@@ -78,9 +74,6 @@ export class AccountService {
   }
 
   createBackupRDAccount(p_company: string) {
-    // let acc_key: any = {};
-    // let temp: any = { all: acc_key };
-
     this.allRD$.pipe(first()).subscribe({
       next: (temp: { AccountNo: string | number }[]) => {
         let new_temp: any = {};

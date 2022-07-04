@@ -12,7 +12,7 @@ import { CU } from 'src/app/shared/comm-util';
   templateUrl: './account-dialog.component.html',
   styleUrls: ['./account-dialog.component.scss'],
 })
-export class AccountDialogComponent implements OnInit {
+export class AccountDialogComponent {
   toBeCollected = false;
   toBePaid = false;
   toBeBilled = false;
@@ -61,8 +61,6 @@ export class AccountDialogComponent implements OnInit {
       this.actionName = 'बिल';
     }
   }
-
-  ngOnInit(): void {}
 
   doAction() {
     let tempPack: any = {
@@ -148,13 +146,13 @@ export class AccountDialogComponent implements OnInit {
       LastUpdateBy: this.auth.curUserRef?.id,
     };
 
+    console.log(this.rec);
     if (
       this.rec.Usertype === AccountType.A &&
       (this.rec.AmountPaid !== this.rec.AmountCollected ||
-        //billing condition 1 & 2
-        this.rec.AmountPaid !== this.rec.AmountBilled ||
-        this.rec.AmountCollected !== this.rec.AmountBilled ||
-        false)
+        this.rec.AmountPaid !== this.rec.AmountBilled) &&
+      ((this.rec.billingOrCollection === 'C' && this.rec.AmountPaid) ||
+        (this.rec.billingOrCollection === 'B' && this.rec.AmountBilled))
     ) {
       if (this.rec.billingOrCollection === 'C') {
         //revert Collected to Paid amount
@@ -182,6 +180,7 @@ export class AccountDialogComponent implements OnInit {
         ).calcDate;
       }
       let self = this;
+      console.log('patching', tempPack);
       this.accountService
         .createUpdateRDAccount(
           this.auth.curUser ? this.auth.curUser.company : '',
@@ -190,18 +189,16 @@ export class AccountDialogComponent implements OnInit {
         .then(() => {
           console.log(1);
           self.dialogRef.close({
-            xx: 'ghgj',
             diaCloseMsg: 'Collection complete for ' + this.rec.AccountNo,
           });
         })
         .catch((err) => {
-          console.log(1);
+          console.log(2);
           self.dialogRef.close({
             diaCloseMsg: 'Some error occured ' + this.rec.AccountNo,
           });
         });
     } else {
-      console.log('Collection cancelled for ' + this.rec.AccountNo);
       this.dialogRef.close({
         diaCloseMsg: 'Collection cancelled for ' + this.rec.AccountNo,
       });
