@@ -96,7 +96,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
       // if (!formVal.AccountName) return;
 
       if (this.editAccountNo || this.editAccountNo !== '') {
-        // console.count(formVal);
+        console.count(formVal);
         this.editAccountChange =
           formVal.Phoneno !== this.curAccountObj.Phoneno ||
           formVal.Nominee !== this.curAccountObj.Nominee ||
@@ -203,7 +203,9 @@ export class NewAccountComponent implements OnInit, OnDestroy {
       // let monthDiff =
       //   moment(moment.now()).diff(RdStartDate as moment.MomentInput, 'months') +
       //   1;
-      let monthDiff = CU.monthDiff(RdStartDate.toDate(), new Date()) + 1;
+      let monthDiff = RdStartDate
+        ? CU.monthDiff(RdStartDate.toDate(), new Date()) + 1
+        : 0;
       console.log('month diff', monthDiff);
 
       let amtTillNow = monthDiff * parseInt(Installment);

@@ -1,6 +1,5 @@
-import { ChangeDetectionStrategy, OnDestroy } from '@angular/core';
+import { OnDestroy } from '@angular/core';
 import { Component, OnInit } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { RDAccount } from 'src/app/model/account.model';
