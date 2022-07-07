@@ -269,7 +269,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
         temp_account.AmountPaid
       ).calcDate
     );
-    temp_account.Enabled = true;
+    // temp_account.Enabled = true;
 
     try {
       let actionPromise: Promise<void> | Promise<[void, void]>;
