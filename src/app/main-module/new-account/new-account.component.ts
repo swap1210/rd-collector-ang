@@ -240,7 +240,9 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     }
 
     //end date translation always
-    temp_account.RdEndDate = Timestamp.fromDate(this.tempRdEndDate);
+    if (this.tempRdEndDate) {
+      temp_account.RdEndDate = Timestamp.fromDate(this.tempRdEndDate);
+    }
 
     //DEFAULT VALUES
     //IF BILLED ELSE 0
