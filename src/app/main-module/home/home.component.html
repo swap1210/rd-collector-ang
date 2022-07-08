@@ -24,6 +24,9 @@
         }"
       >
         <mat-button-toggle-group [(value)]="billingOrCollection" color="accent">
+          <mat-button-toggle value="AC" (click)="fetchPaidMode()">{{
+            t("आज कि कलेक्शन सूची")
+          }}</mat-button-toggle>
           <mat-button-toggle value="C" (click)="fetchPaidMode()">{{
             t("कलेक्शन सूची")
           }}</mat-button-toggle>
@@ -86,6 +89,7 @@
           mat-cell
           *matCellDef="let row"
           (click)="
+            billingOrCollection === 'AC' ||
             billingOrCollection === 'C' ||
             billingOrCollection === 'B' ||
             auth.curUser?.type === AccountType.C

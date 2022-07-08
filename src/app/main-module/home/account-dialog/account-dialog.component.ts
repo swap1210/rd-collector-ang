@@ -39,7 +39,7 @@ export class AccountDialogComponent {
       this.actionName = 'कलेक्ट';
     } else if (
       rec.Usertype === AccountType.A &&
-      rec.billingOrCollection === 'C'
+      (rec.billingOrCollection === 'C' || rec.billingOrCollection === 'AC')
     ) {
       this.toBePaid = true;
 
@@ -151,10 +151,15 @@ export class AccountDialogComponent {
       this.rec.Usertype === AccountType.A &&
       (this.rec.AmountPaid !== this.rec.AmountCollected ||
         this.rec.AmountPaid !== this.rec.AmountBilled) &&
-      ((this.rec.billingOrCollection === 'C' && this.rec.AmountPaid) ||
+      (((this.rec.billingOrCollection === 'C' ||
+        this.rec.billingOrCollection === 'AC') &&
+        this.rec.AmountPaid) ||
         (this.rec.billingOrCollection === 'B' && this.rec.AmountBilled))
     ) {
-      if (this.rec.billingOrCollection === 'C') {
+      if (
+        this.rec.billingOrCollection === 'AC' ||
+        this.rec.billingOrCollection === 'C'
+      ) {
         //revert Collected to Paid amount
         tempPack.AmountCollected = this.rec.AmountPaid;
         tempPack.LastCollected = CU.dateFinder(

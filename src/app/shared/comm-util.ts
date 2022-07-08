@@ -130,6 +130,7 @@ export class CU {
     'सभी खाते देखे': 'View All Account',
     'बकाया खाते देखे': 'View Pending Account',
     'कलेक्शन सूची': 'Collection List',
+    'आज कि कलेक्शन सूची': "Today's Collection List",
     'भुगतान सूची': 'Paid List',
     'खता सूची': 'Account List',
     'खाता विवरण': 'Account Detail',

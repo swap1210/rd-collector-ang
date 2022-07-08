@@ -238,6 +238,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
         (!this.billingOrCollection &&
           record.AmountCollected <
             (record.AmountTillNow || record.Installment)) ||
+        (this.billingOrCollection === 'AC' &&
+          record.AmountCollected >=
+            (record.AmountTillNow || record.Installment) &&
+          record.AmountCollected > record.AmountPaid) ||
         (this.billingOrCollection === 'C' &&
           record.AmountPaid < (record.AmountTillNow || record.Installment)) ||
         (this.billingOrCollection === 'B' &&
