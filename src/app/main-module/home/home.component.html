@@ -110,6 +110,7 @@
           mat-cell
           *matCellDef="let row"
           (click)="
+            billingOrCollection === 'AC' ||
             billingOrCollection === 'C' ||
             billingOrCollection === 'B' ||
             auth.curUser?.type === AccountType.C
@@ -130,6 +131,7 @@
           mat-cell
           *matCellDef="let row"
           (click)="
+            billingOrCollection === 'AC' ||
             billingOrCollection === 'C' ||
             billingOrCollection === 'B' ||
             auth.curUser?.type === AccountType.C

@@ -188,12 +188,25 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
 
       //ignore all further filters if enableAll is toggled
       if (unfilter.enableAll) {
+        const selIndex = this.displayedColumns.indexOf('select');
+        if (selIndex > -1) {
+          this.selection.clear();
+          this.displayedColumns.splice(selIndex, 1);
+        }
         return (
           record.AccountName.includes(
             unfilter.filterInput.trim().toUpperCase()
           ) ||
           record.AccountNo.includes(unfilter.filterInput.trim().toUpperCase())
         );
+      } else {
+        // billingOrCollection
+        // console.log(this.filterGroup.getRawValue());
+        if (
+          this.billingOrCollection == 'B' &&
+          !this.displayedColumns.includes('select')
+        )
+          this.displayedColumns.unshift('select');
       }
 
       //record is Enabled
