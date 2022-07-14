@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { AccountDetailComponent } from './account-detail/account-detail.component';
 import { SelectedMenuComponent } from './home/selected-menu/selected-menu.component';
 import { NopageComponent } from './nopage/nopage.component';
+import { MeraCommissionComponent } from './home/mera-commission/mera-commission.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { NopageComponent } from './nopage/nopage.component';
     AccountDetailComponent,
     SelectedMenuComponent,
     NopageComponent,
+    MeraCommissionComponent,
   ],
   imports: [CommonModule, FormsModule, SharedModule, RouterModule],
 })

@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
     'new-account': 'नया खाता',
     'edit-account': 'खाता नंबर $ में बदलाव',
     'account-detail': '$ का विवरण',
+    calculator: 'मेरा कमिश्न',
   } as const;
   tag: any = {
     '': '',
@@ -25,6 +26,7 @@ export class HeaderComponent implements OnInit {
     'new-account': '',
     'edit-account': '',
     'account-detail': '',
+    calculator: 'Mera Comission',
   };
   currentTitle = 'home';
   showGreeting: boolean = true;

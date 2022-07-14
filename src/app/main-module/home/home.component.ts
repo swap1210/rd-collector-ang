@@ -23,7 +23,7 @@ import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { AccountDialogComponent } from './account-dialog/account-dialog.component';
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { SelectionModel } from '@angular/cdk/collections';
 import {

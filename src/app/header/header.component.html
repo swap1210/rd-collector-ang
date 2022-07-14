@@ -25,6 +25,9 @@
       [ngStyle]="{ display: showGreeting ? 'block' : 'none' }"
     ></h3>
     <button class="menuItems" mat-icon-button routerLink="/home">🏡</button>
+    <button class="bkpBtn" mat-icon-button routerLink="/calculator">
+      <mat-icon>calculate</mat-icon>
+    </button>
     <button class="menuItems" mat-icon-button (click)="languageChange()">
       {{ curLanguage === Language.HI ? "अ" : "En" }}
     </button>
@@ -62,6 +65,12 @@
       🏡
       <div>
         {{ auth.t("होम स्क्रीन") }}
+      </div>
+    </button>
+    <button class="phoneBtn" mat-menu-item routerLink="/calculator">
+      <mat-icon>calculate</mat-icon>
+      <div>
+        {{ auth.t("मेरा कमिश्न") }}
       </div>
     </button>
     <button class="phoneBtn" mat-menu-item (click)="languageChange()">
