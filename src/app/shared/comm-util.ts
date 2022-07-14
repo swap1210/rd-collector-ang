@@ -105,7 +105,7 @@ export class CU {
     'नॉमिनी का नाम': 'Nominee Name',
     'फोन नंबर': 'Phone No.',
     'फोन नंबर <strong>गलत</strong> है': 'Phone is <strong>invalid</strong>',
-    'राशि <strong>जरूरी</strong> है': 'Amound is <strong>required</strong>',
+    'राशि <strong>जरूरी</strong> है': 'Amount is <strong>required</strong>',
     'खता चालू है': 'Account is Active',
     'पीछे जाये ⬅': 'Back ⬅',
     'सुधार करें': 'Correct Account',
