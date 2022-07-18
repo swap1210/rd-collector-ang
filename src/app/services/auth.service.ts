@@ -63,6 +63,7 @@ export class AuthService {
           this.anl = vv.default_login['allow'];
           this.default_work_group = vv.default_login['work_group'];
           vv.img['mera_commission'] = vv.mera_commission;
+          vv.img['info'] = vv.info;
           this.commonData$.next(vv.img);
         },
       });

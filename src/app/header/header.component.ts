@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
     'new-account': 'नया खाता',
     'edit-account': 'खाता नंबर $ में बदलाव',
     'account-detail': '$ का विवरण',
-    calculator: 'मेरा कमिश्न',
+    calculator: 'मेरा कमीशन',
   } as const;
   tag: any = {
     '': '',

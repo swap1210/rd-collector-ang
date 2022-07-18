@@ -4,7 +4,7 @@
       class="mat-title"
       [innerText]="
         '[ ' +
-        auth.t('कमिश्न') +
+        auth.t('कमीशन') +
         ' (' +
         commission_rate +
         '%) & ' +
@@ -18,7 +18,12 @@
     <form [formGroup]="meraCommissionForm" #accountFormGroupDirective="ngForm">
       <mat-form-field class="form-field" appearance="fill">
         <mat-label [innerText]="auth.t('राशि')"></mat-label>
-        <input autocomplete="off" matInput type="text" formControlName="amt" />
+        <input
+          autocomplete="off"
+          matInput
+          type="number"
+          formControlName="amt"
+        />
         <button
           *ngIf="meraCommissionForm.value.amt"
           matSuffix
@@ -37,7 +42,7 @@
       <div
         class="keyLabel"
         [innerText]="
-          auth.t('कमिश्न') +
+          auth.t('कमीशन') +
           ' ($)'.replace(
             '$',
             meraCommissionForm.value.amt + ' x ' + commission_rate + '%'
