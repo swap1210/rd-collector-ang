@@ -32,6 +32,7 @@ export class AuthService {
     this.user$ = this.afAuth.authState.pipe(
       switchMap((user) => {
         if (user) {
+          console.log('user ', user);
           //yes logged in but loggin only if there is a existing profile of him in the user document
           this.curUserRef = this.afs.doc<User>(`users/${user.uid}`).ref;
 
