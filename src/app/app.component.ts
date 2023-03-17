@@ -8,13 +8,5 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(public auth: AuthService) {
-    console.log(
-      'Instance 12 ' +
-        environment.instance +
-        ' v' +
-        environment.version +
-        ' Hi Parvez.'
-    );
-  }
+  constructor(public auth: AuthService) {}
 }
