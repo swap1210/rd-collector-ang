@@ -21,7 +21,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     console.log('detroy of home');
-    // this.accountService.allRD$?.unsubscribe();
     this.destroy$.next(true);
     this.destroy$.complete();
   }

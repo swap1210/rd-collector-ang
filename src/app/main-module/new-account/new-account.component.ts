@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   FormGroupDirective,
   Validators,
 } from '@angular/forms';
@@ -33,7 +33,7 @@ import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
 export class NewAccountComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
   public tempRdEndDate!: Date;
-  accountForm: FormGroup = new FormGroup({});
+  accountForm: UntypedFormGroup = new UntypedFormGroup({});
   onlydigit = /\d+/g;
   editAccountNo = '';
   editAccountChange = false;
@@ -58,7 +58,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   durationInSeconds: number = 3;
 
   constructor(
-    private _formBuilder: FormBuilder,
+    private _formBuilder: UntypedFormBuilder,
     public auth: AuthService,
     private accountService: AccountService,
     private route: ActivatedRoute,
@@ -73,20 +73,20 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // console.log(this.auth.curUserRef?.id);
     this.accountForm = this._formBuilder.group({
-      AccountNo: new FormControl('', [Validators.required]),
-      AccountName: new FormControl('', [Validators.required]),
-      CardNo: new FormControl('', []),
-      RdStartDate: new FormControl('', [Validators.required]),
-      Period: new FormControl(0, []),
-      Installment: new FormControl(0, [Validators.required]),
-      AmountCollected: new FormControl(0, []),
-      AmountPaid: new FormControl(0, []),
-      AmountBilled: new FormControl(0, []),
-      Enabled: new FormControl(true),
-      Nominee: new FormControl('', []),
-      CIFNo: new FormControl('', []),
-      Phoneno: new FormControl('', [Validators.pattern('[0-9]{10}')]),
-      Whatsapp: new FormControl(false, []),
+      AccountNo: new UntypedFormControl('', [Validators.required]),
+      AccountName: new UntypedFormControl('', [Validators.required]),
+      CardNo: new UntypedFormControl('', []),
+      RdStartDate: new UntypedFormControl('', [Validators.required]),
+      Period: new UntypedFormControl(0, []),
+      Installment: new UntypedFormControl(0, [Validators.required]),
+      AmountCollected: new UntypedFormControl(0, []),
+      AmountPaid: new UntypedFormControl(0, []),
+      AmountBilled: new UntypedFormControl(0, []),
+      Enabled: new UntypedFormControl(true),
+      Nominee: new UntypedFormControl('', []),
+      CIFNo: new UntypedFormControl('', []),
+      Phoneno: new UntypedFormControl('', [Validators.pattern('[0-9]{10}')]),
+      Whatsapp: new UntypedFormControl(false, []),
     });
 
     this.editAccountNo = this.route.snapshot.paramMap.get('accid') || '';

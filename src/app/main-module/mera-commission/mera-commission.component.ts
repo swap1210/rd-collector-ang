@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
+  UntypedFormBuilder,
+  UntypedFormControl,
+  UntypedFormGroup,
   Validators,
 } from '@angular/forms';
 import { Subject, takeUntil } from 'rxjs';
@@ -15,10 +15,10 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class MeraCommissionComponent implements OnInit, OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
-  meraCommissionForm: FormGroup = new FormGroup({});
+  meraCommissionForm: UntypedFormGroup = new UntypedFormGroup({});
   public commission_rate = 0;
   public tds_rate = 0;
-  constructor(public auth: AuthService, private _formBuilder: FormBuilder) {
+  constructor(public auth: AuthService, private _formBuilder: UntypedFormBuilder) {
     auth.commonData$.pipe(takeUntil(this.destroy$)).subscribe((obj) => {
       // console.log(obj);
       // console.log(obj.mera_commission);
@@ -33,7 +33,7 @@ export class MeraCommissionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.meraCommissionForm = this._formBuilder.group({
-      amt: new FormControl('', [Validators.required]),
+      amt: new UntypedFormControl('', [Validators.required]),
     });
   }
 
