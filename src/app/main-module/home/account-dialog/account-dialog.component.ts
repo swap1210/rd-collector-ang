@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Timestamp } from '@angular/fire/firestore';
+import { T } from '@angular/fire/firestore';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { RDAccount } from 'src/app/model/account.model';
 import { AccountType } from 'src/app/model/user.model';
