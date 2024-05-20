@@ -54,8 +54,8 @@ $rd-collector: mat.define-light-theme(
   )
 );
 
-@include mat.button-theme($rd-collector);
+@include mat.legacy-button-theme($rd-collector);
 @include mat.toolbar-theme($rd-collector);
-@include mat.table-theme($rd-collector);
-@include mat.slide-toggle-theme($rd-collector);
+@include mat.legacy-table-theme($rd-collector);
+@include mat.legacy-slide-toggle-theme($rd-collector);
 @include mat.datepicker-theme($rd-collector);

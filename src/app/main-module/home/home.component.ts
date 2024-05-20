@@ -9,9 +9,9 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { MatSelectionList } from '@angular/material/list';
-import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatLegacySelectionList as MatSelectionList } from '@angular/material/legacy-list';
+import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatLegacyPaginator as MatPaginator } from '@angular/material/legacy-paginator';
 import { MatSort } from '@angular/material/sort';
 
 import { RDAccount } from 'src/app/model/account.model';
@@ -20,8 +20,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { CU } from 'src/app/shared/comm-util';
 import { AccountType } from 'src/app/model/user.model';
 import { SnacksComponent } from 'src/app/shared/snacks/snacks.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { AccountDialogComponent } from './account-dialog/account-dialog.component';
 import { Subject, takeUntil } from 'rxjs';
 import { FormBuilder, FormGroup } from '@angular/forms';

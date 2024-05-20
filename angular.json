@@ -67,10 +67,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "rd-collector-ang:build:production"
+              "buildTarget": "rd-collector-ang:build:production"
             },
             "development": {
-              "browserTarget": "rd-collector-ang:build:development"
+              "buildTarget": "rd-collector-ang:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -78,7 +78,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "rd-collector-ang:build"
+            "buildTarget": "rd-collector-ang:build"
           }
         },
         "test": {
