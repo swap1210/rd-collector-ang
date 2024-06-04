@@ -36,7 +36,7 @@
         </mat-button-toggle-group>
       </div>
 
-      <mat-form-field appearance="standard">
+      <mat-form-field>
         <mat-label [innerText]="t('नाम खोजे')"></mat-label>
         <input
           matInput
@@ -139,7 +139,7 @@
               : snack(t('कलेक्शन या भुगतान सूची चुने'))
           "
         >
-          &nbsp;{{ row.Installment | currency: "INR":"symbol" }}
+          &nbsp;{{ row.Installment | currency : "INR" : "symbol" }}
         </td>
       </ng-container>
 
@@ -149,7 +149,7 @@
           {{ t("आरंभ तारीख") }}
         </th>
         <td mat-cell *matCellDef="let row">
-          {{ row.RdStartDate.seconds | date: "dd-MMM-yy" }}
+          {{ row.RdStartDate.seconds | date : "dd-MMM-yy" }}
         </td>
       </ng-container>
 
@@ -227,7 +227,7 @@
     </button>
     <div style="font-size: x-large; font-weight: 600">
       <span [innerText]="t('टोटल') + ': '"></span
-      >{{ billingTotal | currency: "INR":"symbol" }}
+      >{{ billingTotal | currency : "INR" : "symbol" }}
     </div>
   </div>
 </div>

@@ -1,6 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { T } from '@angular/fire/firestore';
-import { MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
+import { Component, Inject } from '@angular/core';
+import { Timestamp } from '@angular/fire/firestore';
+import {
+  MatDialogRef as MatDialogRef,
+  MAT_DIALOG_DATA as MAT_DIALOG_DATA,
+} from '@angular/material/dialog';
 import { RDAccount } from 'src/app/model/account.model';
 import { AccountType } from 'src/app/model/user.model';
 import { AccountService } from 'src/app/services/account.service';

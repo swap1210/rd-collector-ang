@@ -49,7 +49,7 @@
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('किस्त')"></div>
-      <div>{{ ca.Installment | currency: "INR":"symbol" }}</div>
+      <div>{{ ca.Installment | currency : "INR" : "symbol" }}</div>
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('कार्ड नंबर')"></div>
@@ -57,19 +57,19 @@
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('आरंभ तारीख')"></div>
-      <div>{{ ca.RdStartDate.toDate() | date: "dd-MMM-yyyy" }}</div>
+      <div>{{ ca.RdStartDate.toDate() | date : "dd-MMM-yyyy" }}</div>
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('अंतिम तारीख')"></div>
       <div>
         <!-- use temp variable till end date logic is fixed -->
-        {{ this.ca?.RdEndDate?.toDate() | date: "dd-MMM-yyyy" }}
+        {{ this.ca.RdEndDate?.toDate() | date : "dd-MMM-yyyy" }}
       </div>
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('आखरी कलेक्शन तारीख')"></div>
       <div>
-        {{ this.ca.LastCollected.toDate() | date: "dd-MMM-yyyy" }}
+        {{ this.ca.LastCollected.toDate() | date : "dd-MMM-yyyy" }}
       </div>
     </div>
     <div
@@ -80,14 +80,14 @@
       <div>
         {{
           (ca.AmountTillNow || 0) - ca.AmountCollected
-            | currency: "INR":"symbol"
+            | currency : "INR" : "symbol"
         }}
       </div>
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('आखरी भुगतान तारीख')"></div>
       <div>
-        {{ ca.LastPaid.toDate() | date: "dd-MMM-yyyy" }}
+        {{ ca.LastPaid.toDate() | date : "dd-MMM-yyyy" }}
       </div>
     </div>
     <div
@@ -96,13 +96,15 @@
     >
       <div class="keyLabel" [innerText]="auth.t('भुगतान बकाया')"></div>
       <div>
-        {{ (ca.AmountTillNow || 0) - ca.AmountPaid | currency: "INR":"symbol" }}
+        {{
+          (ca.AmountTillNow || 0) - ca.AmountPaid | currency : "INR" : "symbol"
+        }}
       </div>
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('आखरी बिल तारीख')"></div>
       <div>
-        {{ ca.LastBilled.toDate() | date: "dd-MMM-yyyy" }}
+        {{ ca.LastBilled.toDate() | date : "dd-MMM-yyyy" }}
       </div>
     </div>
     <div
@@ -112,13 +114,14 @@
       <div class="keyLabel" [innerText]="auth.t('बिल बकाया')"></div>
       <div>
         {{
-          (ca.AmountTillNow || 0) - ca.AmountBilled | currency: "INR":"symbol"
+          (ca.AmountTillNow || 0) - ca.AmountBilled
+            | currency : "INR" : "symbol"
         }}
       </div>
     </div>
     <div class="box mat-elevation-z2">
       <div class="keyLabel" [innerText]="auth.t('अब तक की राशि')"></div>
-      <div>{{ ca.AmountTillNow | currency: "INR":"symbol" }}</div>
+      <div>{{ ca.AmountTillNow | currency : "INR" : "symbol" }}</div>
     </div>
     <div class="box mat-elevation-z2" *ngIf="ca.Nominee && ca.Nominee !== ''">
       <div class="keyLabel" [innerText]="auth.t('नॉमिनी का नाम')"></div>

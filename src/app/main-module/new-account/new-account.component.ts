@@ -14,10 +14,9 @@ import {
   FormGroupDirective,
   Validators,
 } from '@angular/forms';
-import { MatLegacySnackBar as MatSnackBar } from '@angular/material/legacy-snack-bar';
+import { MatSnackBar as MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
-// import * as moment from 'moment';
 import { RDAccount, RDAccountChange } from 'src/app/model/account.model';
 import { AccountService } from 'src/app/services/account.service';
 import { AuthService } from 'src/app/services/auth.service';
