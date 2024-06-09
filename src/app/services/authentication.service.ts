@@ -1,6 +1,6 @@
 import { Injectable, computed, signal } from '@angular/core';
 import { User } from '../model/user.model';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../environments/environment';
 import {
   GoogleAuthProvider,
   getAuth,
