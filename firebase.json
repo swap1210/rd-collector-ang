@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "public": "dist",
+      "public": "dist/rd-collector-ang/browser/",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
@@ -12,7 +12,7 @@
     },
     {
       "target": "dev-instance",
-      "public": "dist",
+      "public": "dist/rd-collector-ang/browser/",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
