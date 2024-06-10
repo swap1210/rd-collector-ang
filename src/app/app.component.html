@@ -1,8 +1,12 @@
-<div class="parent">
-  <!-- [ngStyle]="{ 'background-color': !(auth.user$ | async) ? '#ef5454' : '' }" -->
-  @if(authenticationService.user()){ @defer (on timer(50)) {
+<div
+  class="parent"
+  [ngStyle]="{
+    'background-color': !authenticationService.isLoggedIn() ? '#ef5454' : ''
+  }"
+>
+  @if(authenticationService.isLoggedIn()){
   <app-header></app-header>
-  } } @else{
+  } @else{
   <div class="thick"></div>
   }
   <div class="centered">

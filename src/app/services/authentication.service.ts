@@ -1,5 +1,4 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { User } from '../model/user.model';
 import { environment } from '../../environments/environment';
 import {
   GoogleAuthProvider,
@@ -9,7 +8,6 @@ import {
   signInWithRedirect,
   signOut,
 } from 'firebase/auth';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +18,7 @@ export class AuthenticationService {
   private auth = getAuth();
   user = signal<any>(null);
   isLoggedIn = computed(() => this.user() !== null);
-  constructor(private router: Router) {
+  constructor() {
     onAuthStateChanged(this.auth, (firebaseUser: any) => {
       this.user.set(firebaseUser);
     });

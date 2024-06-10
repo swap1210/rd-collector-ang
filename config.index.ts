@@ -5,6 +5,7 @@ const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
 let apiKey = process.env['APIKEY'];
 apiKey = apiKey ? apiKey : '';
+const appName = 'RD कलेक्टर';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
@@ -14,6 +15,7 @@ const envConfigFile1 = `export const environment = {
                 "projectId": 'poorti-21857',
               },
     version: '${version}-dev',
+    appName: '${appName}',
     author: '${author.name}',
     url: '${author.url}',
     email: '${author.email}'
@@ -28,6 +30,7 @@ const envConfigFile2 = `export const environment = {
               "projectId": 'poorti-21857',
             },
     version: '${version}',
+    appName: '${appName}',
     author: '${author.name}',
     url: '${author.url}',
     email: '${author.email}'

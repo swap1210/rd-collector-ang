@@ -1,3 +1,4 @@
+@if(!authenticationService.isLoggedIn()){ @defer(on timer(50)){
 <div class="login-body">
   <mat-card class="mat-elevation-z8">
     <fieldset>
@@ -38,3 +39,6 @@
     </fieldset>
   </mat-card>
 </div>
+} } @else {
+<mat-spinner diameter="50"></mat-spinner>
+}

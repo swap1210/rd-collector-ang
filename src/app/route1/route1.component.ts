@@ -18,7 +18,7 @@ export class Route1Component {
 
   constructor() {
     effect(() => {
-      if (!this.authenticationService.user()) {
+      if (!this.authenticationService.isLoggedIn()) {
         this.router.navigate(['/login']);
       }
     });

@@ -3,13 +3,14 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [MatCardModule, MatButtonModule],
+  imports: [MatCardModule, MatButtonModule, MatProgressSpinnerModule],
 })
 export class LoginComponent {
   public authenticationService = inject(AuthenticationService);
@@ -17,7 +18,7 @@ export class LoginComponent {
 
   constructor() {
     effect(() => {
-      if (this.authenticationService.user()) {
+      if (this.authenticationService.isLoggedIn()) {
         this.router.navigate(['/home']);
       }
     });
