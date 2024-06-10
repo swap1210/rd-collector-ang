@@ -2,28 +2,29 @@ import { mkdir, writeFile } from 'fs';
 
 const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
-let x = process.env['APIKEY'];
-x = x ? x : '';
+let apiKey = process.env['APIKEY'];
+apiKey = apiKey ? apiKey : '';
+const appVersion = require('./package.json').version + '';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
    firebase: {
-                "apiKey": '${x}',
+                "apiKey": '${apiKey}',
                 "authDomain": 'poorti-21857.firebaseapp.com',
                 "projectId": 'poorti-21857',
               },
-    version: 1.3
+    version: '${appVersion}-dev'
 };
 `;
 const envConfigFile2 = `export const environment = {
    production: true,
    instance: 'Production',
    firebase: {
-              "apiKey": '${x}',
+              "apiKey": '${apiKey}',
               "authDomain": 'poorti-21857.firebaseapp.com',
               "projectId": 'poorti-21857',
             },
-    version: 1.3
+    version: '${appVersion}'
 };
 `;
 mkdir('./src/environments/', (err) => {
