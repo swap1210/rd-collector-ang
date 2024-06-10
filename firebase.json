@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "public": "build",
+      "public": "dist",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
@@ -12,7 +12,7 @@
     },
     {
       "target": "dev-instance",
-      "public": "build",
+      "public": "dist",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "rewrites": [
         {
