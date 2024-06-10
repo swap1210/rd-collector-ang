@@ -1,6 +1,7 @@
-import { Component, effect, signal } from '@angular/core';
+import { Component, effect, inject, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthenticationService } from '../services/authentication.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-route1',
@@ -12,9 +13,14 @@ import { AuthenticationService } from '../services/authentication.service';
 export class Route1Component {
   private countSignal = signal(0);
 
-  constructor(private authenticationService: AuthenticationService) {
+  public authenticationService = inject(AuthenticationService);
+  private router = inject(Router);
+
+  constructor() {
     effect(() => {
-      console.log('countSignal', this.countSignal());
+      if (!this.authenticationService.user()) {
+        this.router.navigate(['/login']);
+      }
     });
   }
 

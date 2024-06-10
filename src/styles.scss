@@ -28,11 +28,20 @@ $rd-collector-ang-theme: mat.define-theme(
 :root {
   @include mat.all-component-themes($rd-collector-ang-theme);
 }
+
 html,
 body {
   height: 100%;
-}
-body {
+  background-color: #e5e5e5;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+  scroll-behavior: smooth;
+}
+.snacks.mat-snack-bar-container {
+  background-color: aliceblue;
+  color: #000;
+}
+
+.imgIcon {
+  width: 2.2em;
 }

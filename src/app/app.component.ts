@@ -1,13 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { FooterComponent } from './footer/footer.component';
+import { AuthenticationService } from './services/authentication.service';
+import { HeaderComponent } from './header/header.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  imports: [RouterOutlet, FooterComponent, HeaderComponent],
 })
 export class AppComponent {
-  title = 'rd-collector-ang';
+  public authenticationService = inject(AuthenticationService);
 }

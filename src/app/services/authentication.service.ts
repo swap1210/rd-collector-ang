@@ -18,9 +18,8 @@ export class AuthenticationService {
   private anl = !environment.production; //flag for anonymous login
   readonly default_work_group = 'na'; //flag for anonymous login
   private auth = getAuth();
-  private user = signal<any>(null);
+  user = signal<any>(null);
   isLoggedIn = computed(() => this.user() !== null);
-  curUser: User | undefined;
   constructor(private router: Router) {
     onAuthStateChanged(this.auth, (firebaseUser: any) => {
       this.user.set(firebaseUser);
@@ -41,32 +40,17 @@ export class AuthenticationService {
 
   googleSignIn() {
     const provider = new GoogleAuthProvider();
+    //TODO handle failed login case
     if (environment.production) {
-      return signInWithPopup(this.auth, provider)
-        .then(() => {
-          this.router.navigate(['/home']);
-        })
-        .catch((error) => {
-          console.error('Login failed', error);
-        });
+      return signInWithPopup(this.auth, provider);
     } else {
-      return signInWithRedirect(this.auth, provider)
-        .then(() => {
-          this.router.navigate(['/home']);
-        })
-        .catch((error) => {
-          console.error('Login failed', error);
-        });
+      return signInWithRedirect(this.auth, provider);
     }
   }
 
   // Sign out
   signOut() {
     return signOut(this.auth);
-  }
-
-  getCurrentUser() {
-    return this.user();
   }
   // async updateUserData(user: any) {
   //   const userRef: AngularFirestoreDocument<any> = this.afs.doc(

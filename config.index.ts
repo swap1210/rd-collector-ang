@@ -1,10 +1,10 @@
 import { mkdir, writeFile } from 'fs';
+const { version, author } = require('./package.json');
 
 const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
 let apiKey = process.env['APIKEY'];
 apiKey = apiKey ? apiKey : '';
-const appVersion = require('./package.json').version + '';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
@@ -13,7 +13,10 @@ const envConfigFile1 = `export const environment = {
                 "authDomain": 'poorti-21857.firebaseapp.com',
                 "projectId": 'poorti-21857',
               },
-    version: '${appVersion}-dev'
+    version: '${version}-dev',
+    author: '${author.name}',
+    url: '${author.url}',
+    email: '${author.email}'
 };
 `;
 const envConfigFile2 = `export const environment = {
@@ -24,7 +27,10 @@ const envConfigFile2 = `export const environment = {
               "authDomain": 'poorti-21857.firebaseapp.com',
               "projectId": 'poorti-21857',
             },
-    version: '${appVersion}'
+    version: '${version}',
+    author: '${author.name}',
+    url: '${author.url}',
+    email: '${author.email}'
 };
 `;
 mkdir('./src/environments/', (err) => {

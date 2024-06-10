@@ -1,6 +1,13 @@
 {
   "name": "rd-collector-ang",
   "version": "0.0.1",
+  "homepage": "https://github.com/swap1210/rd-collector-ang",
+  "license": "MIT",
+  "author": {
+    "name": "Swapnil Patel",
+    "email": "p.swap1210@gmail.com",
+    "url": "https://swapnilpatel-projects.web.app/"
+  },
   "scripts": {
     "ng": "ng",
     "start": "npm run config && ng serve",
