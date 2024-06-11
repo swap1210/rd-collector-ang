@@ -4,45 +4,50 @@
       mat-card-avatar
       src="../../assets/logo.ico"
       style="width: 3em; border-radius: 2em"
-    /><span class="appnamediv" style="padding-left: 0.5em; font-size: 1.5em"
-      >RD कलेक्टर</span
-    >
+    /><span
+      class="appnamediv"
+      style="padding-left: 0.5em; font-size: 1.5em"
+      [innerText]="env.appName"
+    ></span>
   </button>
-  <!-- <h1
-    [innerText]="
-      tag[currentTitle] ? tag[currentTitle].replace('$', curRoute[2]) : ''
-    "
-    *ngIf="!translationPending"
-  ></h1> -->
+  <h1 [innerText]="currentTitle()?.label"></h1>
   <div class="expanded">
-    <!-- <h3
+    <h3
       class="greeting fadeOut"
-      [innerText]="'Welcome ' + (auth.curUser ? auth.curUser.displayName : '')"
-      [ngStyle]="{ display: showGreeting ? 'block' : 'none' }"
-    ></h3> -->
-    <button class="menuItems" mat-icon-button routerLink="/home">🏡</button>
+      [innerText]="'Welcome ' + authenticationService.user()?.displayName"
+      [ngStyle]="{ display: showGreeting() ? 'block' : 'none' }"
+    ></h3>
+    <!-- <button class="menuItems" mat-icon-button routerLink="/home">🏡</button>
     <button class="bkpBtn" mat-icon-button routerLink="/calculator">
-      <mat-icon>calculate</mat-icon>
+      <mat-icon fontIcon="calculate"></mat-icon>
     </button>
-    <!-- <button class="menuItems" mat-icon-button (click)="languageChange()">
-      {{ curLanguage === Language.HI ? "अ" : "En" }}
-    </button> -->
+    <button class="menuItems" mat-icon-button (click)="languageChange()">
+      {{ userProfileService.curLanguage === Language.HI ? "अ" : "En" }}
+    </button>
     @if(userProfileService.userIsAccountant()){
     <button class="menuItems" mat-icon-button routerLink="/new-account">
       ➕
     </button>
-    }
-    <!-- <button
-      class="bkpBtn"
-      mat-icon-button
-      (click)="accSer.createBackupRDAccount(auth.curUser.company)"
-      *ngIf="auth.curUser && auth.curUser.type === Usertype.A"
-    >
-      <mat-icon>backup</mat-icon>
-    </button> -->
-    <button class="menuItems" mat-icon-button (click)="signOut()">
-      <mat-icon style="font-size: 1.5em">power_settings_new</mat-icon>
+    <button class="bkpBtn" mat-icon-button>
+      <mat-icon fontIcon="backup"></mat-icon>
     </button>
+    (click)="accSer.createBackupRDAccount(auth.curUser.company)"
+    }
+    <button class="menuItems" mat-icon-button (click)="signOut()">
+      <mat-icon fontIcon="power_settings_new"></mat-icon>
+    </button> -->
+    @for (headerAction of headerActions(); track headerActions) {
+    <button
+      ngClass="headerAction.styleClass"
+      mat-icon-button
+      (click)="headerAction.action(headerAction.param)"
+    >
+      {{ headerAction.label }}
+      @if(headerAction.innerIcon !== undefined){
+      <mat-icon fontIcon="{{ headerAction.innerIcon?.fontIcon }}"></mat-icon>
+      }
+    </button>
+    }
   </div>
   <button
     mat-icon-button
@@ -50,27 +55,21 @@
     [matMenuTriggerFor]="menu"
     aria-label="menu icon"
   >
-    <mat-icon>menu</mat-icon>
+    <mat-icon fontIcon="menu"></mat-icon>
   </button>
   <!-- hide all above icons if there are too many icons -->
   <mat-menu #menu="matMenu">
-    <button class="phoneBtn" mat-menu-item routerLink="/home">
+    <!-- <button class="phoneBtn" mat-menu-item routerLink="/home">
       🏡
       <div>होम स्क्रीन</div>
     </button>
     <button class="phoneBtn" mat-menu-item routerLink="/calculator">
-      <mat-icon>calculate</mat-icon>
+      <mat-icon fontIcon="calculate"></mat-icon>
       <div>मेरा कमीशन</div>
     </button>
-    <!-- <button class="phoneBtn" mat-menu-item (click)="languageChange()">
-      <div>
-        {{
-          curLanguage === Language.HI
-            ? "भाषा बदले (English)"
-            : "Translate to (हिंदी)"
-        }}
-      </div>
-    </button> -->
+    <button class="phoneBtn" mat-menu-item (click)="languageChange()">
+      भाषा बदले (English)
+    </button>
     @if(userProfileService.userIsAccountant()){
     <button class="phoneBtn" mat-menu-item routerLink="/new-account">
       ➕
@@ -78,16 +77,27 @@
       <span>नया खाता</span>
     </button>
     <button class="phoneBtn" mat-menu-item>
-      <!-- (click)="accSer.createBackupRDAccount(auth.curUser.company)" -->
-      <mat-icon color="warn">backup</mat-icon>
+      <mat-icon color="warn" fontIcon="backup"></mat-icon>
       <div>
         <span>हमशकल खाते</span>
       </div>
     </button>
     }
     <button class="phoneBtn" mat-menu-item (click)="signOut()">
-      <mat-icon>power_settings_new</mat-icon>
+      <mat-icon fontIcon="power_settings_new"></mat-icon>
       <div>बंद करे</div>
+    </button> -->
+    @for (headerAction of headerActions(); track headerActions) {
+    <button
+      class="phoneBtn"
+      mat-icon-button
+      (click)="headerAction.action(headerAction.param)"
+    >
+      @if(headerAction.innerIcon !== undefined){
+      <mat-icon fontIcon="{{ headerAction.innerIcon?.fontIcon }}"></mat-icon>
+      }
+      <div>{{ headerAction.mobileLabel }}</div>
     </button>
+    }
   </mat-menu>
 </mat-toolbar>

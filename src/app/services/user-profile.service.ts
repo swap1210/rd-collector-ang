@@ -13,4 +13,9 @@ export class UserProfileService {
   });
 
   constructor() {}
+
+  languageChange() {
+    this.curLanguage =
+      this.curLanguage === Language.HI ? Language.EN : Language.HI;
+  }
 }

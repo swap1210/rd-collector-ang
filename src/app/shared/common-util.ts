@@ -1,15 +1,23 @@
 import { Language } from '../model/user.model';
 
-export class CU {
-  constructor() {}
+export class CommonUtil {
+  public static readonly tempImgGallery: any = {
+    '404_v2':
+      'https://firebasestorage.googleapis.com/v0/b/poorti-21857.appspot.com/o/cassets%2F404_v2.png?alt=media&token=9b8a91e9-498e-43ba-9514-789a2d732ffc',
+  };
+
+  public static readonly commissionMetaData: any = {
+    commission_rate: 4,
+    tds_rate: 5,
+  };
 
   static t(p_lang: string, p_str: string): string {
     let temp = '';
     // console.log(p_lang, p_str);
     switch (p_lang) {
       case Language.EN:
-        if (new Object(CU.translation).hasOwnProperty(p_str)) {
-          temp = CU.translation[p_str];
+        if (new Object(CommonUtil.translation).hasOwnProperty(p_str)) {
+          temp = CommonUtil.translation[p_str];
           // console.log(p_lang, p_str, temp);
         } else {
           temp = 'TNA: ' + p_str;
