@@ -17,25 +17,6 @@
       [innerText]="'Welcome ' + authenticationService.user()?.displayName"
       [ngStyle]="{ display: showGreeting() ? 'block' : 'none' }"
     ></h3>
-    <!-- <button class="menuItems" mat-icon-button routerLink="/home">🏡</button>
-    <button class="bkpBtn" mat-icon-button routerLink="/calculator">
-      <mat-icon fontIcon="calculate"></mat-icon>
-    </button>
-    <button class="menuItems" mat-icon-button (click)="languageChange()">
-      {{ userProfileService.curLanguage === Language.HI ? "अ" : "En" }}
-    </button>
-    @if(userProfileService.userIsAccountant()){
-    <button class="menuItems" mat-icon-button routerLink="/new-account">
-      ➕
-    </button>
-    <button class="bkpBtn" mat-icon-button>
-      <mat-icon fontIcon="backup"></mat-icon>
-    </button>
-    (click)="accSer.createBackupRDAccount(auth.curUser.company)"
-    }
-    <button class="menuItems" mat-icon-button (click)="signOut()">
-      <mat-icon fontIcon="power_settings_new"></mat-icon>
-    </button> -->
     @for (headerAction of headerActions(); track headerActions) {
     <button
       ngClass="headerAction.styleClass"
@@ -59,34 +40,6 @@
   </button>
   <!-- hide all above icons if there are too many icons -->
   <mat-menu #menu="matMenu">
-    <!-- <button class="phoneBtn" mat-menu-item routerLink="/home">
-      🏡
-      <div>होम स्क्रीन</div>
-    </button>
-    <button class="phoneBtn" mat-menu-item routerLink="/calculator">
-      <mat-icon fontIcon="calculate"></mat-icon>
-      <div>मेरा कमीशन</div>
-    </button>
-    <button class="phoneBtn" mat-menu-item (click)="languageChange()">
-      भाषा बदले (English)
-    </button>
-    @if(userProfileService.userIsAccountant()){
-    <button class="phoneBtn" mat-menu-item routerLink="/new-account">
-      ➕
-      <div></div>
-      <span>नया खाता</span>
-    </button>
-    <button class="phoneBtn" mat-menu-item>
-      <mat-icon color="warn" fontIcon="backup"></mat-icon>
-      <div>
-        <span>हमशकल खाते</span>
-      </div>
-    </button>
-    }
-    <button class="phoneBtn" mat-menu-item (click)="signOut()">
-      <mat-icon fontIcon="power_settings_new"></mat-icon>
-      <div>बंद करे</div>
-    </button> -->
     @for (headerAction of headerActions(); track headerActions) {
     <button
       class="phoneBtn"
