@@ -75,9 +75,19 @@ mat-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: -webkit-fill-available;
 }
 .bkpBtn {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.logoDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.list-menu {
+  display: flex;
+  flex-direction: column;
 }

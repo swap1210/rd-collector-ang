@@ -1,14 +1,16 @@
 <mat-toolbar color="accent" class="toolbarDiv mat-elevation-z2">
   <button mat-button routerLink="/home">
-    <img
-      mat-card-avatar
-      src="../../assets/logo.ico"
-      style="width: 3em; border-radius: 2em"
-    /><span
-      class="appnamediv"
-      style="padding-left: 0.5em; font-size: 1.5em"
-      [innerText]="env.appName"
-    ></span>
+    <div class="logoDiv">
+      <img
+        mat-card-avatar
+        src="../../assets/logo.ico"
+        style="width: 3em; border-radius: 2em"
+      /><span
+        class="appnamediv"
+        style="padding-left: 0.5em; font-size: 1.5em"
+        [innerText]="env.appName"
+      ></span>
+    </div>
   </button>
   <h1 [innerText]="currentTitle()?.label"></h1>
   <div class="expanded">
@@ -25,7 +27,7 @@
     >
       {{ headerAction.label }}
       @if(headerAction.innerIcon !== undefined){
-      <mat-icon fontIcon="{{ headerAction.innerIcon?.fontIcon }}"></mat-icon>
+      <mat-icon fontIcon="{{ headerAction.innerIcon.fontIcon }}"></mat-icon>
       }
     </button>
     }
@@ -43,11 +45,11 @@
     @for (headerAction of headerActions(); track headerActions) {
     <button
       class="phoneBtn"
-      mat-icon-button
+      mat-button
       (click)="headerAction.action(headerAction.param)"
     >
       @if(headerAction.innerIcon !== undefined){
-      <mat-icon fontIcon="{{ headerAction.innerIcon?.fontIcon }}"></mat-icon>
+      <mat-icon fontIcon="{{ headerAction.innerIcon.fontIcon }}"></mat-icon>
       }
       <div>{{ headerAction.mobileLabel }}</div>
     </button>

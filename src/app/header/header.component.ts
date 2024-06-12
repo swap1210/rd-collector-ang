@@ -27,14 +27,6 @@ import { AccountService } from '../services/account.service';
   styleUrl: './header.component.scss',
 })
 export class HeaderComponent {
-  // {
-  //   '': '🏡',
-  //   home: '🏡',
-  //   'new-account': 'नया खाता',
-  //   'edit-account': 'खाता नंबर $ में बदलाव',
-  //   'account-detail': '$ का विवरण',
-  //   calculator: 'मेरा कमीशन',
-  // }
   readonly env = environment;
   readonly Language = Language;
 

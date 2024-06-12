@@ -29,6 +29,8 @@ $rd-collector-ang-theme: mat.define-theme(
   @include mat.all-component-themes($rd-collector-ang-theme);
 }
 
+// Include the theme mixins for other co
+
 html,
 body {
   height: 100%;
