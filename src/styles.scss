@@ -1,38 +1,13 @@
 @use "@angular/material" as mat;
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
-// Plus imports for other components in your app.
+@use "../m3-theme.scss";
 
-// Include the common styles for Angular Material. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
-// Be sure that you only ever include this mixin once!
-@include mat.core();
-
-// Define the theme object.
-$rd-collector-ang-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    density: (
-      scale: 0,
-    ),
-  )
-);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
-:root {
-  @include mat.all-component-themes($rd-collector-ang-theme);
+.dark-theme {
+  @include mat.all-component-colors(m3-theme.$dark-theme);
 }
-
-// Include the theme mixins for other co
 
 html,
 body {
+  @include mat.all-component-themes(m3-theme.$light-theme);
   height: 100%;
   background-color: #e5e5e5;
   margin: 0;
@@ -46,4 +21,16 @@ body {
 
 .imgIcon {
   width: 2.2em;
+}
+
+.only-mobile {
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
+
+.only-pc {
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 }

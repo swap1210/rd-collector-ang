@@ -11,6 +11,7 @@ import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { AccountType, Language } from '../model/user.model';
 import { AccountService } from '../services/account.service';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -29,10 +30,13 @@ import { AccountService } from '../services/account.service';
 export class HeaderComponent {
   readonly env = environment;
   readonly Language = Language;
+  isDarkTheme = false;
 
   authenticationService = inject(AuthenticationService);
   accountService = inject(AccountService);
   userProfileService = inject(UserProfileService);
+  private router = inject(Router);
+  themeService = inject(ThemeService);
 
   //TODO should this be a signal? as it might update in runtime
   headerActions = computed<HeaderAction[]>(() => [
@@ -95,8 +99,6 @@ export class HeaderComponent {
     },
   ]);
 
-  private router = inject(Router);
-
   showGreeting = signal(true);
   currentTitle = signal<HeaderAction | undefined>(undefined);
 
@@ -128,5 +130,10 @@ export class HeaderComponent {
 
   goRoute(path: string) {
     this.router.navigate([path]);
+  }
+
+  toggleTheme() {
+    this.isDarkTheme = !this.isDarkTheme;
+    this.themeService.setTheme(this.isDarkTheme ? 'dark' : 'light'); // Set theme in service
   }
 }

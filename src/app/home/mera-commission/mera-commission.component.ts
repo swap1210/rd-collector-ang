@@ -16,7 +16,7 @@ import { CommonUtilService } from '../../shared/common-util.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-mera-comission',
+  selector: 'app-mera-commission',
   standalone: true,
   imports: [
     CommonModule,

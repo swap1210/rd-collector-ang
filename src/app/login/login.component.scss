@@ -5,6 +5,7 @@ h1 {
 mat-card {
   background-color: #dbdbdb9f;
   max-width: 15em;
+  padding: 0em 1em 1em 1em;
 }
 
 .login-body {
@@ -16,6 +17,7 @@ mat-card {
 }
 
 fieldset {
+  border-width: 0.4em;
   border-radius: 0.3em;
   display: flex;
   flex-direction: column;
@@ -24,4 +26,7 @@ fieldset {
 }
 button {
   height: 5em;
+}
+.btn-label {
+  display: flex;
 }
