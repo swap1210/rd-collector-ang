@@ -5,13 +5,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {
   FormGroup,
-  FormBuilder,
   FormControl,
   Validators,
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { AuthenticationService } from '../../services/authentication.service';
 import { CommonUtilService } from '../../shared/common-util.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
@@ -50,10 +48,7 @@ export class MeraCommissionComponent implements OnInit {
     }
   );
   readonly tds_rate = 4;
-  constructor(
-    public auth: AuthenticationService,
-    private _formBuilder: FormBuilder
-  ) {}
+  constructor() {}
   ngOnInit(): void {}
 
   round(n: number): string {
