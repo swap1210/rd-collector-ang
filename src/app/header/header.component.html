@@ -1,5 +1,9 @@
 <mat-toolbar mat-primary class="toolbarDiv mat-elevation-z2">
-  <button mat-button routerLink="/home">
+  <button
+    mat-button
+    routerLink="/home"
+    [disabled]="!authenticationService.isLoggedIn()"
+  >
     <div class="logoDiv">
       <img
         mat-card-avatar
@@ -40,7 +44,7 @@
     <div class="menuItems" (click)="toggleTheme()">
       <mat-icon
         inline="true"
-        [fontIcon]="isDarkTheme ? 'brightness_7' : 'dark_mode'"
+        [fontIcon]="themeService.darkMode() ? 'brightness_7' : 'dark_mode'"
       ></mat-icon>
     </div>
     <!-- </button> -->
@@ -70,7 +74,7 @@
     }}
     <button class="phoneBtn" mat-menu-item (click)="toggleTheme()">
       <mat-icon
-        [fontIcon]="isDarkTheme ? 'brightness_7' : 'dark_mode'"
+        [fontIcon]="themeService.darkMode() ? 'brightness_7' : 'dark_mode'"
       ></mat-icon>
       <div>Switch Theme</div>
     </button>

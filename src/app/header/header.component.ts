@@ -30,7 +30,6 @@ import { ThemeService } from '../services/theme.service';
 export class HeaderComponent {
   readonly env = environment;
   readonly Language = Language;
-  isDarkTheme = false;
 
   authenticationService = inject(AuthenticationService);
   accountService = inject(AccountService);
@@ -107,7 +106,7 @@ export class HeaderComponent {
       if (!this.authenticationService.isLoggedIn()) {
         this.router.navigate(['/login']);
       }
-
+      console.log('authenticationService.isLoggedIn');
       setTimeout(() => {
         this.showGreeting.set(false);
       }, 3000);
@@ -133,8 +132,7 @@ export class HeaderComponent {
   }
 
   toggleTheme() {
-    this.isDarkTheme = !this.isDarkTheme;
-    this.themeService.setTheme(this.isDarkTheme ? 'dark' : 'light'); // Set theme in service
+    this.themeService.darkMode.set(!this.themeService.darkMode());
   }
 
   notLoggedIn() {
