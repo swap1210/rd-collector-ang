@@ -1,6 +1,6 @@
 {
   "name": "rd-collector-ang",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/swap1210/rd-collector-ang",
   "license": "MIT",
   "author": {
@@ -13,6 +13,7 @@
     "start": "npm run config && ng serve",
     "config": "ts-node -O '{\"module\": \"commonjs\"}' ./config.index.ts",
     "build": "npm run config && ng build",
+    "prod-build": "npm run config && ng build --configuration production",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

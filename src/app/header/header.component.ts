@@ -50,7 +50,7 @@ export class HeaderComponent {
     },
     {
       label: '🧮',
-      styleClass: 'bkpBtn',
+      styleClass: 'menuItems',
       action: (param: any) => this.goRoute(param),
       param: '/calculator',
       // innerIcon: {
@@ -61,14 +61,14 @@ export class HeaderComponent {
     },
     {
       label: '🇮🇳',
-      styleClass: 'bkpBtn',
+      styleClass: 'menuItems',
       action: () => this.languageChange(),
       mobileLabel: '🇮🇳 भाषा बदले (English)',
       mobileStyleClass: 'phoneBtn',
     },
     {
       label: '➕',
-      styleClass: 'bkpBtn',
+      styleClass: 'menuItems',
       action: (param: any) => this.goRoute(param),
       param: '/new-account',
       accountType: AccountType.A,
@@ -77,7 +77,7 @@ export class HeaderComponent {
     },
     {
       label: '☁️',
-      styleClass: 'bkpBtn',
+      styleClass: 'menuItems',
       action: (param: any) => this.accountService.takeBackup(param),
       param: this.userProfileService.userProfile()?.company,
       accountType: AccountType.A,
@@ -135,5 +135,9 @@ export class HeaderComponent {
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;
     this.themeService.setTheme(this.isDarkTheme ? 'dark' : 'light'); // Set theme in service
+  }
+
+  notLoggedIn() {
+    window.alert('Please login to continue');
   }
 }

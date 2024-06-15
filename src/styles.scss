@@ -9,7 +9,6 @@ html,
 body {
   @include mat.all-component-themes(m3-theme.$light-theme);
   height: 100%;
-  background-color: #e5e5e5;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   scroll-behavior: smooth;
@@ -34,3 +33,6 @@ body {
     display: none;
   }
 }
+
+@include mat.core();
+@include mat.color-variants-backwards-compatibility(m3-theme.$light-theme);

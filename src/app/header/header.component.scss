@@ -49,6 +49,7 @@ mat-toolbar {
 }
 .menuItems {
   flex: 1;
+  font-size: xx-large;
 }
 @keyframes fadeOut {
   0% {
@@ -77,11 +78,7 @@ mat-toolbar {
   align-items: center;
   width: -webkit-fill-available;
 }
-.bkpBtn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 .logoDiv {
   display: flex;
   justify-content: center;

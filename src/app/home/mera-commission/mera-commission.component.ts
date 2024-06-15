@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,6 +14,9 @@ import {
 import { AuthenticationService } from '../../services/authentication.service';
 import { CommonUtilService } from '../../shared/common-util.service';
 import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-mera-commission',
@@ -26,6 +29,7 @@ import { CommonModule } from '@angular/common';
     MatFormFieldModule,
     FormsModule,
     ReactiveFormsModule,
+    MatInputModule,
   ],
   templateUrl: './mera-commission.component.html',
   styleUrl: './mera-commission.component.scss',
@@ -33,20 +37,24 @@ import { CommonModule } from '@angular/common';
 
 //TODO need to make this form reactive
 export class MeraCommissionComponent implements OnInit {
-  commonService = inject(CommonUtilService);
-  meraCommissionForm: FormGroup = new FormGroup({});
-  readonly commission_rate =
-    this.commonService.getCommissionMetaData().commission_rate;
-  readonly tds_rate = this.commonService.getCommissionMetaData().tds_rate;
+  commonUtilService = inject(CommonUtilService);
+  meraCommissionForm: FormGroup = new FormGroup({
+    amt: new FormControl('', [Validators.required]),
+  });
+  commission_rate = toSignal(
+    this.commonUtilService
+      .getComm()
+      .pipe(map((data) => data?.mera_commission?.commission_rate)),
+    {
+      initialValue: 0,
+    }
+  );
+  readonly tds_rate = 4;
   constructor(
     public auth: AuthenticationService,
     private _formBuilder: FormBuilder
   ) {}
-  ngOnInit(): void {
-    this.meraCommissionForm = this._formBuilder.group({
-      amt: new FormControl('', [Validators.required]),
-    });
-  }
+  ngOnInit(): void {}
 
   round(n: number): string {
     return n.toFixed(2);

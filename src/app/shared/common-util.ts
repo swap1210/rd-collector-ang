@@ -1,6 +1,10 @@
 import { Language } from '../model/user.model';
 
 export class CommonUtil {
+  public static readonly firebaseMetaData: any = {
+    collectionName: 'comm',
+    documentId: 'gknplF75bvmpeCorR66k',
+  };
   public static readonly tempImgGallery: any = {
     '404_v2':
       'https://firebasestorage.googleapis.com/v0/b/poorti-21857.appspot.com/o/cassets%2F404_v2.png?alt=media&token=9b8a91e9-498e-43ba-9514-789a2d732ffc',

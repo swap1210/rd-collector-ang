@@ -9,7 +9,8 @@
         style="opacity: 75%; width: 100%; border-radius: 0.3em"
       />
       <hr />
-      <button mat-raised-button (click)="login()" color="primary">
+      @if(!environment.isLocal){
+      <button mat-raised-button (click)="login()">
         <div class="btn-label">
           <svg
             viewBox="0 0 24 24"
@@ -37,8 +38,46 @@
             </g>
           </svg>
           <span class="only-pc">&nbsp;&nbsp;Login with Google</span>
-        </div>
-      </button>
+        </div></button
+      >} @else {
+      <form class="local-login-form" [formGroup]="localUserLoginFormGroup">
+        <mat-form-field appearance="fill">
+          <mat-label for="email">Email:</mat-label>
+          <input
+            matInput
+            type="email"
+            formControlName="email"
+            placeholder="Enter your email"
+          />
+          @if(localUserLoginFormGroup.get('email')?.hasError('required')){
+          <mat-error>Email is <strong>required</strong>.</mat-error>
+          } @if(localUserLoginFormGroup.get('email')?.hasError('email')){
+          <mat-error>
+            Please enter a <strong>valid</strong> email address.
+          </mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Password:</mat-label>
+          <input
+            matInput
+            type="password"
+            formControlName="password"
+            placeholder="Enter password"
+          />
+          @if(localUserLoginFormGroup.get('password')?.hasError('required')){
+          <mat-error>Password is <strong>required</strong>.</mat-error>
+          }
+        </mat-form-field>
+        <button
+          mat-raised-button
+          (click)="login()"
+          [disabled]="localUserLoginFormGroup.invalid"
+        >
+          Login
+        </button>
+      </form>
+      }
     </fieldset>
   </mat-card>
 </div>

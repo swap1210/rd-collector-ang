@@ -9,6 +9,7 @@ const appName = 'RD कलेक्टर';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
+   isLocal: false,
    firebase: {
                 "apiKey": '${apiKey}',
                 "authDomain": 'poorti-21857.firebaseapp.com',
@@ -24,6 +25,7 @@ const envConfigFile1 = `export const environment = {
 const envConfigFile2 = `export const environment = {
    production: true,
    instance: 'Production',
+   isLocal: false,
    firebase: {
               "apiKey": '${apiKey}',
               "authDomain": 'poorti-21857.firebaseapp.com',

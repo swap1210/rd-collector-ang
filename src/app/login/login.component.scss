@@ -4,7 +4,7 @@ h1 {
 
 mat-card {
   background-color: #dbdbdb9f;
-  max-width: 15em;
+  max-width: 18.5em;
   padding: 0em 1em 1em 1em;
 }
 
@@ -29,4 +29,11 @@ button {
 }
 .btn-label {
   display: flex;
+}
+
+.local-login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
 }

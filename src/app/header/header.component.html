@@ -1,4 +1,4 @@
-<mat-toolbar color="primary" class="toolbarDiv mat-elevation-z2">
+<mat-toolbar mat-primary class="toolbarDiv mat-elevation-z2">
   <button mat-button routerLink="/home">
     <div class="logoDiv">
       <img
@@ -14,24 +14,36 @@
   </button>
   <h1 [innerText]="currentTitle()?.label"></h1>
   <div class="expanded">
+    @if(authenticationService.isLoggedIn()){
     <h3
       class="greeting fadeOut"
       [innerText]="'Welcome ' + authenticationService.user()?.displayName"
       [ngStyle]="{ display: showGreeting() ? 'block' : 'none' }"
     ></h3>
-    @for (headerAction of headerActions(); track headerActions) {
+    } @if(authenticationService.isLoggedIn()){@for (headerAction of
+    headerActions(); track headerActions) {
     <button
-      ngClass="headerAction.styleClass"
-      mat-icon-button
+      mat-button
+      [ngClass]="headerAction.styleClass"
       (click)="headerAction.action(headerAction.param)"
     >
       {{ headerAction.label }}
       @if(headerAction.innerIcon !== undefined){
-      <mat-icon fontIcon="{{ headerAction.innerIcon.fontIcon }}"></mat-icon>
+      <mat-icon
+        inline="true"
+        fontIcon="{{ headerAction.innerIcon.fontIcon }}"
+      ></mat-icon>
       }
     </button>
-    }
-    <button (click)="toggleTheme()">Toggle Theme</button>
+    }}
+    <!-- <button mat-button class="menuItems logoDiv" (click)="toggleTheme()"> -->
+    <div class="menuItems" (click)="toggleTheme()">
+      <mat-icon
+        inline="true"
+        [fontIcon]="isDarkTheme ? 'brightness_7' : 'dark_mode'"
+      ></mat-icon>
+    </div>
+    <!-- </button> -->
   </div>
   <button
     mat-icon-button
@@ -43,10 +55,11 @@
   </button>
   <!-- hide all above icons if there are too many icons -->
   <mat-menu #menu="matMenu">
-    @for (headerAction of headerActions(); track headerActions) {
+    @if(authenticationService.isLoggedIn()){@for (headerAction of
+    headerActions(); track headerActions) {
     <button
       class="phoneBtn"
-      mat-button
+      mat-menu-item
       (click)="headerAction.action(headerAction.param)"
     >
       @if(headerAction.innerIcon !== undefined){
@@ -54,6 +67,12 @@
       }
       <div>{{ headerAction.mobileLabel }}</div>
     </button>
-    }
+    }}
+    <button class="phoneBtn" mat-menu-item (click)="toggleTheme()">
+      <mat-icon
+        [fontIcon]="isDarkTheme ? 'brightness_7' : 'dark_mode'"
+      ></mat-icon>
+      <div>Switch Theme</div>
+    </button>
   </mat-menu>
 </mat-toolbar>

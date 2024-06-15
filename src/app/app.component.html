@@ -4,11 +4,8 @@
     'background-color': !authenticationService.isLoggedIn() ? '#ef5454' : ''
   }"
 >
-  @if(authenticationService.isLoggedIn()){
   <app-header></app-header>
-  } @else{
   <div class="thick"></div>
-  }
   <div class="centered">
     <router-outlet></router-outlet>
   </div>
