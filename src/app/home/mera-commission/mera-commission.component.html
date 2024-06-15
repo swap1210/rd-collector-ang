@@ -1,7 +1,7 @@
 <mat-card class="mera-main mat-elevation-z4">
   <fieldset>
     <legend class="mat-title">
-      [ कमीशन ({{ commission_rate() }}%) & टी.डी.एस ({{ tds_rate }}%) ]
+      [ कमीशन ({{ commission_rate() }}%) & टी.डी.एस ({{ tds_rate() }}%) ]
     </legend>
     <form [formGroup]="meraCommissionForm" #accountFormGroupDirective="ngForm">
       <mat-form-field appearance="fill">
@@ -67,7 +67,7 @@
         =&nbsp;{{
           meraCommissionForm.value.amt *
             (commission_rate() / 100) *
-            (tds_rate / 100) | currency : "INR" : "symbol"
+            (tds_rate() / 100) | currency : "INR" : "symbol"
         }}
       </div>
     </div>

@@ -47,7 +47,14 @@ export class MeraCommissionComponent implements OnInit {
       initialValue: 0,
     }
   );
-  readonly tds_rate = 4;
+  readonly tds_rate = toSignal(
+    this.commonUtilService
+      .getComm()
+      .pipe(map((data) => data?.mera_commission?.tds_rate)),
+    {
+      initialValue: 0,
+    }
+  );
   constructor() {}
   ngOnInit(): void {}
 
