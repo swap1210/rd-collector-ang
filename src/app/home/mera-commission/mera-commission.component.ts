@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, computed, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -10,11 +10,9 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { CommonUtilService } from '../../shared/common-util.service';
 import { CommonModule } from '@angular/common';
 import { MatInputModule } from '@angular/material/input';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { CommonUtilService } from '../../shared/services/common-util.service';
 
 @Component({
   selector: 'app-mera-commission',
@@ -39,21 +37,12 @@ export class MeraCommissionComponent implements OnInit {
   meraCommissionForm: FormGroup = new FormGroup({
     amt: new FormControl('', [Validators.required]),
   });
-  commission_rate = toSignal(
-    this.commonUtilService
-      .getComm()
-      .pipe(map((data) => data?.mera_commission?.commission_rate)),
-    {
-      initialValue: 0,
-    }
+  commission_rate = computed(
+    () =>
+      this.commonUtilService.state().commModel.mera_commission.commission_rate
   );
-  readonly tds_rate = toSignal(
-    this.commonUtilService
-      .getComm()
-      .pipe(map((data) => data?.mera_commission?.tds_rate)),
-    {
-      initialValue: 0,
-    }
+  readonly tds_rate = computed(
+    () => this.commonUtilService.state().commModel.mera_commission.tds_rate
   );
   constructor() {}
   ngOnInit(): void {}

@@ -9,7 +9,7 @@ import { Router, RouterModule } from '@angular/router';
 import { HeaderAction } from '../model/header.action.model';
 import { environment } from '../../environments/environment';
 import { CommonModule } from '@angular/common';
-import { AccountType, Language } from '../model/user.model';
+import { AccountType, Language } from '../model/rd.user.profile.model.model';
 import { AccountService } from '../services/account.service';
 import { ThemeService } from '../services/theme.service';
 
@@ -102,11 +102,11 @@ export class HeaderComponent {
   currentTitle = signal<HeaderAction | undefined>(undefined);
 
   constructor() {
+    console.log('authenticationService.isLoggedIn');
     effect(() => {
       if (!this.authenticationService.isLoggedIn()) {
         this.router.navigate(['/login']);
       }
-      console.log('authenticationService.isLoggedIn');
       setTimeout(() => {
         this.showGreeting.set(false);
       }, 3000);

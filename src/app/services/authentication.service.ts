@@ -1,31 +1,53 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import {
+  Auth,
   GoogleAuthProvider,
+  User,
   connectAuthEmulator,
-  getAuth,
-  onAuthStateChanged,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
 import { LocalLoginUser } from '../model/local.login.model';
+import { AUTH } from '../app.config';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
+
+export type AuthUser = User | null | undefined;
+
+interface AuthState {
+  user: AuthUser;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  private anl = !environment.production; //flag for anonymous login
-  readonly default_work_group = 'na'; //flag for anonymous login
-  private auth = getAuth();
-  user = signal<any>(null);
+  // private anl = !environment.production; //flag for anonymous login
+  // readonly default_work_group = 'na'; //flag for anonymous login
+  // private auth = getAuth();
+  private auth = inject(AUTH);
+
+  user = computed(() => this.state().user);
   isLoggedIn = computed(() => this.user() !== null);
+
+  // private newUser$ = onAuthStateChanged(this.auth, (firebaseUser: any) => {});
+
+  private user$ = this.authState(this.auth);
+
+  private state = signal<AuthState>({ user: undefined });
+
   constructor() {
     if (environment.isLocal) {
       connectAuthEmulator(this.auth, 'http://127.0.0.1:9099');
     }
-    onAuthStateChanged(this.auth, (firebaseUser: any) => {
-      this.user.set(firebaseUser);
+    // onAuthStateChanged(this.auth, (firebaseUser: any) => {
+    //   this.user.set(firebaseUser);
+    // });
+
+    this.user$.pipe(takeUntilDestroyed()).subscribe((user) => {
+      this.state.update((state) => ({ ...state, user }));
     });
   }
 
@@ -53,64 +75,14 @@ export class AuthenticationService {
   signOut() {
     return signOut(this.auth);
   }
+
+  authState(auth: Auth): Observable<User | null> {
+    return new Observable<User | null>((observer) => {
+      const unsubscribe = auth.onAuthStateChanged((user) => {
+        observer.next(user);
+      });
+
+      return () => unsubscribe();
+    });
+  }
 }
-
-// Auth logic to run auth providers
-// async AuthLogin(provider: any) {
-// return this.auth
-//   .signInWithPopup(provider)
-//   .then((result) => {
-//     this.updateUserData(result.user);
-//   })
-//   .catch((error) => {
-//     window.alert(error);
-//   });
-// }
-
-// async updateUserData(user: any) {
-//   const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-//     `users/${user.uid}`
-//   );
-
-//   userRef.get().subscribe({
-//     next: (oldData) => {
-//       const data = {};
-//       if (oldData && user.uid === oldData.get('uid')) {
-//         // sessionStorage.setItem('language', oldData.get('language'));
-//         return userRef.set({ last_login: Timestamp.now() }, { merge: true });
-//       } else {
-//         // sessionStorage.clear();
-//         if (this.anl) {
-//           const { uid, displayName, email } = user;
-//           return userRef.set(
-//             {
-//               uid,
-//               displayName,
-//               email,
-//               language: 'hi',
-//               type: AccountType.C,
-//               last_login: Timestamp.now(),
-//               company: this.default_work_group,
-//             },
-//             { merge: true }
-//           );
-//         } else {
-//           this.afAuth.signOut();
-//           alert('Currently new logins are disabled');
-//         }
-//         return { uid: null };
-//       }
-//     },
-//   });
-// }
-
-// async updateUserDataLanguage(p_language: Language) {
-//   const userRef: AngularFirestoreDocument<any> = this.afs.doc(
-//     `users/${this.curUser ? this.curUser.uid : ''}`
-//   );
-
-//   return userRef.set(
-//     { last_login: Timestamp.now(), language: p_language },
-//     { merge: true }
-//   );
-// }

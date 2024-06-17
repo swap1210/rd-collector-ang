@@ -14,18 +14,27 @@ export const routes: Routes = [
   },
   {
     path: 'new-account',
-    component: NewAccountComponent,
     canActivate: [authGuard],
+    loadComponent: () =>
+      import('./home/new-account/new-account.component').then(
+        (m) => m.NewAccountComponent
+      ),
   },
   {
     path: 'new-account/:accid',
-    component: NewAccountComponent,
     canActivate: [authGuard],
+    loadComponent: () =>
+      import('./home/new-account/new-account.component').then(
+        (m) => m.NewAccountComponent
+      ),
   },
   {
     path: 'account-detail/:accid',
-    component: AccountDetailComponent,
     canActivate: [authGuard],
+    loadComponent: () =>
+      import('./home/account-detail/account-detail.component').then(
+        (m) => m.AccountDetailComponent
+      ),
   },
   {
     path: 'calculator',

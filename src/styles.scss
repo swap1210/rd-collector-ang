@@ -3,6 +3,7 @@
 
 .dark-theme {
   @include mat.all-component-colors(m3-theme.$dark-theme);
+  color: #fff; //contrasting font color
 }
 
 html,

@@ -1,5 +1,12 @@
 # RdCollectorAng
 
+## v2.0.0 Features
+
+<span style="color:green">✔️</span> Got ride of subscribe unsubscribe hell<br>
+<span style="color:green">✔️</span> no more async await, or async pipe<br>
+<span style="color:green">✔️</span> Zoneless: No dependency on [zone.js](https://www.npmjs.com/package/zone.js?activeTab=readme)<br>
+<span style="color:green">✔️</span> [@angular/fire independent](https://github.com/angular/angularfire) as it is not zoneless friendly yet.<br>
+
 ## How to setup project locally:
 
 ### Step 1:

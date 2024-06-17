@@ -1,4 +1,4 @@
-import { AccountType } from './user.model';
+import { AccountType } from './rd.user.profile.model.model';
 
 interface InnerIcon {
   fontIcon: string;

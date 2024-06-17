@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { CommonUtilService } from '../shared/common-util.service';
+import { CommonUtilService } from '../shared/services/common-util.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 

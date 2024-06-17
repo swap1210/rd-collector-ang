@@ -1,4 +1,4 @@
-import { Language } from '../model/user.model';
+import { Language } from '../../model/rd.user.profile.model.model';
 
 export class CommonUtil {
   public static readonly firebaseMetaData: any = {

@@ -1,7 +1,5 @@
-// import { firestore } from '@angular/fire';
-import { DocumentReference } from '@angular/fire/compat/firestore';
-import { GeoPoint, Timestamp } from '@angular/fire/firestore';
-import { AccountType } from './user.model';
+import { DocumentReference, GeoPoint, Timestamp } from 'firebase/firestore';
+import { AccountType } from './rd.user.profile.model.model';
 
 export interface RDAccount {
   temp_account: DocumentReference | String;

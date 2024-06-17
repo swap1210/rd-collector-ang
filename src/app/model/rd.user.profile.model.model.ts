@@ -8,7 +8,7 @@ export enum Language {
   EN = 'en',
 }
 
-export interface User {
+export interface RDUserProfileModel {
   company: string;
   displayName?: string;
   email: string;

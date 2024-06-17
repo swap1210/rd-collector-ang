@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MetaDataService } from './meta-data.service';
+import { CommonUtilService } from '../common-util.service';
 
-describe('MetaDataService', () => {
-  let service: MetaDataService;
+describe('CommonUtilService', () => {
+  let service: CommonUtilService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MetaDataService);
+    service = TestBed.inject(CommonUtilService);
   });
 
   it('should be created', () => {
