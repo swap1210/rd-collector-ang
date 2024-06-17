@@ -32,7 +32,9 @@ export class AuthenticationService {
   user = computed(() => {
     return this.state().user;
   });
-  isLoggedIn = computed(() => this.user() !== null);
+  isLoggedIn = computed(
+    () => this.user() !== null && this.user() !== undefined
+  );
 
   // private newUser$ = onAuthStateChanged(this.auth, (firebaseUser: any) => {});
 
