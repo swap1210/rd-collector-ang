@@ -14,6 +14,7 @@ import {
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoaderComponent } from '../shared/components/loader/loader.component';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +24,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
   imports: [
     MatCardModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     FormsModule,
     MatInputModule,
+    LoaderComponent,
   ],
 })
 export class LoginComponent {

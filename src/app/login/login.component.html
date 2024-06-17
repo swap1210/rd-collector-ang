@@ -1,5 +1,5 @@
-@if(!authenticationService.isLoggedIn()){ @defer(on timer(500)){
 <div class="login-body">
+  @if(!authenticationService.isLoggedIn()){ @defer(on timer(500)){
   <mat-card class="mat-elevation-z8">
     <fieldset>
       <legend style="margin: 0 auto"><h3>Login</h3></legend>
@@ -80,7 +80,7 @@
       }
     </fieldset>
   </mat-card>
+  } } @else {
+  <app-loader></app-loader>
+  }
 </div>
-} } @else {
-<mat-spinner diameter="50"></mat-spinner>
-}
