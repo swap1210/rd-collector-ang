@@ -1,7 +1,8 @@
 <mat-card class="mera-main mat-elevation-z4">
   <fieldset>
     <legend class="mat-title">
-      [ कमीशन ({{ commission_rate() }}%) & टी.डी.एस ({{ tds_rate() }}%) ]
+      [ कमीशन ({{ meraCommissionMetadataSignal().commission_rate }}%) & टी.डी.एस
+      ({{ meraCommissionMetadataSignal().tds_rate }}%) ]
     </legend>
     <form [formGroup]="meraCommissionForm" #accountFormGroupDirective="ngForm">
       <mat-form-field appearance="fill">
@@ -28,12 +29,13 @@
     <div class="box mat-elevation-z2">
       <div class="keyLabel">
         कमीशन ({{ meraCommissionForm.value.amt | currency : "INR" : "symbol" }})
-        x {{ commission_rate() }}%
+        x {{ meraCommissionMetadataSignal().commission_rate }}%
       </div>
       <div>
         =&nbsp;
         {{
-          meraCommissionForm.value.amt * (commission_rate() / 100)
+          meraCommissionForm.value.amt *
+            (meraCommissionMetadataSignal().commission_rate / 100)
             | currency : "INR" : "symbol"
         }}
       </div>
@@ -44,14 +46,17 @@
         {{ meraCommissionForm.value.amt | currency : "INR" : "symbol" }}
         -
         {{
-          round(meraCommissionForm.value.amt * (commission_rate() / 100))
-            | currency : "INR" : "symbol"
+          round(
+            meraCommissionForm.value.amt *
+              (meraCommissionMetadataSignal().commission_rate / 100)
+          ) | currency : "INR" : "symbol"
         }}
       </div>
       <div>
         =&nbsp;{{
           meraCommissionForm.value.amt -
-            meraCommissionForm.value.amt * (commission_rate() / 100)
+            meraCommissionForm.value.amt *
+              (meraCommissionMetadataSignal().commission_rate / 100)
             | currency : "INR" : "symbol"
         }}
       </div>
@@ -59,15 +64,18 @@
     <div class="box mat-elevation-z2">
       <div class="keyLabel">
         टी.डी.एस ({{
-          round(meraCommissionForm.value.amt * (commission_rate() / 100))
-            | currency : "INR" : "symbol"
-        }}) x {{ commission_rate() }}%
+          round(
+            meraCommissionForm.value.amt *
+              (meraCommissionMetadataSignal().commission_rate / 100)
+          ) | currency : "INR" : "symbol"
+        }}) x {{ meraCommissionMetadataSignal().commission_rate }}%
       </div>
       <div>
         =&nbsp;{{
           meraCommissionForm.value.amt *
-            (commission_rate() / 100) *
-            (tds_rate() / 100) | currency : "INR" : "symbol"
+            (meraCommissionMetadataSignal().commission_rate / 100) *
+            (meraCommissionMetadataSignal().tds_rate / 100)
+            | currency : "INR" : "symbol"
         }}
       </div>
     </div>

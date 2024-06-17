@@ -105,6 +105,7 @@ export class HeaderComponent {
     console.log('authenticationService.isLoggedIn');
     effect(() => {
       if (!this.authenticationService.isLoggedIn()) {
+        console.log('not logged in redirecting to login');
         this.router.navigate(['/login']);
       }
       setTimeout(() => {

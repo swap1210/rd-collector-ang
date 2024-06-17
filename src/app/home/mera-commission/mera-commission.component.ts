@@ -37,13 +37,9 @@ export class MeraCommissionComponent implements OnInit {
   meraCommissionForm: FormGroup = new FormGroup({
     amt: new FormControl('', [Validators.required]),
   });
-  commission_rate = computed(
-    () =>
-      this.commonUtilService.state().commModel.mera_commission.commission_rate
-  );
-  readonly tds_rate = computed(
-    () => this.commonUtilService.state().commModel.mera_commission.tds_rate
-  );
+  readonly meraCommissionMetadataSignal = computed(() => {
+    return this.commonUtilService.metadataSignal().mera_commission;
+  });
   constructor() {}
   ngOnInit(): void {}
 

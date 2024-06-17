@@ -45,8 +45,8 @@ export class LoginComponent {
 
   constructor() {
     effect(() => {
-      console.log('effect');
       if (this.authenticationService.isLoggedIn()) {
+        console.log('logged in redirecting to home');
         this.router.navigate(['/home']);
       }
     });

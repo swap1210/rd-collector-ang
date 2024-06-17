@@ -20,22 +20,6 @@ export class UserProfileService {
   authenticationService = inject(AuthenticationService);
   private readonly USER_PROFILE_COLLECTION_NAME: string = 'users';
 
-  //TODO use computed signal of userProfile entity
-  curLanguage: Language = Language.HI;
-  // userProfile: Signal<RDUserProfileModel> = toSignal(
-  //   this.FetchObservableData<RDUserProfileModel>(
-  //     'ASuyTn5zsvY7oVdWLkhQXuwxAy9V'
-  //   ),
-  //   {
-  //     initialValue: {
-  //       company: '',
-  //       email: '',
-  //       language: Language.HI,
-  //       type: AccountType.C,
-  //       uid: '',
-  //     },
-  //   }
-  // );
   userProfile = signal<RDUserProfileModel>({
     company: '',
     email: '',
@@ -60,14 +44,19 @@ export class UserProfileService {
     error: null,
   });
 
-  userUid = computed(() => this.authenticationService.user()?.uid);
+  rdUserProfileUidComputed = computed(
+    () => this.authenticationService.user()?.uid
+  );
 
   constructor() {
     effect(() => {
-      const documentId = this.authenticationService.user()?.uid;
-      if (documentId) {
+      if (this.rdUserProfileUidComputed()) {
         const unsub = onSnapshot(
-          doc(this.firestore, this.USER_PROFILE_COLLECTION_NAME, documentId),
+          doc(
+            this.firestore,
+            this.USER_PROFILE_COLLECTION_NAME,
+            this.rdUserProfileUidComputed()!
+          ),
           (doc) => {
             console.log('Current data: ', doc.data());
             this.state.update((state) => ({
@@ -82,7 +71,6 @@ export class UserProfileService {
   }
 
   languageChange() {
-    this.curLanguage =
-      this.curLanguage === Language.HI ? Language.EN : Language.HI;
+    throw new Error('Method not implemented.');
   }
 }

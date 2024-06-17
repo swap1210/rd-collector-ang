@@ -26,7 +26,7 @@ export class CommonUtilService {
   // );
 
   // state
-  state = signal<MetadataState>({
+  private state = signal<MetadataState>({
     commModel: {
       img: {
         whatsapp_logo: '',
@@ -40,11 +40,11 @@ export class CommonUtilService {
   });
 
   metadataSignal = computed(() => {
-    this.state().commModel;
+    return this.state().commModel;
   });
 
   errorSignal = computed(() => {
-    this.state().error;
+    return this.state().error;
   });
 
   constructor() {
@@ -67,77 +67,4 @@ export class CommonUtilService {
   getImages = (pImgKey: string): string => {
     return CommonUtil.tempImgGallery[pImgKey];
   };
-
-  // getFirebaseMetaData() {
-  //   return new Observable<MetadataState>((subscriber) => {
-  //     const unsub = onSnapshot(
-  //       doc(
-  //         this.firestore,
-  //         CommonUtil.firebaseMetaData.collectionName,
-  //         CommonUtil.firebaseMetaData.documentId
-  //       ),
-  //       (documentFetched) => {
-  //         const source = documentFetched.metadata.hasPendingWrites
-  //           ? 'Local'
-  //           : 'Server';
-  //         console.log(source, ' data: ', documentFetched.data());
-  //         subscriber.next({
-  //           commModel: documentFetched.data() as CommModel,
-  //           error: null,
-  //         });
-  //       },
-  //       (error) => {
-  //         subscriber.error(error);
-  //       }
-  //     );
-
-  //     // Unsubscribe function
-  //     return () => unsub();
-  //   });
-  // }
-
-  // private updateState(commModel: CommModel, error: string | null) {
-  //   this.state.update((state) => ({ ...state, commModel, error }));
-  // }
 }
-
-// private metadata = signal<CommModel>({
-//   img: {
-//     whatsapp_logo: '',
-//   },
-//   mera_commission: {
-//     commission_rate: 0,
-//     tds_rate: 0,
-//   },
-// });
-
-// metadata = toSignal(
-//   this.FetchObservableData<CommModel>(CommonUtil.firebaseMetaData.documentId),
-//   {
-//     initialValue: {
-//       img: {
-//         whatsapp_logo: '',
-//       },
-//       mera_commission: {
-//         commission_rate: 0,
-//         tds_rate: 0,
-//       },
-//     },
-//   }
-// );
-//   }
-// }
-
-//   this.FetchObservableData<CommModel>(CommonUtil.firebaseMetaData.documentId),
-//   {
-//     initialValue: {
-//       img: {
-//         whatsapp_logo: '',
-//       },
-//       mera_commission: {
-//         commission_rate: 0,
-//         tds_rate: 0,
-//       },
-//     },
-//   }
-// );

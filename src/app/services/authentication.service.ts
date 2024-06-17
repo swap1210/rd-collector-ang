@@ -29,7 +29,9 @@ export class AuthenticationService {
   // private auth = getAuth();
   private auth = inject(AUTH);
 
-  user = computed(() => this.state().user);
+  user = computed(() => {
+    return this.state().user;
+  });
   isLoggedIn = computed(() => this.user() !== null);
 
   // private newUser$ = onAuthStateChanged(this.auth, (firebaseUser: any) => {});
