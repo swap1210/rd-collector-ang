@@ -5,7 +5,7 @@ export interface RDAccount {
   temp_account: DocumentReference | String;
   Alias?: string[];
   AccountName: string;
-  AccountNo: string;
+  accountNo: string;
   AmountBilled: number;
   AmountCollected: number;
   AmountPaid: number;

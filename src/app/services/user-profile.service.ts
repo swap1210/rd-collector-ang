@@ -20,18 +20,6 @@ export class UserProfileService {
   authenticationService = inject(AuthenticationService);
   private readonly USER_PROFILE_COLLECTION_NAME: string = 'users';
 
-  userProfile = signal<RDUserProfileModel>({
-    company: '',
-    email: '',
-    language: Language.HI,
-    type: AccountType.C,
-    uid: '',
-  });
-
-  userIsAccountant = computed(() => {
-    return this.userProfile()?.type === AccountType.A;
-  });
-
   // state
   state = signal<UserProfileState>({
     rDUserProfileModel: {
@@ -42,6 +30,11 @@ export class UserProfileService {
       uid: '',
     },
     error: null,
+  });
+
+  userProfile = computed(() => this.state()?.rDUserProfileModel);
+  userIsAccountant = computed(() => {
+    return this.userProfile()?.type === AccountType.A;
   });
 
   rdUserProfileUidComputed = computed(
@@ -61,7 +54,7 @@ export class UserProfileService {
             console.log('Current data: ', doc.data());
             this.state.update((state) => ({
               ...state,
-              commModel: doc.data() as RDUserProfileModel,
+              rDUserProfileModel: doc.data() as RDUserProfileModel,
             }));
           }
         );

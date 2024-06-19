@@ -13,21 +13,22 @@ $_palettes: (
     25: #7d0012,
     30: #900919,
     35: #a21a23,
-    40: #ffb3af,
-    //buttoon font color
+    40: #201a1a,
+    //button font color or flat button color
     50: #d54143,
     60: #f85b5a,
     70: #ff8984,
     80: #ffb3af,
     90: #ffdad7,
     95: #ffedeb,
-    98: #fff8f7,
-    99: #fff8f7,
-    100: #fff8f7,
+    98: #51b61b,
+    99: #f7fe18,
+    100: #fffbfb,
   ),
   secondary: (
     0: #000000,
     10: #2c1514,
+    //label colors
     20: #442928,
     25: #503432,
     30: #5d3f3d,
@@ -50,7 +51,8 @@ $_palettes: (
     25: #4d380f,
     30: #594319,
     35: #664f24,
-    40: #735b2e,
+    40: #56cc6b,
+    //toggle button background when active
     50: #8e7344,
     60: #a98d5b,
     70: #c5a773,
@@ -64,6 +66,7 @@ $_palettes: (
   neutral: (
     0: #000000,
     10: #201a1a,
+    //primary component font color or primary for dark mode
     20: #362f2e,
     25: #413a39,
     30: #4d4544,
@@ -72,12 +75,12 @@ $_palettes: (
     50: #7f7574,
     60: #998e8d,
     70: #b4a9a8,
-    80: #d0c4c3,
+    80: #d0c4d3,
     90: #ede0de,
     95: #fbeeec,
     98: #fff8f7,
     99: #ef5454,
-    //This color is used by toolbar
+    //This color is used by primary components
     100: #ffffff,
     4: #120d0c,
     6: #181212,
@@ -98,7 +101,8 @@ $_palettes: (
     30: #534342,
     35: #5f4f4d,
     40: #6b5a59,
-    50: #857371,
+    50: #de0000,
+    //toggle button nob when active
     60: #a08c8b,
     70: #bba6a5,
     80: #d8c2c0,
@@ -115,7 +119,8 @@ $_palettes: (
     25: #7e0007,
     30: #93000a,
     35: #a80710,
-    40: #ba1a1a,
+    40: #880000,
+    //error k text ka color
     50: #de3730,
     60: #ff5449,
     70: #ff897d,

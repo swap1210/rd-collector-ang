@@ -1,9 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
-import { NoPageComponent } from './no-page/no-page.component';
-import { NewAccountComponent } from './home/new-account/new-account.component';
 import { MeraCommissionComponent as MeraCommissionComponent } from './home/mera-commission/mera-commission.component';
-import { AccountDetailComponent } from './home/account-detail/account-detail.component';
+import { NoPageComponent } from './shared/components/no-page/no-page.component';
 
 export const routes: Routes = [
   {

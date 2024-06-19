@@ -1,9 +1,17 @@
-import { Component, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   FormBuilder,
   FormControl,
   FormGroup,
   FormGroupDirective,
+  FormsModule,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
@@ -23,6 +31,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { LoaderComponent } from '../../shared/components/loader/loader.component';
 import { CommonModule } from '@angular/common';
 import { SnacksComponent } from '../../shared/components/snacks/snacks.component';
+import { MatNativeDateModule } from '@angular/material/core';
+import { CommonUtilService } from '../../shared/services/common-util.service';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-new-account',
@@ -35,13 +47,18 @@ import { SnacksComponent } from '../../shared/components/snacks/snacks.component
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,
+    FormsModule,
     ReactiveFormsModule,
     MatDatepickerModule,
     LoaderComponent,
+    MatNativeDateModule,
+    MatSlideToggleModule,
+    MatInputModule,
   ],
 })
 export class NewAccountComponent implements OnInit, OnDestroy {
   userProfileService = inject(UserProfileService);
+  commonUtilService = inject(CommonUtilService);
 
   destroy$: Subject<boolean> = new Subject<boolean>();
   public tempRdEndDate!: Date;
@@ -63,15 +80,15 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     Phoneno: '',
     Whatsapp: false,
   };
-  @ViewChild('accountFormGroupDirective')
-  accountFormGroupDirective: FormGroupDirective | undefined;
-  loaderFlag = false;
+  // @ViewChild('accountFormGroupDirective')
+  // accountFormGroupDirective: FormGroupDirective | undefined;
+
+  loaderFlag = signal<boolean>(false);
   durationInSeconds: number = 3;
 
   accountService = inject(AccountService);
 
   constructor(
-    private _formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar
@@ -83,13 +100,13 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   }
   ngOnInit(): void {
     // console.log(this.auth.curUserRef?.id);
-    this.accountForm = this._formBuilder.group({
-      AccountNo: new FormControl('', [Validators.required]),
+    this.accountForm = new FormGroup({
+      accountNo: new FormControl('', [Validators.required]),
       AccountName: new FormControl('', [Validators.required]),
       CardNo: new FormControl('', []),
-      RdStartDate: new FormControl('', [Validators.required]),
+      RdStartDate: new FormControl<Date | null>(null, [Validators.required]),
       Period: new FormControl(0, []),
-      Installment: new FormControl(0, [Validators.required]),
+      Installment: new FormControl(0, [Validators.required, Validators.min(1)]),
       AmountCollected: new FormControl(0, []),
       AmountPaid: new FormControl(0, []),
       AmountBilled: new FormControl(0, []),
@@ -214,21 +231,23 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   createNewRecord = (p_mode: string) => {
     if (!this.accountForm.valid) return;
 
-    let tempRawData = this.accountForm.getRawValue();
-
-    let temp_account: RDAccount = tempRawData;
+    // TODO timestamps won't auto convert
+    const temp_account: RDAccount = this.accountForm.value as RDAccount;
     temp_account.AccountName = temp_account.AccountName.toUpperCase();
     if (temp_account.Nominee)
       temp_account.Nominee = temp_account.Nominee.toUpperCase();
-    this.loaderFlag = true;
+    this.loaderFlag.set(true);
 
+    console.log(temp_account.RdStartDate);
+    console.log(typeof temp_account.RdStartDate);
     //start date translation
     if (this.curAccountObj.RdStartDate) {
       temp_account.RdStartDate = this.curAccountObj.RdStartDate;
     } else {
       temp_account.RdStartDate = Timestamp.fromDate(
-        temp_account.RdStartDate.toDate()
+        this.accountForm.value.RdStartDate
       );
+      // it was already a timestamp
     }
 
     //end date translation always
@@ -238,7 +257,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
 
     //DEFAULT VALUES
     //IF BILLED ELSE 0
-    temp_account.CreatedBy = this.userProfileService.userProfile()!.uid;
+    temp_account.CreatedBy = this.userProfileService.rdUserProfileUidComputed();
     temp_account.CreatedOn = Timestamp.now();
     temp_account.LastBilled = Timestamp.fromDate(
       CommonUtil.dateFinder(
@@ -264,10 +283,10 @@ export class NewAccountComponent implements OnInit, OnDestroy {
 
     try {
       let actionPromise: Promise<void> | Promise<[void, void]>;
-      // actionPromise = this.accountService.createUpdateRDAccount(
-      //   this.userProfileService.userProfile()!.uid,
-      //   temp_account
-      // );
+      actionPromise = this.accountService.createUpdateRDAccount(
+        this.userProfileService.userProfile().company,
+        temp_account
+      );
 
       // actionPromise
       //   .then((obj) => {
@@ -301,7 +320,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
       //   });
     } catch (e) {
       //display error in popup
-      this.loaderFlag = false;
+      this.loaderFlag.set(false);
       console.log(e);
       this.snack(CommonUtil.err[0]);
     }

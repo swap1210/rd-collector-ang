@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
-import { CommonUtilService } from '../shared/services/common-util.service';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
+import { CommonUtilService } from '../../services/common-util.service';
 
 @Component({
   selector: 'app-no-page',

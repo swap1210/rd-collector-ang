@@ -16,8 +16,8 @@ interface MetadataState {
 })
 export class CommonUtilService {
   private firestore = inject(FIRESTORE);
-  private authenticationService = inject(AuthenticationService);
-  private authUser$ = toObservable(this.authenticationService.user);
+  // private authenticationService = inject(AuthenticationService);
+  // private authUser$ = toObservable(this.authenticationService.user);
 
   // source
   // metadata$ = this.getFirebaseMetaData().pipe(
@@ -39,9 +39,7 @@ export class CommonUtilService {
     error: null,
   });
 
-  metadataSignal = computed(() => {
-    return this.state().commModel;
-  });
+  metadataSignal = computed(() => this.state().commModel);
 
   errorSignal = computed(() => {
     return this.state().error;

@@ -3,7 +3,7 @@
     <form
       [formGroup]="accountForm"
       #accountFormGroupDirective="ngForm"
-      [ngStyle]="{ display: !loaderFlag ? 'block' : 'none' }"
+      [ngStyle]="{ display: !loaderFlag() ? 'block' : 'none' }"
     >
       <div class="formfields">
         <mat-form-field class="form-field" appearance="fill">
@@ -12,20 +12,18 @@
             autocomplete="off"
             matInput
             type="text"
-            formControlName="AccountNo"
+            formControlName="accountNo"
           />
-          <button
-            *ngIf="accountForm.value.AccountNo"
+          @if(accountForm.value.AccountNo){<button
             matSuffix
             mat-icon-button
             (click)="accountForm.patchValue({ AccountNo: '' })"
           >
             <mat-icon>close</mat-icon></button
-          ><mat-error
-            *ngIf="accountForm.controls['AccountNo'].hasError('required')"
-          >
-            <span>खाता नंबर <strong>जरूरी</strong> हैं</span>
-          </mat-error>
+          >}
+          @if(accountForm.controls['accountNo'].hasError('required')){<mat-error>
+            <span>खाता नंबर <strong>जरूरी</strong> हैं</span> </mat-error
+          >}
         </mat-form-field>
         <mat-form-field class="form-field" appearance="fill">
           <mat-label>खाता धारक का नाम</mat-label>
@@ -37,18 +35,16 @@
             #AccNameInput
             [disabled]="editAccountNo !== ''"
           />
-          <button
-            *ngIf="accountForm.value.AccountName"
+          @if(accountForm.value.AccountName){<button
             matSuffix
             mat-icon-button
             (click)="accountForm.patchValue({ AccountName: '' })"
           >
             <mat-icon>close</mat-icon></button
-          ><mat-error
-            *ngIf="accountForm.controls['AccountName'].hasError('required')"
-          >
-            <span>खाता धारक का नाम <strong>जरूरी</strong> हैं</span>
-          </mat-error>
+          >}
+          @if(accountForm.controls['AccountName'].hasError('required')){<mat-error>
+            <span>खाता धारक का नाम <strong>जरूरी</strong> हैं</span> </mat-error
+          >}
         </mat-form-field>
         <mat-form-field class="form-field" appearance="fill">
           <mat-label>कार्ड नंबर</mat-label>
@@ -58,14 +54,13 @@
             type="text"
             formControlName="CardNo"
           />
-          <button
-            *ngIf="accountForm.value.CardNo"
+          @if(accountForm.value.CardNo){<button
             matSuffix
             mat-icon-button
             (click)="accountForm.patchValue({ CardNo: '' })"
           >
-            <mat-icon>close</mat-icon>
-          </button>
+            <mat-icon>close</mat-icon></button
+          >}
         </mat-form-field>
         <!-- start date -->
         <mat-form-field class="form-field" appearance="fill">
@@ -82,18 +77,17 @@
             [for]="picker"
           ></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker
-          ><mat-error
-            *ngIf="accountForm.controls['RdStartDate'].hasError('required')"
-          >
-            <span>आरंभ करने की तारीख डालना <strong>जरूरी</strong> हैं</span>
-          </mat-error>
+          >@if(accountForm.controls['RdStartDate'].hasError('required')){<mat-error>
+            <span
+              >आरंभ करने की तारीख डालना <strong>जरूरी</strong> हैं</span
+            > </mat-error
+          >}
         </mat-form-field>
 
         <span>{{ tempRdEndDate | date : "dd-MMM-yyyy" }}</span>
-        <mat-form-field
+        @if(this.editAccountNo || accountForm.value.RdStartDate){<mat-form-field
           class="form-field2"
           appearance="fill"
-          *ngIf="this.editAccountNo || accountForm.value.RdStartDate"
         >
           <button
             matPrefix
@@ -118,10 +112,9 @@
             formControlName="Period"
             (change)="calcEndDate()"
           />
-          <button
+          @if(accountForm.value.Period > 0){<button
             matSuffix
             mat-icon-button
-            *ngIf="accountForm.value.Period > 0"
             (click)="
               accountForm.patchValue(
                 {
@@ -135,9 +128,9 @@
               calcEndDate()
             "
           >
-            <mat-icon>remove</mat-icon>
-          </button>
-        </mat-form-field>
+            <mat-icon>remove</mat-icon></button
+          >}</mat-form-field
+        >}
 
         <mat-form-field class="form-field" appearance="fill">
           <mat-label>किस्त</mat-label>
@@ -148,18 +141,18 @@
             formControlName="Installment"
             (change)="installmentOrStartDateChange()"
           />
-          <button
-            *ngIf="accountForm.value.Installment"
+          @if(accountForm.value.Installment){<button
             matSuffix
             mat-icon-button
             (click)="accountForm.patchValue({ Installment: '' })"
           >
             <mat-icon>close</mat-icon></button
-          ><mat-error
-            *ngIf="accountForm.controls['Installment'].hasError('required')"
-          >
-            <span>किस्त डालना <strong>जरूरी</strong> हैं</span>
-          </mat-error>
+          >}
+          @if(accountForm.controls['Installment'].hasError('required')){<mat-error>
+            <span>किस्त डालना <strong>जरूरी</strong> हैं</span> </mat-error
+          >} @if(accountForm.controls['Installment'].hasError('min')){<mat-error>
+            <span>किस्त <strong>शून्य</strong> नहीं हो सकती</span> </mat-error
+          >}
         </mat-form-field>
         <mat-form-field class="form-field" appearance="fill">
           <mat-label>नॉमिनी का नाम</mat-label>
@@ -169,14 +162,13 @@
             type="text"
             formControlName="Nominee"
           />
-          <button
-            *ngIf="accountForm.value.Nominee"
+          @if(accountForm.value.Nominee){<button
             matSuffix
             mat-icon-button
             (click)="accountForm.patchValue({ Nominee: '' })"
           >
-            <mat-icon>close</mat-icon>
-          </button>
+            <mat-icon>close</mat-icon></button
+          >}
         </mat-form-field>
         <mat-form-field class="form-field" appearance="fill">
           <mat-label>स.ई.फ. नंबर</mat-label>
@@ -186,14 +178,13 @@
             type="text"
             formControlName="CIFNo"
           />
-          <button
-            *ngIf="accountForm.value.CIFNo"
+          @if(accountForm.value.CIFNo){<button
             matSuffix
             mat-icon-button
             (click)="accountForm.patchValue({ CIFNo: '' })"
           >
-            <mat-icon>close</mat-icon>
-          </button>
+            <mat-icon>close</mat-icon></button
+          >}
         </mat-form-field>
         <div class="phoneDiv">
           <mat-form-field class="form-field" appearance="fill">
@@ -204,22 +195,22 @@
               type="text"
               formControlName="Phoneno"
             />
-            <button
-              *ngIf="accountForm.value.Phoneno"
+            @if(accountForm.value.Phoneno){<button
               matSuffix
               mat-icon-button
               (click)="accountForm.patchValue({ Phoneno: '' })"
             >
               <mat-icon>close</mat-icon></button
-            ><mat-error
-              *ngIf="accountForm.controls['Phoneno'].hasError('pattern')"
-            >
-              <span>फोन नंबर <strong>गलत</strong> है</span>
-            </mat-error>
+            >}
+            @if(accountForm.controls['Phoneno'].hasError('pattern')){<mat-error>
+              <span>फोन नंबर <strong>गलत</strong> है</span> </mat-error
+            >}
           </mat-form-field>
 
           <mat-slide-toggle formControlName="Whatsapp"
-            ><img class="imgIcon" [src]="['whatsapp-logo.svg']"
+            ><img
+              class="imgIcon"
+              [src]="commonUtilService.metadataSignal().img.whatsapp_logo"
           /></mat-slide-toggle>
         </div>
         <mat-slide-toggle formControlName="Enabled"
@@ -232,10 +223,10 @@
           }"
         >
           <mat-form-field class="form-field" appearance="fill"
-            ><button
+            >@if(accountForm.value.Installment ||
+            curAccountObj.Installment){<button
               matPrefix
               mat-icon-button
-              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
@@ -248,8 +239,8 @@
                 )
               "
             >
-              <mat-icon>add</mat-icon>
-            </button>
+              <mat-icon>add</mat-icon></button
+            >}
             <mat-label>बिल की गई राशि</mat-label>
             <input
               autocomplete="off"
@@ -257,8 +248,7 @@
               type="number"
               formControlName="AmountBilled"
             />
-            <button
-              *ngIf="accountForm.value.AmountBilled"
+            @if(accountForm.value.AmountBilled){<button
               matSuffix
               mat-icon-button
               (click)="
@@ -268,12 +258,11 @@
                 )
               "
             >
-              <mat-icon>close</mat-icon>
-            </button>
-            <button
+              <mat-icon>close</mat-icon></button
+            >} @if(accountForm.value.Installment ||
+            curAccountObj.Installment){<button
               matSuffix
               mat-icon-button
-              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
@@ -288,14 +277,14 @@
                 )
               "
             >
-              <mat-icon>remove</mat-icon>
-            </button>
+              <mat-icon>remove</mat-icon></button
+            >}
           </mat-form-field>
           <mat-form-field class="form-field" appearance="fill">
-            <button
+            @if(accountForm.value.Installment ||
+            curAccountObj.Installment){<button
               matPrefix
               mat-icon-button
-              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
@@ -308,8 +297,8 @@
                 )
               "
             >
-              <mat-icon>add</mat-icon>
-            </button>
+              <mat-icon>add</mat-icon></button
+            >}
             <mat-label>भुगतान राशि</mat-label>
             <input
               autocomplete="off"
@@ -317,8 +306,7 @@
               type="number"
               formControlName="AmountPaid"
             />
-            <button
-              *ngIf="accountForm.value.AmountPaid"
+            @if(accountForm.value.AmountPaid){<button
               matSuffix
               mat-icon-button
               (click)="
@@ -328,12 +316,11 @@
                 )
               "
             >
-              <mat-icon>close</mat-icon>
-            </button>
-            <button
+              <mat-icon>close</mat-icon></button
+            >} @if(accountForm.value.Installment ||
+            curAccountObj.Installment){<button
               matSuffix
               mat-icon-button
-              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
@@ -348,14 +335,14 @@
                 )
               "
             >
-              <mat-icon>remove</mat-icon>
-            </button>
+              <mat-icon>remove</mat-icon></button
+            >}
           </mat-form-field>
           <mat-form-field class="form-field" appearance="fill">
-            <button
+            @if(accountForm.value.Installment ||
+            curAccountObj.Installment){<button
               matPrefix
               mat-icon-button
-              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
@@ -368,8 +355,8 @@
                 )
               "
             >
-              <mat-icon>add</mat-icon>
-            </button>
+              <mat-icon>add</mat-icon></button
+            >}
             <mat-label>कलेक्शन राशि</mat-label>
             <input
               autocomplete="off"
@@ -377,8 +364,7 @@
               type="number"
               formControlName="AmountCollected"
             />
-            <button
-              *ngIf="accountForm.value.AmountCollected"
+            @if(accountForm.value.AmountCollected){<button
               matSuffix
               mat-icon-button
               (click)="
@@ -388,12 +374,11 @@
                 )
               "
             >
-              <mat-icon>close</mat-icon>
-            </button>
-            <button
+              <mat-icon>close</mat-icon></button
+            >} @if(accountForm.value.Installment ||
+            curAccountObj.Installment){<button
               matSuffix
               mat-icon-button
-              *ngIf="accountForm.value.Installment || curAccountObj.Installment"
               (click)="
                 accountForm.patchValue(
                   {
@@ -408,15 +393,14 @@
                 )
               "
             >
-              <mat-icon>remove</mat-icon>
-            </button>
+              <mat-icon>remove</mat-icon></button
+            >}
           </mat-form-field>
         </div>
       </div>
       <div class="editActionDiv">
         <button
-          mat-raised-button
-          color="accent"
+          mat-flat-button
           (click)="createNewRecord(editAccountNo ? 'U' : 'C')"
           [disabled]="
             editAccountNo
@@ -425,11 +409,10 @@
           "
           [innerText]="editAccountNo ? 'सुधार करें' : 'खता बनाए'"
         ></button>
-        <button mat-raised-button color="primary" routerLink="/home">
-          पीछे जाये ⬅
-        </button>
+        <button mat-flat-button routerLink="/home">पीछे जाये ⬅</button>
       </div>
     </form>
-    <app-loader *ngIf="loaderFlag"></app-loader>
+    <!-- TODO see how to make this variable reactive  -->
+    @if(loaderFlag()){<app-loader></app-loader>}
   </mat-card>
 </div>

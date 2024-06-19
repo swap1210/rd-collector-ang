@@ -4,7 +4,7 @@
       [ कमीशन ({{ meraCommissionMetadataSignal().commission_rate }}%) & टी.डी.एस
       ({{ meraCommissionMetadataSignal().tds_rate }}%) ]
     </legend>
-    <form [formGroup]="meraCommissionForm" #accountFormGroupDirective="ngForm">
+    <form [formGroup]="meraCommissionForm">
       <mat-form-field appearance="fill">
         <mat-label>राशि</mat-label>
         <input

@@ -32,7 +32,7 @@ import { CommonUtilService } from '../../shared/services/common-util.service';
 })
 
 //TODO need to make this form reactive
-export class MeraCommissionComponent implements OnInit {
+export class MeraCommissionComponent {
   commonUtilService = inject(CommonUtilService);
   meraCommissionForm: FormGroup = new FormGroup({
     amt: new FormControl('', [Validators.required]),
@@ -41,7 +41,6 @@ export class MeraCommissionComponent implements OnInit {
     return this.commonUtilService.metadataSignal().mera_commission;
   });
   constructor() {}
-  ngOnInit(): void {}
 
   round(n: number): string {
     return n.toFixed(2);
