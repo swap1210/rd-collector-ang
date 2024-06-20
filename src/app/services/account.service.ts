@@ -1,4 +1,4 @@
-import { Injectable, effect, inject } from '@angular/core';
+import { Injectable, effect, inject, signal } from '@angular/core';
 import { UserProfileService } from './user-profile.service';
 import { RDAccount } from '../model/account.model';
 import { FIRESTORE } from '../app.config';
@@ -11,6 +11,10 @@ export class AccountService {
   private readonly RD_ACCOUNT_COLLECTION_NAME: string = 'rd-records';
   userProfileService = inject(UserProfileService);
   private firestore = inject(FIRESTORE);
+  familyGroupAutoCompleteSuggestion = signal<string[]>([
+    'Ram Parivar',
+    'Sharma Parivar',
+  ]);
 
   getAllAccounts() {}
 
@@ -24,7 +28,7 @@ export class AccountService {
 
   createUpdateRDAccount(p_company: string, p_RDAccount: RDAccount) {
     let acc_key: any = {};
-    acc_key[p_RDAccount.accountNo] = p_RDAccount;
+    acc_key[p_RDAccount.AccountNo] = p_RDAccount;
     let temp: any = { all: acc_key };
     return setDoc(
       doc(this.firestore, this.RD_ACCOUNT_COLLECTION_NAME, p_company),

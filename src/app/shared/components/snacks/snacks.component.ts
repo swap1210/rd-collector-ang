@@ -1,12 +1,23 @@
-import { Component } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import {
+  MatSnackBarRef,
+  MAT_SNACK_BAR_DATA,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-snacks',
-  standalone: true,
-  imports: [],
   templateUrl: './snacks.component.html',
-  styleUrl: './snacks.component.scss'
+  styleUrls: ['./snacks.component.scss'],
 })
-export class SnacksComponent {
+export class SnacksComponent implements OnInit {
+  message: string;
+  constructor(
+    @Inject(MAT_SNACK_BAR_DATA) public data: any,
+    public snackbarRef: MatSnackBarRef<SnacksComponent>
+  ) {
+    this.message = data.message;
+    console.log(this.message);
+  }
 
+  ngOnInit(): void {}
 }

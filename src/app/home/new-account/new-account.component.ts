@@ -1,16 +1,7 @@
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  inject,
-  signal,
-} from '@angular/core';
-import {
-  FormBuilder,
   FormControl,
   FormGroup,
-  FormGroupDirective,
   FormsModule,
   ReactiveFormsModule,
   Validators,
@@ -35,6 +26,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { CommonUtilService } from '../../shared/services/common-util.service';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-new-account',
@@ -43,17 +35,18 @@ import { MatInputModule } from '@angular/material/input';
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
     FormsModule,
-    ReactiveFormsModule,
-    MatDatepickerModule,
     LoaderComponent,
+    MatAutocompleteModule,
+    MatButtonModule,
+    MatCardModule,
+    MatDatepickerModule,
+    MatFormFieldModule,
+    MatIconModule,
+    MatInputModule,
     MatNativeDateModule,
     MatSlideToggleModule,
-    MatInputModule,
+    ReactiveFormsModule,
   ],
 })
 export class NewAccountComponent implements OnInit, OnDestroy {
@@ -79,6 +72,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     Nominee: '',
     Phoneno: '',
     Whatsapp: false,
+    familyGroup: '',
   };
   // @ViewChild('accountFormGroupDirective')
   // accountFormGroupDirective: FormGroupDirective | undefined;
@@ -101,7 +95,8 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // console.log(this.auth.curUserRef?.id);
     this.accountForm = new FormGroup({
-      accountNo: new FormControl('', [Validators.required]),
+      familyGroup: new FormControl('', [Validators.required]),
+      AccountNo: new FormControl('', [Validators.required]),
       AccountName: new FormControl('', [Validators.required]),
       CardNo: new FormControl('', []),
       RdStartDate: new FormControl<Date | null>(null, [Validators.required]),
@@ -206,14 +201,11 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     // }
   }
   installmentOrStartDateChange() {
-    //if both start date and installemnt is filled
     const { Installment, RdStartDate } = this.accountForm.value;
-    if (
-      this.accountForm.controls['Installment'] &&
-      this.accountForm.controls['RdStartDate']
-    ) {
+    //proceed only if both start date and installment is filled
+    if (Installment && RdStartDate) {
       let monthDiff = RdStartDate
-        ? CommonUtil.monthDiff(RdStartDate.toDate(), new Date()) + 1
+        ? CommonUtil.monthDiff(RdStartDate, new Date()) + 1
         : 0;
       console.log('month diff', monthDiff);
 
@@ -231,7 +223,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   createNewRecord = (p_mode: string) => {
     if (!this.accountForm.valid) return;
 
-    // TODO timestamps won't auto convert
+    // TODO some fields like Timestamps won't auto convert
     const temp_account: RDAccount = this.accountForm.value as RDAccount;
     temp_account.AccountName = temp_account.AccountName.toUpperCase();
     if (temp_account.Nominee)
@@ -282,42 +274,40 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     );
 
     try {
-      let actionPromise: Promise<void> | Promise<[void, void]>;
-      actionPromise = this.accountService.createUpdateRDAccount(
-        this.userProfileService.userProfile().company,
-        temp_account
-      );
+      this.accountService
+        .createUpdateRDAccount(
+          this.userProfileService.userProfile().company,
+          temp_account
+        )
+        .then((obj) => {
+          console.log(obj);
+          this.snack(
+            `खता नंबर ${this.accountForm.value.AccountNo} का ${
+              p_mode === 'C' ? 'नामांकन' : 'सुधार'
+            } पूरा हुआ!`
+          );
 
-      // actionPromise
-      //   .then((obj) => {
-      //     console.log(obj);
-      //     this.snack(
-      //       `खता नंबर ${this.accountForm.getRawValue().AccountNo} का ${
-      //         p_mode === 'C' ? 'नामांकन' : 'सुधार'
-      //       } पूरा हुआ!`
-      //     );
-
-      //     if (p_mode === 'C') {
-      //       (this.accountFormGroupDirective as FormGroupDirective).resetForm();
-      //       this.accountForm.reset({
-      //         AmountBilled: 0,
-      //         AmountCollected: 0,
-      //         AmountPaid: 0,
-      //         Whatsapp: false,
-      //         existingAccount: true,
-      //       });
-      //     } else {
-      //       this.router.navigate(['/home']);
-      //     }
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //     this.loaderFlag = false;
-      //     this.snack(CommonUtil.err[0]);
-      //   })
-      //   .finally(() => {
-      //     this.loaderFlag = false;
-      //   });
+          if (p_mode === 'C') {
+            // (this.accountFormGroupDirective as FormGroupDirective).resetForm();
+            this.accountForm.reset({
+              AmountBilled: 0,
+              AmountCollected: 0,
+              AmountPaid: 0,
+              Whatsapp: false,
+              existingAccount: true,
+            });
+          } else {
+            this.router.navigate(['/home']);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          this.loaderFlag.set(false);
+          this.snack(CommonUtil.err[0]);
+        })
+        .finally(() => {
+          this.loaderFlag.set(false);
+        });
     } catch (e) {
       //display error in popup
       this.loaderFlag.set(false);
@@ -335,7 +325,7 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   snack(p_msg: string) {
     this._snackBar.openFromComponent(SnacksComponent, {
       data: { message: p_msg },
-      duration: this.durationInSeconds * 1000,
+      duration: this.durationInSeconds * 5000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
       panelClass: 'snacks',

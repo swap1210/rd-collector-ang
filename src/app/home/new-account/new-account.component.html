@@ -2,17 +2,32 @@
   <mat-card class="form-card mat-elevation-z4">
     <form
       [formGroup]="accountForm"
-      #accountFormGroupDirective="ngForm"
       [ngStyle]="{ display: !loaderFlag() ? 'block' : 'none' }"
     >
       <div class="formfields">
+        <mat-form-field class="example-full-width">
+          <mat-label>परिवार ग्रुप</mat-label>
+          <input
+            type="text"
+            matInput
+            formControlName="familyGroup"
+            [matAutocomplete]="auto"
+          />
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            @for (option of accountService.familyGroupAutoCompleteSuggestion();
+            track option) {
+            <mat-option [value]="option">{{ option }}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+
         <mat-form-field class="form-field" appearance="fill">
           <mat-label>खाता नंबर</mat-label>
           <input
             autocomplete="off"
             matInput
             type="text"
-            formControlName="accountNo"
+            formControlName="AccountNo"
           />
           @if(accountForm.value.AccountNo){<button
             matSuffix
@@ -21,7 +36,7 @@
           >
             <mat-icon>close</mat-icon></button
           >}
-          @if(accountForm.controls['accountNo'].hasError('required')){<mat-error>
+          @if(accountForm.controls['AccountNo'].hasError('required')){<mat-error>
             <span>खाता नंबर <strong>जरूरी</strong> हैं</span> </mat-error
           >}
         </mat-form-field>
@@ -70,7 +85,7 @@
             matInput
             [matDatepicker]="picker"
             formControlName="RdStartDate"
-            (change)="installmentOrStartDateChange()"
+            (dateChange)="installmentOrStartDateChange()"
           />
           <mat-datepicker-toggle
             matSuffix
@@ -412,7 +427,6 @@
         <button mat-flat-button routerLink="/home">पीछे जाये ⬅</button>
       </div>
     </form>
-    <!-- TODO see how to make this variable reactive  -->
     @if(loaderFlag()){<app-loader></app-loader>}
   </mat-card>
 </div>
