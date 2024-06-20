@@ -51,6 +51,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 })
 export class NewAccountComponent implements OnInit, OnDestroy {
   userProfileService = inject(UserProfileService);
+  accountService = inject(AccountService);
   commonUtilService = inject(CommonUtilService);
 
   destroy$: Subject<boolean> = new Subject<boolean>();
@@ -80,8 +81,6 @@ export class NewAccountComponent implements OnInit, OnDestroy {
   loaderFlag = signal<boolean>(false);
   durationInSeconds: number = 3;
 
-  accountService = inject(AccountService);
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -93,7 +92,6 @@ export class NewAccountComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
   ngOnInit(): void {
-    // console.log(this.auth.curUserRef?.id);
     this.accountForm = new FormGroup({
       familyGroup: new FormControl('', [Validators.required]),
       AccountNo: new FormControl('', [Validators.required]),

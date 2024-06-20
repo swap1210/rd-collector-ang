@@ -1,0 +1,93 @@
+.main-home {
+  background-color: #e5e5e5;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+beforeFetch {
+  height: 100%;
+  width: 100%;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  min-width: 95%;
+  justify-content: space-around;
+}
+
+td.mat-cell {
+  padding: 0em 0.5em;
+}
+
+th.mat-header-cell {
+  padding: 0em 0.5em;
+  background-color: #ef5454;
+  font-size: medium;
+  font-weight: 600;
+}
+th,
+td {
+  border: 0.2em solid #6d6d6d;
+  padding: 0.5em;
+  text-align: center;
+}
+::ng-deep .mat-sort-header-container {
+  display: flex;
+  justify-content: center;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+.actionCls {
+  display: flex;
+  justify-content: space-around;
+}
+
+.noDataDiv {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 3em 0em;
+}
+.homeActions {
+  display: flex;
+  gap: 1.5em;
+  align-items: center;
+}
+.tabDiv {
+  display: flex;
+  // width: 15em;
+  justify-content: space-around;
+}
+.lowerDiv {
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+}
+img {
+  width: 10em;
+}
+.filterFormDiv {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1em;
+  padding: 0 0.4em;
+  padding-bottom: 1em;
+}
+.billing-box {
+  display: flex;
+  background-color: #6c9705;
+  justify-content: space-evenly;
+  align-items: center;
+  width: stretch;
+  min-height: 4.9em;
+  padding: 0.5em 3em;
+  flex-wrap: wrap;
+  gap: 1em;
+}

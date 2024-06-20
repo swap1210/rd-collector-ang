@@ -5,5 +5,7 @@ export type CommModel = {
   };
   img: {
     whatsapp_logo: string;
+    finding_logo: string;
+    happy_logo: string;
   };
 };

@@ -30,6 +30,8 @@ export class CommonUtilService {
     commModel: {
       img: {
         whatsapp_logo: '',
+        finding_logo: '',
+        happy_logo: '',
       },
       mera_commission: {
         commission_rate: 0,
@@ -53,7 +55,7 @@ export class CommonUtilService {
         CommonUtil.firebaseMetaData.documentId
       ),
       (doc) => {
-        console.log('Current data: ', doc.data());
+        console.log('Common data: ', doc.data());
         this.state.update((state) => ({
           ...state,
           commModel: doc.data() as CommModel,

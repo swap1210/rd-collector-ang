@@ -2,7 +2,7 @@ import { Injectable, effect, inject, signal } from '@angular/core';
 import { UserProfileService } from './user-profile.service';
 import { RDAccount } from '../model/account.model';
 import { FIRESTORE } from '../app.config';
-import { doc, setDoc } from 'firebase/firestore';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
@@ -15,13 +15,28 @@ export class AccountService {
     'Ram Parivar',
     'Sharma Parivar',
   ]);
+  state = signal<{ all: RDAccount[] }>({ all: [] });
 
   getAllAccounts() {}
 
   constructor() {
     effect(() => {
-      if (this.userProfileService.userProfile()) {
+      if (this.userProfileService.userProfile().company) {
         // this.documentId = this.userProfileService.userProfile()!.company;
+        onSnapshot(
+          doc(
+            this.firestore,
+            this.RD_ACCOUNT_COLLECTION_NAME,
+            this.userProfileService.userProfile()!.company
+          ),
+          (doc) => {
+            console.log('Account data: ', doc.data());
+            this.state.update((state) => ({
+              ...state,
+              ...doc.data(),
+            }));
+          }
+        );
       }
     });
   }
@@ -37,13 +52,18 @@ export class AccountService {
     );
   }
 
-  takeBackup = (rdDocument: any) => {
+  takeBackup = (allRDAccounts: any) => {
     if (!this.userProfileService.userProfile()) {
       return;
     }
-    // return this.setNewDocument(
-    //   this.userProfileService.userProfile()!.company + '-backup',
-    //   rdDocument
-    // );
+    return setDoc(
+      doc(
+        this.firestore,
+        this.RD_ACCOUNT_COLLECTION_NAME,
+        this.userProfileService.userProfile().company + '-backup'
+      ),
+      allRDAccounts,
+      { merge: true }
+    );
   };
 }
