@@ -77,8 +77,7 @@ export class HeaderComponent {
     {
       label: '☁️',
       styleClass: 'menuItems',
-      action: (param: any) => this.accountService.takeBackup(param),
-      param: this.accountService.state(),
+      action: (param: any) => this.accountService.takeBackup(),
       accountType: AccountType.A,
       // innerIcon: {
       //   fontIcon: 'backup',

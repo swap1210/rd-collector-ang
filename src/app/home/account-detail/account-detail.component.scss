@@ -1,0 +1,41 @@
+.main-detail {
+  background-color: #e5e5e5;
+  height: -webkit-fill-available;
+  padding-top: 4em;
+  padding-bottom: 1em;
+}
+mat-selection-list {
+  width: 31em;
+}
+.wrapper {
+  background-color: #e5e5e5;
+  display: flex;
+  margin: 1em auto;
+  max-width: 50em;
+  padding: 1em 2em;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  row-gap: 1.5em;
+  column-gap: 1em;
+}
+.box {
+  flex: 1;
+  padding: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  min-width: 15em;
+}
+.keyLabel {
+  font-weight: 800;
+}
+.imp {
+  background-color: coral;
+}
+.loaderDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: inherit;
+}

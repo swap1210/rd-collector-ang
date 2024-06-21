@@ -1,4 +1,4 @@
-import { Injectable, effect, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { UserProfileService } from './user-profile.service';
 import { RDAccount } from '../model/account.model';
 import { FIRESTORE } from '../app.config';
@@ -11,13 +11,18 @@ export class AccountService {
   private readonly RD_ACCOUNT_COLLECTION_NAME: string = 'rd-records';
   userProfileService = inject(UserProfileService);
   private firestore = inject(FIRESTORE);
-  familyGroupAutoCompleteSuggestion = signal<string[]>([
-    'Ram Parivar',
-    'Sharma Parivar',
-  ]);
-  state = signal<{ all: RDAccount[] }>({ all: [] });
 
-  getAllAccounts() {}
+  // TODO make state private
+  private state = signal<{ all: any }>({ all: {} });
+  rdAccounts = computed<RDAccount[]>(() => Object.values(this.state().all));
+  rdAccountMap = computed<RDAccount[]>(() => Object.values(this.state().all));
+  familyGroupAutoCompleteSuggestion = computed<Set<string>>(() => {
+    return new Set(
+      this.rdAccounts()
+        .filter((rd) => rd?.familyGroup)
+        .map((rd) => rd.familyGroup)
+    );
+  });
 
   constructor() {
     effect(() => {
@@ -52,7 +57,14 @@ export class AccountService {
     );
   }
 
-  takeBackup = (allRDAccounts: any) => {
+  createUpdateOneRDAccount(p_RDAccount: RDAccount) {
+    return this.createUpdateRDAccount(
+      this.userProfileService.userProfile()!.company,
+      p_RDAccount
+    );
+  }
+
+  takeBackup = () => {
     if (!this.userProfileService.userProfile()) {
       return;
     }
@@ -62,7 +74,7 @@ export class AccountService {
         this.RD_ACCOUNT_COLLECTION_NAME,
         this.userProfileService.userProfile().company + '-backup'
       ),
-      allRDAccounts,
+      this.state(),
       { merge: true }
     );
   };

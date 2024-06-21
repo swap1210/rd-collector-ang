@@ -1,0 +1,30 @@
+.main-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+}
+.dia-item {
+  display: flex;
+  width: 15em;
+  white-space: normal;
+  justify-content: space-evenly;
+  align-items: center;
+  @media screen and (max-width: 400px) {
+    width: 11em;
+  }
+}
+.form-field {
+  width: 12em;
+}
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}

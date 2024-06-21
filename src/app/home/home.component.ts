@@ -1,6 +1,5 @@
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -18,7 +17,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { Subject, takeUntil } from 'rxjs';
+import { Subject } from 'rxjs';
 import {
   FormBuilder,
   FormControl,
@@ -37,8 +36,6 @@ import { AccountType } from '../model/rd.user.profile.model.model';
 import { AccountService } from '../services/account.service';
 import { SnacksComponent } from '../shared/components/snacks/snacks.component';
 import { AccountDialogComponent } from './account-dialog/account-dialog.component';
-import { AuthenticationService } from '../services/authentication.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { UserProfileService } from '../services/user-profile.service';
 import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../shared/components/loader/loader.component';
@@ -144,16 +141,15 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     this.LastMonthLastDay = new Date(date.getFullYear(), date.getMonth(), 0);
 
     effect(() => {
-      if (this.accountService.state().all) {
-        const rdDocList = Object.values(this.accountService.state().all);
+      if (this.accountService.rdAccounts()) {
+        const rdDocList = this.accountService.rdAccounts();
         console.log('Home sub', rdDocList.length);
         if (!rdDocList.length) return;
         console.count('data loaded');
-        let tempAll = rdDocList;
         this.filterGroup.patchValue({ filterInput: '', enableAll: false });
         this.dialog.closeAll();
         this.dataFetched = true;
-        this.rdlist = tempAll;
+        this.rdlist = rdDocList;
         this.dataSource = new MatTableDataSource(this.rdlist);
         this.dataSource.filterPredicate = this.customFilterPredicate;
         this.applyFilter(JSON.stringify(this.filterGroup.getRawValue()));

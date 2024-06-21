@@ -71,11 +71,13 @@ export class CommonUtil {
     };
   }
 
-  static monthOptions = { year: 'numeric', month: 'long' } as const;
-  static dateOptions = {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
+  static calenderOptions = {
+    monthOptions: { year: 'numeric', month: 'long' },
+    dateOptions: {
+      year: 'numeric',
+      month: 'long',
+      day: '2-digit',
+    },
   } as const;
 
   static err = {

@@ -67,4 +67,8 @@ export class CommonUtilService {
   getImages = (pImgKey: string): string => {
     return CommonUtil.tempImgGallery[pImgKey];
   };
+
+  getCalenderOptions = (): any => {
+    return CommonUtil.calenderOptions;
+  };
 }
