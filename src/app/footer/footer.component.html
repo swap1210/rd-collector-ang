@@ -1,1 +1,6 @@
-<div class="foot">{{ (auth.commonData$ | async)?.footer?.third }}</div>
+<div class="foot">
+  {{ env.appName }}&nbsp;[ver {{ env.version }}]&nbsp;is developed by&nbsp;<a
+    [href]="env.url"
+    >{{ env.author }}</a
+  >&nbsp;<a href="mailto:{{ env.email }}">&#123;&nbsp;✉️&nbsp;&#125;</a>
+</div>

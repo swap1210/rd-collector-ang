@@ -1,5 +1,14 @@
 {
-  "projects": {
-    "default": "poorti-21857"
-  }
+  "projects": {},
+  "targets": {
+    "poorti-21857": {
+      "hosting": {
+        "dev-instance": [
+          "rd-collector"
+        ]
+      }
+    }
+  },
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }

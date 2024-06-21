@@ -1,29 +1,41 @@
 import { mkdir, writeFile } from 'fs';
+const { version, author } = require('./package.json');
 
 const targetPath1 = './src/environments/environment.ts';
 const targetPath2 = './src/environments/environment.prod.ts';
-let x = process.env['APIKEY'];
-x = x ? x : '';
+let apiKey = process.env['APIKEY'];
+apiKey = apiKey ? apiKey : '';
+const appName = 'RD कलेक्टर';
 const envConfigFile1 = `export const environment = {
    production: false,
    instance: 'Development',
+   isLocal: false,
    firebase: {
-                "apiKey": '${x}',
+                "apiKey": '${apiKey}',
                 "authDomain": 'poorti-21857.firebaseapp.com',
                 "projectId": 'poorti-21857',
               },
-    version: 1.3
+    version: '${version}-dev',
+    appName: '${appName}',
+    author: '${author.name}',
+    url: '${author.url}',
+    email: '${author.email}'
 };
 `;
 const envConfigFile2 = `export const environment = {
    production: true,
    instance: 'Production',
+   isLocal: false,
    firebase: {
-              "apiKey": '${x}',
+              "apiKey": '${apiKey}',
               "authDomain": 'poorti-21857.firebaseapp.com',
               "projectId": 'poorti-21857',
             },
-    version: 1.3
+    version: '${version}',
+    appName: '${appName}',
+    author: '${author.name}',
+    url: '${author.url}',
+    email: '${author.email}'
 };
 `;
 mkdir('./src/environments/', (err) => {

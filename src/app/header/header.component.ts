@@ -1,97 +1,141 @@
-import { Component, OnInit } from '@angular/core';
-import { NavigationEnd, Router } from '@angular/router';
-import { filter } from 'rxjs/operators';
-import { AuthService } from 'src/app/services/auth.service';
-import { AccountType, Language } from '../model/user.model';
+import { Component, inject, effect, signal, computed } from '@angular/core';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { UserProfileService } from '../services/user-profile.service';
+import { AuthenticationService } from '../services/authentication.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { Router, RouterModule } from '@angular/router';
+import { HeaderAction } from '../model/header.action.model';
+import { environment } from '../../environments/environment';
+import { CommonModule } from '@angular/common';
+import { AccountType, Language } from '../model/rd.user.profile.model.model';
 import { AccountService } from '../services/account.service';
-import { environment } from 'src/environments/environment';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [
+    CommonModule,
+    RouterModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatMenuModule,
+    MatButtonModule,
+  ],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrl: './header.component.scss',
 })
-export class HeaderComponent implements OnInit {
-  orgtag: any = {
-    '': '🏡',
-    home: '🏡',
-    'new-account': 'नया खाता',
-    'edit-account': 'खाता नंबर $ में बदलाव',
-    'account-detail': '$ का विवरण',
-    calculator: 'मेरा कमीशन',
-  } as const;
-  tag: any = {
-    '': '',
-    home: '',
-    'new-account': '',
-    'edit-account': '',
-    'account-detail': '',
-    calculator: 'Mera Comission',
-  };
-  currentTitle = 'home';
-  showGreeting: boolean = true;
-  curLanguage: Language = Language.EN;
-  Language = Language;
-  Usertype = AccountType;
-  curRoute: string[] = [];
-  translationPending = false;
+export class HeaderComponent {
+  readonly env = environment;
+  readonly Language = Language;
 
-  constructor(
-    public auth: AuthService,
-    private _router: Router,
-    public accSer: AccountService
-  ) {
-    if (this.auth.curUser)
-      this.curLanguage = this.auth.curUser.language as Language;
-    setTimeout(() => {
-      this.showGreeting = false;
-    }, 3000);
-    this.translateTags();
+  authenticationService = inject(AuthenticationService);
+  accountService = inject(AccountService);
+  userProfileService = inject(UserProfileService);
+  private router = inject(Router);
+  themeService = inject(ThemeService);
 
-    //not working correctly
-    this._router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event) => {
-        this.curRoute = (event as any)['url'].split('/');
-        this.tagMapping();
-      });
-  }
+  //TODO should this be a signal? as it might update in runtime
+  headerActions = computed<HeaderAction[]>(() => [
+    {
+      label: '🏡',
+      styleClass: 'menuItems',
+      action: (param: any) => this.goRoute(param),
+      param: '/home',
+      mobileLabel: '🏡 होम स्क्रीन',
+      mobileStyleClass: 'phoneBtn',
+    },
+    {
+      label: '🧮',
+      styleClass: 'menuItems',
+      action: (param: any) => this.goRoute(param),
+      param: '/calculator',
+      // innerIcon: {
+      //   fontIcon: 'calculate',
+      // },
+      mobileLabel: '🧮 मेरा कमीशन',
+      mobileStyleClass: 'phoneBtn',
+    },
+    {
+      label: '🇮🇳',
+      styleClass: 'menuItems',
+      action: () => this.languageChange(),
+      mobileLabel: '🇮🇳 भाषा बदले (English)',
+      mobileStyleClass: 'phoneBtn',
+    },
+    {
+      label: '➕',
+      styleClass: 'menuItems',
+      action: (param: any) => this.goRoute(param),
+      param: '/new-account',
+      accountType: AccountType.A,
+      mobileLabel: '➕ नया खाता',
+      mobileStyleClass: 'phoneBtn',
+    },
+    {
+      label: '☁️',
+      styleClass: 'menuItems',
+      action: (param: any) => this.accountService.takeBackup(),
+      accountType: AccountType.A,
+      // innerIcon: {
+      //   fontIcon: 'backup',
+      // },
+      mobileLabel: '☁️ हमशकल खाते',
+      mobileStyleClass: 'phoneBtn',
+    },
+    {
+      label: '🔌',
+      styleClass: 'menuItems',
+      action: () => this.signOut(),
+      // innerIcon: {
+      //   fontIcon: 'power_settings_new',
+      // },
+      mobileLabel: '🔌 बंद करे',
+      mobileStyleClass: 'phoneBtn',
+    },
+  ]);
 
-  translateTags() {
-    Object.keys(this.tag).map((val: string) => {
-      this.tag[val] = this.auth.t(this.orgtag[val]);
-      // console.log('HDR tag key ', val, this.tag[val]);
+  showGreeting = signal(true);
+  currentTitle = signal<HeaderAction | undefined>(undefined);
+
+  constructor() {
+    console.log('authenticationService.isLoggedIn');
+    effect(() => {
+      if (!this.authenticationService.isLoggedIn()) {
+        console.log('not logged in redirecting to login');
+        this.router.navigate(['/login']);
+      }
+      setTimeout(() => {
+        this.showGreeting.set(false);
+      }, 3000);
     });
   }
-
-  ngOnInit(): void {
-    console.log('Instance ' + environment.instance, ' v' + environment.version);
+  signOut() {
+    this.authenticationService.signOut();
   }
 
-  tagMapping() {
-    if (this.curRoute.length > 2 && this.curRoute[1] === 'new-account') {
-      this.currentTitle = 'edit-account';
-    } else if (
-      this.curRoute.length > 2 &&
-      this.curRoute[1] === 'account-detail'
-    ) {
-      this.currentTitle = 'account-detail';
-    } else {
-      this.currentTitle = this.curRoute[1];
-    }
+  // setCurrentTitle(titleName: string) {
+  //   const title = this.headerActions.find(
+  //     (headerActions) => headerActions.label === titleName
+  //   );
+  //   this.currentTitle.set(title);
+  // }
+
+  languageChange = (): void => {
+    this.userProfileService.languageChange();
+  };
+
+  goRoute(path: string) {
+    this.router.navigate([path]);
   }
 
-  languageChange() {
-    this.translationPending = true;
-    this.curLanguage =
-      this.curLanguage === Language.HI ? Language.EN : Language.HI;
-    this.auth
-      .updateUserDataLanguage(this.curLanguage)
-      .then(() => {
-        this.translateTags();
-      })
-      .finally(() => {
-        this.translationPending = false;
-      });
+  toggleTheme() {
+    this.themeService.darkMode.set(!this.themeService.darkMode());
+  }
+
+  notLoggedIn() {
+    window.alert('Please login to continue');
   }
 }

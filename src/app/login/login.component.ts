@@ -1,0 +1,72 @@
+import { Component, OnInit, computed, effect, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '../services/authentication.service';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { environment } from '../../environments/environment';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { LoaderComponent } from '../shared/components/loader/loader.component';
+
+@Component({
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
+  standalone: true,
+  imports: [
+    MatCardModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
+    LoaderComponent,
+  ],
+})
+export class LoginComponent {
+  environment = environment;
+  public authenticationService = inject(AuthenticationService);
+  private router = inject(Router);
+
+  localUserLoginFormGroup = new FormGroup({
+    email: new FormControl('test@g.co', [
+      Validators.required,
+      Validators.email,
+    ]),
+    password: new FormControl('password', [Validators.required]),
+  });
+
+  constructor() {
+    effect(() => {
+      if (this.authenticationService.isLoggedIn()) {
+        console.log('logged in redirecting to home');
+        this.router.navigate(['/home']);
+      }
+    });
+  }
+
+  login() {
+    if (environment.isLocal) {
+      this.authenticationService
+        .emailPasswordSignIn({
+          email: this.localUserLoginFormGroup.value.email ?? '',
+          password: this.localUserLoginFormGroup.value.password ?? '',
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage);
+        });
+    } else {
+      this.authenticationService.googleSignIn();
+    }
+  }
+}

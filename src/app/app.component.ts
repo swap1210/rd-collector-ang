@@ -1,12 +1,17 @@
-import { Component } from '@angular/core';
-import { environment } from 'src/environments/environment';
-import { AuthService } from './services/auth.service';
+import { Component, inject } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { FooterComponent } from './footer/footer.component';
+import { AuthenticationService } from './services/authentication.service';
+import { HeaderComponent } from './header/header.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  styleUrl: './app.component.scss',
+  imports: [CommonModule, RouterOutlet, FooterComponent, HeaderComponent],
 })
 export class AppComponent {
-  constructor(public auth: AuthService) {}
+  public authenticationService = inject(AuthenticationService);
 }

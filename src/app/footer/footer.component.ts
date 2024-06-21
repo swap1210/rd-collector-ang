@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../services/auth.service';
+import { Component, inject } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-footer',
+  standalone: true,
+  imports: [],
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss'],
+  styleUrl: './footer.component.scss',
 })
-export class FooterComponent implements OnInit {
-  constructor(public auth: AuthService) {}
-
-  ngOnInit(): void {}
+export class FooterComponent {
+  env = environment;
 }

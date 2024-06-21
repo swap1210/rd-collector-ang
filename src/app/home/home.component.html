@@ -1,0 +1,233 @@
+<div
+  class="main-home"
+  [ngStyle]="
+    rdlist.length > 9
+      ? { margin: '5em 0em', height: 'auto' }
+      : { height: '100%' }
+  "
+>
+  <div class="loaderDiv" *ngIf="rdlist.length === 0 && !dataFetched">
+    <app-loader *ngIf="rdlist.length === 0 && !dataFetched"></app-loader>
+  </div>
+  <div
+    class="lowerDiv"
+    [ngStyle]="{
+      display: rdlist.length > 0 ? 'flex' : 'none'
+    }"
+  >
+    <form class="filterFormDiv" [formGroup]="filterGroup">
+      <div
+        class="tabDiv"
+        *ngIf="userProfileService.userProfile().type === AccountType.A"
+        [ngStyle]="{
+          display: !filterGroup.controls['enableAll'].value ? 'block' : 'none'
+        }"
+      >
+        <mat-button-toggle-group [(value)]="billingOrCollection" color="accent">
+          <mat-button-toggle value="AC" (click)="fetchPaidMode()">{{
+            "आज कि कलेक्शन सूची"
+          }}</mat-button-toggle>
+          <mat-button-toggle value="C" (click)="fetchPaidMode()">{{
+            "कलेक्शन सूची"
+          }}</mat-button-toggle>
+          <mat-button-toggle value="B" (click)="fetchBilledMode()">{{
+            "भुगतान सूची"
+          }}</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label [innerText]="'नाम खोजे'"></mat-label>
+        <input
+          matInput
+          autocomplete="off"
+          placeholder="E.g. Swapnil"
+          formControlName="filterInput"
+        />
+      </mat-form-field>
+      <mat-slide-toggle formControlName="enableAll">{{
+        filterGroup.controls["enableAll"].value
+          ? "बकाया खाते देखे"
+          : "सभी खाते देखे"
+      }}</mat-slide-toggle>
+    </form>
+    <table
+      mat-table
+      *ngIf="dataSource"
+      [dataSource]="dataSource"
+      [trackBy]="myTracker"
+      matSort
+    >
+      <!-- Checkbox for RD Bill creation -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+          <mat-checkbox
+            (change)="$event ? masterToggle() : null"
+            [checked]="selection.hasValue() && isAllSelected()"
+            [indeterminate]="selection.hasValue() && !isAllSelected()"
+            [aria-label]="checkboxLabel()"
+          >
+          </mat-checkbox>
+          {{ "&nbsp;&nbsp;" + "सब" }}
+        </th>
+        <td mat-cell *matCellDef="let row; let i = index">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            (change)="$event ? selection.toggle(row) : null"
+            [checked]="selection.isSelected(row)"
+            [aria-label]="checkboxLabel(row)"
+          >
+          </mat-checkbox>
+        </td>
+      </ng-container>
+      <!-- AccountNo Column -->
+      <ng-container matColumnDef="AccountNo">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ "खाता नंबर" }}
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let row"
+          (click)="
+            billingOrCollection === 'AC' ||
+            billingOrCollection === 'C' ||
+            billingOrCollection === 'B' ||
+            userProfileService.userProfile().type === AccountType.C
+              ? rowClick(row)
+              : snack('कलेक्शन या भुगतान सूची चुने')
+          "
+        >
+          {{ row.AccountNo }}
+        </td>
+      </ng-container>
+
+      <!-- AccountName Column -->
+      <ng-container matColumnDef="AccountName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ "नाम" }}
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let row"
+          (click)="
+            billingOrCollection === 'AC' ||
+            billingOrCollection === 'C' ||
+            billingOrCollection === 'B' ||
+            userProfileService.userProfile().type === AccountType.C
+              ? rowClick(row)
+              : snack('कलेक्शन या भुगतान सूची चुने')
+          "
+        >
+          {{ row.AccountName }}
+        </td>
+      </ng-container>
+
+      <!-- Installment Column -->
+      <ng-container matColumnDef="Installment">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ "किस्त" }}
+        </th>
+        <td
+          mat-cell
+          *matCellDef="let row"
+          (click)="
+            billingOrCollection === 'AC' ||
+            billingOrCollection === 'C' ||
+            billingOrCollection === 'B' ||
+            userProfileService.userProfile().type === AccountType.C
+              ? rowClick(row)
+              : snack('कलेक्शन या भुगतान सूची चुने')
+          "
+        >
+          &nbsp;{{ row.Installment | currency : "INR" : "symbol" }}
+        </td>
+      </ng-container>
+
+      <!-- RdStartDate Column -->
+      <ng-container matColumnDef="RdStartDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          {{ "आरंभ तारीख" }}
+        </th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.RdStartDate.seconds | date : "dd-MMM-yy" }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr
+        mat-row
+        style="cursor: pointer"
+        [ngStyle]="{
+          'background-color': row.maturity == 0 ? 'lawngreen' : 'none'
+        }"
+        *matRowDef="let row; columns: displayedColumns"
+      ></tr>
+
+      <!-- Row shown when there is no matching data. -->
+
+      <tr
+        class="mat-row"
+        *matNoDataRow
+        (click)="filterGroup.patchValue({ filterInput: '' })"
+      >
+        <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+          <div
+            class="noDataDiv"
+            *ngIf="filterGroup.controls['filterInput'].value !== ''"
+          >
+            <div>
+              "{{
+                filterGroup.controls["filterInput"].value +
+                  " " +
+                  "फ़िल्टर से मेल खाने वाला कोई खाता नहीं मिला"
+              }}
+            </div>
+            <img
+              [src]="commonUtilService.metadataSignal().img.finding_logo"
+              alt="no data image"
+            />
+          </div>
+          <div
+            class="noDataDiv"
+            *ngIf="
+              !filterGroup.controls['enableAll'].value &&
+              filterGroup.controls['filterInput'].value === ''
+            "
+          >
+            <div>
+              <strong>"बहुत बढ़िया!!</strong
+              >{{ " इस महीने के लिए और कोई कलेक्शन नहीं है" }}
+            </div>
+            <img
+              [src]="commonUtilService.metadataSignal().img.happy_logo"
+              alt="all collection complete image"
+            />
+          </div>
+        </td>
+      </tr>
+    </table>
+    <mat-paginator
+      style="width: 95%; font-size: 1em; font-weight: bold"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+    >
+      ></mat-paginator
+    >
+  </div>
+  <div *ngIf="selection.selected.length > 0" class="billing-box">
+    <button
+      mat-raised-button
+      color="accent"
+      [cdkCopyToClipboard]="billingList.join()"
+      [innerText]="'मैजिक खाते नंबर'"
+      style="font-size: larger; font-weight: 600"
+    ></button
+    ><button mat-raised-button color="accent" (click)="openSelectedMenu()">
+      <mat-icon>arrow_upward</mat-icon><mat-icon>arrow_upward</mat-icon
+      ><mat-icon>arrow_upward</mat-icon><mat-icon>arrow_upward</mat-icon>
+    </button>
+    <div style="font-size: x-large; font-weight: 600">
+      <span [innerText]="'टोटल' + ': '"></span
+      >{{ billingTotal | currency : "INR" : "symbol" }}
+    </div>
+  </div>
+</div>

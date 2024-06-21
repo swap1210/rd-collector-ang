@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { HeaderComponent } from './header.component';
+import { RouterModule } from '@angular/router';
 
 describe('HeaderComponent', () => {
   let component: HeaderComponent;
@@ -8,12 +9,10 @@ describe('HeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeaderComponent ]
-    })
-    .compileComponents();
-  });
+      imports: [HeaderComponent],
+      providers: [, RouterModule.forRoot([])],
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(HeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

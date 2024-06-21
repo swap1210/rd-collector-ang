@@ -1,0 +1,94 @@
+<div mat-dialog-title class="dia-item">
+  <span
+    style="font-size: 1em; font-weight: 500"
+    [innerText]="'खाता नंबर ' + rec.AccountNo"
+  ></span>
+  @if(rec.Usertype === AccountType.A){<button
+    mat-icon-button
+    [routerLink]="'/new-account/' + rec.AccountNo"
+    [mat-dialog-close]="true"
+  >
+    <mat-icon>mode</mat-icon></button
+  >}
+</div>
+<mat-dialog-content class="main-dialog">
+  <!-- Preview Info -->
+  <button
+    class="dia-item"
+    mat-flat-button
+    [routerLink]="'/account-detail/' + rec.AccountNo"
+    mat-dialog-close
+    [innerText]="rec.AccountName"
+  ></button>
+  <!-- Amount Edit -->
+  <form [formGroup]="updateOneAccountFormGroup" class="dia-item">
+    <mat-form-field class="form-field" appearance="fill"
+      ><button matPrefix mat-icon-button (click)="updateOperatingAmt(true)">
+        <mat-icon>add</mat-icon>
+      </button>
+      <mat-label [innerText]="'ली जाने वाली राशि'"></mat-label>
+      <input matInput type="number" formControlName="operatingAmt" />
+      @if((this.updateOneAccountFormGroup.value.operatingAmt || 0) >
+      (rec.AmountTillNow || 0) - originalOperatingAmt){<button
+        matSuffix
+        mat-icon-button
+        (click)="(resetOperatingAmt)"
+      >
+        <mat-icon>close</mat-icon></button
+      >} @if((this.updateOneAccountFormGroup.value.operatingAmt || 0) >
+      (rec.AmountTillNow || 0) - originalOperatingAmt){<button
+        matSuffix
+        mat-icon-button
+        (click)="updateOperatingAmt(false)"
+      >
+        <mat-icon>remove</mat-icon></button
+      >}
+    </mat-form-field>
+  </form>
+
+  <div class="dia-item">
+    <div [innerText]="'आरंभ तारीख' + ':'"></div>
+    <div>
+      {{ rec.RdStartDate.toDate() | date : "dd-MMM-yy" }}
+    </div>
+  </div>
+  <div class="dia-item">
+    <div [innerText]="'अंतिम तारीख' + ':'"></div>
+    <div>
+      {{ rec.RdEndDate?.toDate() | date : "dd-MMM-yy" }}
+    </div>
+  </div>
+  <div class="dia-item">
+    <div [innerText]="'बकाया' + ':'"></div>
+    <div>
+      {{ operatingAmtRemaining | currency : "INR" : "symbol" }}
+    </div>
+  </div>
+
+  <!-- <div class="dia-item">
+      <button
+        mat-raised-button
+        style="flex: auto"
+        color="accent"
+        [innerText]="('खाता विवरण')"
+      ></button>
+    </div> -->
+
+  <!-- action items -->
+  <div class="dia-item">
+    @if(actionName !== ''){<button
+      mat-flat-button
+      (click)="doAction()"
+      [innerText]="actionName"
+      [disabled]="
+        (this.updateOneAccountFormGroup.value.operatingAmt || 0) === 0
+      "
+      cdkFocusInitial
+    ></button
+    >}<button
+      mat-flat-button
+      (click)="closeAction()"
+      [innerText]="'रद्द करना'"
+    ></button>
+  </div>
+</mat-dialog-content>

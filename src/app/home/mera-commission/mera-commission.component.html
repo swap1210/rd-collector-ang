@@ -1,0 +1,83 @@
+<mat-card class="mera-main mat-elevation-z4">
+  <fieldset>
+    <legend class="mat-title">
+      [ कमीशन ({{ meraCommissionMetadataSignal().commission_rate }}%) & टी.डी.एस
+      ({{ meraCommissionMetadataSignal().tds_rate }}%) ]
+    </legend>
+    <form [formGroup]="meraCommissionForm">
+      <mat-form-field appearance="fill">
+        <mat-label>राशि</mat-label>
+        <input
+          autocomplete="off"
+          matInput
+          type="number"
+          formControlName="amt"
+        />
+        @if(meraCommissionForm.value.amt){<button
+          matSuffix
+          mat-icon-button
+          (click)="meraCommissionForm.patchValue({ amt: '' })"
+        >
+          <mat-icon>close</mat-icon></button
+        >} @else{<mat-error>
+          <span
+            [innerHTML]="'राशि <strong>जरूरी</strong> है'"
+          ></span> </mat-error
+        >}
+      </mat-form-field>
+    </form>
+    <div class="box mat-elevation-z2">
+      <div class="keyLabel">
+        कमीशन ({{ meraCommissionForm.value.amt | currency : "INR" : "symbol" }})
+        x {{ meraCommissionMetadataSignal().commission_rate }}%
+      </div>
+      <div>
+        =&nbsp;
+        {{
+          meraCommissionForm.value.amt *
+            (meraCommissionMetadataSignal().commission_rate / 100)
+            | currency : "INR" : "symbol"
+        }}
+      </div>
+    </div>
+    <div class="box mat-elevation-z2">
+      <div class="keyLabel">
+        टेंडर
+        {{ meraCommissionForm.value.amt | currency : "INR" : "symbol" }}
+        -
+        {{
+          round(
+            meraCommissionForm.value.amt *
+              (meraCommissionMetadataSignal().commission_rate / 100)
+          ) | currency : "INR" : "symbol"
+        }}
+      </div>
+      <div>
+        =&nbsp;{{
+          meraCommissionForm.value.amt -
+            meraCommissionForm.value.amt *
+              (meraCommissionMetadataSignal().commission_rate / 100)
+            | currency : "INR" : "symbol"
+        }}
+      </div>
+    </div>
+    <div class="box mat-elevation-z2">
+      <div class="keyLabel">
+        टी.डी.एस ({{
+          round(
+            meraCommissionForm.value.amt *
+              (meraCommissionMetadataSignal().commission_rate / 100)
+          ) | currency : "INR" : "symbol"
+        }}) x {{ meraCommissionMetadataSignal().commission_rate }}%
+      </div>
+      <div>
+        =&nbsp;{{
+          meraCommissionForm.value.amt *
+            (meraCommissionMetadataSignal().commission_rate / 100) *
+            (meraCommissionMetadataSignal().tds_rate / 100)
+            | currency : "INR" : "symbol"
+        }}
+      </div>
+    </div>
+  </fieldset>
+</mat-card>

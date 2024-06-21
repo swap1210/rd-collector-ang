@@ -1,55 +1,53 @@
-<mat-toolbar color="accent" class="toolbarDiv mat-elevation-z2">
-  <button mat-button routerLink="/home">
-    <img
-      mat-card-avatar
-      src="../../assets/logo.ico"
-      style="width: 3em; border-radius: 2em"
-    /><span
-      class="appnamediv"
-      style="padding-left: 0.5em; font-size: 1.5em"
-      [innerText]="auth.t('RD कलेक्टर')"
-    ></span>
+<mat-toolbar color="primary" class="toolbarDiv mat-elevation-z2">
+  <button
+    mat-button
+    routerLink="/home"
+    [disabled]="!authenticationService.isLoggedIn()"
+  >
+    <div class="logoDiv">
+      <img
+        mat-card-avatar
+        src="../../assets/logo.ico"
+        style="width: 3em; border-radius: 2em"
+      /><span
+        class="appnamediv"
+        style="padding-left: 0.5em; font-size: 1.5em"
+        [innerText]="env.appName"
+      ></span>
+    </div>
   </button>
-  <!-- <span class="max-spacer"></span> -->
-  <h1
-    [innerText]="
-      tag[currentTitle] ? tag[currentTitle].replace('$', curRoute[2]) : ''
-    "
-    *ngIf="!translationPending"
-  ></h1>
-  <!-- <span class="max-spacer"></span> -->
+  <h1 [innerText]="currentTitle()?.label"></h1>
   <div class="expanded">
+    @if(authenticationService.isLoggedIn()){
     <h3
       class="greeting fadeOut"
-      [innerText]="'Welcome ' + (auth.curUser ? auth.curUser.displayName : '')"
-      [ngStyle]="{ display: showGreeting ? 'block' : 'none' }"
+      [innerText]="'Welcome ' + authenticationService.user()?.displayName"
+      [ngStyle]="{ display: showGreeting() ? 'block' : 'none' }"
     ></h3>
-    <button class="menuItems" mat-icon-button routerLink="/home">🏡</button>
-    <button class="bkpBtn" mat-icon-button routerLink="/calculator">
-      <mat-icon>calculate</mat-icon>
-    </button>
-    <button class="menuItems" mat-icon-button (click)="languageChange()">
-      {{ curLanguage === Language.HI ? "अ" : "En" }}
-    </button>
+    } @if(authenticationService.isLoggedIn()){@for (headerAction of
+    headerActions(); track headerActions) {
     <button
-      class="menuItems"
-      mat-icon-button
-      routerLink="/new-account"
-      *ngIf="auth.curUser && auth.curUser.type === Usertype.A"
+      mat-button
+      [ngClass]="headerAction.styleClass"
+      (click)="headerAction.action(headerAction.param)"
     >
-      ➕
+      {{ headerAction.label }}
+      @if(headerAction.innerIcon !== undefined){
+      <mat-icon
+        inline="true"
+        fontIcon="{{ headerAction.innerIcon.fontIcon }}"
+      ></mat-icon>
+      }
     </button>
-    <button
-      class="bkpBtn"
-      mat-icon-button
-      (click)="accSer.createBackupRDAccount(auth.curUser.company)"
-      *ngIf="auth.curUser && auth.curUser.type === Usertype.A"
-    >
-      <mat-icon>backup</mat-icon>
-    </button>
-    <button class="menuItems" mat-icon-button (click)="auth.signOut()">
-      <mat-icon style="font-size: 1.5em">power_settings_new</mat-icon>
-    </button>
+    }}
+    <!-- <button mat-button class="menuItems logoDiv" (click)="toggleTheme()"> -->
+    <div class="menuItems" (click)="toggleTheme()">
+      <mat-icon
+        inline="true"
+        [fontIcon]="themeService.darkMode() ? 'brightness_7' : 'dark_mode'"
+      ></mat-icon>
+    </div>
+    <!-- </button> -->
   </div>
   <button
     mat-icon-button
@@ -57,55 +55,28 @@
     [matMenuTriggerFor]="menu"
     aria-label="menu icon"
   >
-    <mat-icon>menu</mat-icon>
+    <mat-icon fontIcon="menu"></mat-icon>
   </button>
   <!-- hide all above icons if there are too many icons -->
   <mat-menu #menu="matMenu">
-    <button class="phoneBtn" mat-menu-item routerLink="/home">
-      🏡
-      <div>
-        {{ auth.t("होम स्क्रीन") }}
-      </div>
-    </button>
-    <button class="phoneBtn" mat-menu-item routerLink="/calculator">
-      <mat-icon>calculate</mat-icon>
-      <div>
-        {{ auth.t("मेरा कमीशन") }}
-      </div>
-    </button>
-    <button class="phoneBtn" mat-menu-item (click)="languageChange()">
-      <div>
-        {{
-          curLanguage === Language.HI
-            ? "भाषा बदले (English)"
-            : "Translate to (हिंदी)"
-        }}
-      </div>
-    </button>
+    @if(authenticationService.isLoggedIn()){@for (headerAction of
+    headerActions(); track headerActions) {
     <button
       class="phoneBtn"
       mat-menu-item
-      routerLink="/new-account"
-      *ngIf="auth.curUser && auth.curUser.type === Usertype.A"
+      (click)="headerAction.action(headerAction.param)"
     >
-      ➕
-      <div></div>
-      <span [innerText]="auth.t('नया खाता')"></span>
+      @if(headerAction.innerIcon !== undefined){
+      <mat-icon fontIcon="{{ headerAction.innerIcon.fontIcon }}"></mat-icon>
+      }
+      <div>{{ headerAction.mobileLabel }}</div>
     </button>
-    <button
-      class="phoneBtn"
-      mat-menu-item
-      (click)="accSer.createBackupRDAccount(auth.curUser.company)"
-      *ngIf="auth.curUser && auth.curUser.type === Usertype.A"
-    >
-      <mat-icon color="warn">backup</mat-icon>
-      <div>
-        <span [innerText]="auth.t('हमशकल खाते')"></span>
-      </div>
-    </button>
-    <button class="phoneBtn" mat-menu-item (click)="auth.signOut()">
-      <mat-icon>power_settings_new</mat-icon>
-      <div>{{ curLanguage === Language.HI ? "बंद करे" : "Log out" }}</div>
+    }}
+    <button class="phoneBtn" mat-menu-item (click)="toggleTheme()">
+      <mat-icon
+        [fontIcon]="themeService.darkMode() ? 'brightness_7' : 'dark_mode'"
+      ></mat-icon>
+      <div>Switch Theme</div>
     </button>
   </mat-menu>
 </mat-toolbar>

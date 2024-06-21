@@ -1,95 +1,81 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Timestamp } from '@angular/fire/firestore';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
+import { UserProfileService } from './user-profile.service';
 import { RDAccount } from '../model/account.model';
-import { CU } from '../shared/comm-util';
-import { AuthService } from './auth.service';
+import { FIRESTORE } from '../app.config';
+import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AccountService {
-  // fsObs: Observable<any> | undefined;
-  allRD$ = new BehaviorSubject<RDAccount[]>([]);
-  collectionName = 'rd-records';
-  firstDay: Date = new Date();
-  constructor(private firestore: AngularFirestore, private auth: AuthService) {
-    console.log('acc service');
-    const date = new Date();
-    this.firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-  }
+  private readonly RD_ACCOUNT_COLLECTION_NAME: string = 'rd-records';
+  userProfileService = inject(UserProfileService);
+  private firestore = inject(FIRESTORE);
 
-  getAllAccounts = (): BehaviorSubject<RDAccount[]> => {
-    const allRD_v2$ = new BehaviorSubject<RDAccount[]>([]);
-    if (this.auth.user$) {
-      this.auth.user$.subscribe((ur) => {
-        if (ur && ur.company) {
-          this.fetchRDAccounts2(ur.company).subscribe((val) => {
-            allRD_v2$.next(val);
-          });
-        }
-      });
-    }
-    return allRD_v2$;
-  };
+  // TODO make state private
+  private state = signal<{ all: any }>({ all: {} });
+  rdAccounts = computed<RDAccount[]>(() => Object.values(this.state().all));
+  rdAccountMap = computed<RDAccount[]>(() => Object.values(this.state().all));
+  familyGroupAutoCompleteSuggestion = computed<Set<string>>(() => {
+    return new Set(
+      this.rdAccounts()
+        .filter((rd) => rd?.familyGroup)
+        .map((rd) => rd.familyGroup)
+    );
+  });
 
-  fetchRDAccounts2(p_company: string): Observable<RDAccount[]> {
-    console.log('company: ', p_company);
-    return this.firestore
-      .collection<any>(this.collectionName)
-      .doc(p_company)
-      .valueChanges()
-      .pipe(map(this.custCalc));
-  }
-
-  custCalc = (orgObj: any) => {
-    // console.log('Internet', orgObj);
-    Object.values<RDAccount>(orgObj.all).map((rec: RDAccount) => {
-      rec.AmountTillNow =
-        (CU.monthDiff((rec.RdStartDate as Timestamp).toDate(), new Date()) +
-          1) *
-        rec.Installment;
-      if (rec.RdEndDate) {
-        const e = rec.RdEndDate.toDate();
-        if (e.getFullYear() == this.firstDay.getFullYear()) {
-          // console.log('ed fon', e.getMonth(), this.firstDay.getMonth());
-          rec.maturity = e.getMonth() - this.firstDay.getMonth();
-        }
+  constructor() {
+    effect(() => {
+      if (this.userProfileService.userProfile().company) {
+        // this.documentId = this.userProfileService.userProfile()!.company;
+        onSnapshot(
+          doc(
+            this.firestore,
+            this.RD_ACCOUNT_COLLECTION_NAME,
+            this.userProfileService.userProfile()!.company
+          ),
+          (doc) => {
+            console.log('Account data: ', doc.data());
+            this.state.update((state) => ({
+              ...state,
+              ...doc.data(),
+            }));
+          }
+        );
       }
     });
-    let tempList = Object.values<RDAccount>(orgObj.all);
-    return tempList;
-  };
+  }
 
   createUpdateRDAccount(p_company: string, p_RDAccount: RDAccount) {
     let acc_key: any = {};
     acc_key[p_RDAccount.AccountNo] = p_RDAccount;
     let temp: any = { all: acc_key };
-    return this.firestore
-      .collection(this.collectionName)
-      .doc(p_company)
-      .set(temp, { merge: true });
+    return setDoc(
+      doc(this.firestore, this.RD_ACCOUNT_COLLECTION_NAME, p_company),
+      temp,
+      { merge: true }
+    );
   }
 
-  createBackupRDAccount(p_company: string) {
-    this.allRD$.pipe(first()).subscribe({
-      next: (temp: { AccountNo: string | number }[]) => {
-        let new_temp: any = {};
-        temp.map((rec: { AccountNo: string | number }) => {
-          new_temp[rec.AccountNo] = rec;
-        });
-        console.log(this.collectionName, p_company + '_bkp', { all: new_temp });
-        this.firestore
-          .collection(this.collectionName)
-          .doc(p_company + '_bkp')
-          .set({ all: new_temp }, { merge: true });
-      },
-    });
+  createUpdateOneRDAccount(p_RDAccount: RDAccount) {
+    return this.createUpdateRDAccount(
+      this.userProfileService.userProfile()!.company,
+      p_RDAccount
+    );
   }
 
-  ngOnDestroy() {
-    console.log('Service on destroy is being called');
-  }
+  takeBackup = () => {
+    if (!this.userProfileService.userProfile()) {
+      return;
+    }
+    return setDoc(
+      doc(
+        this.firestore,
+        this.RD_ACCOUNT_COLLECTION_NAME,
+        this.userProfileService.userProfile().company + '-backup'
+      ),
+      this.state(),
+      { merge: true }
+    );
+  };
 }
